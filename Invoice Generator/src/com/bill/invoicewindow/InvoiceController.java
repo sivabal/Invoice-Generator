@@ -312,7 +312,7 @@ public class InvoiceController implements Initializable{
 			PDFGenerator.drawTotalTable(billRow, Float.parseFloat(total.getText()), document, page, yPosition);
 			
 			document.addPage(page);
-			document.save("C:\\Users\\welcome\\Desktop\\"+ invoiceNumber.getText() +".pdf");
+			document.save("C:\\"+ invoiceNumber.getText() +".pdf");
 			document.close();
 			
 			System.out.println("Invoice generated");
