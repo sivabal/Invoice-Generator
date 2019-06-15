@@ -13,6 +13,7 @@ public class BilledProducts {
 	private TextField amount;
 	private Float sgstTotal;
 	private Float cgstTotal;
+	private Float orderAmount;
 	
 	public BilledProducts(Integer sno, TextField itemName, TextField quantity, TextField unitRate, TextField sgst, TextField cgst, TextField amount) {
 		this.sno = sno;
@@ -24,6 +25,14 @@ public class BilledProducts {
 		this.amount = amount;
 	}
 
+	
+	public Float getOrderAmount() {
+		return orderAmount;
+	}
+
+	public void setOrderAmount(Float orderAmount) {
+		this.orderAmount = orderAmount;
+	}
 
 	public Float getSgstTotal() {
 		return sgstTotal;

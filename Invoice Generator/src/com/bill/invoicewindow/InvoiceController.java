@@ -191,6 +191,7 @@ public class InvoiceController implements Initializable{
 		
 		itemNameField.setOnAction((actionEvent) -> {
 				BilledProducts currentlySelected = tableView.getSelectionModel().getSelectedItem();
+				currentlySelected.setOrderAmount(productInfo.get(currentlySelected.getItemName().getText()).get(0) * Float.parseFloat(currentlySelected.getQuantity().getText()));
 				currentlySelected.setSgstTotal((productInfo.get(currentlySelected.getItemName().getText()).get(1)*
 						(productInfo.get(currentlySelected.getItemName().getText()).get(0) * Float.parseFloat(currentlySelected.getQuantity().getText())))/100);
 				
@@ -223,7 +224,8 @@ public class InvoiceController implements Initializable{
 		
 		quantityField.setOnAction((actionEvent) -> {
 			
-				BilledProducts currentlySelected = tableView.getSelectionModel().getSelectedItem();				
+				BilledProducts currentlySelected = tableView.getSelectionModel().getSelectedItem();		
+				currentlySelected.setOrderAmount(productInfo.get(currentlySelected.getItemName().getText()).get(0) * Float.parseFloat(currentlySelected.getQuantity().getText()));
 				currentlySelected.setSgstTotal((productInfo.get(currentlySelected.getItemName().getText()).get(1)*
 						(productInfo.get(currentlySelected.getItemName().getText()).get(0) * Float.parseFloat(currentlySelected.getQuantity().getText())))/100);
 				
@@ -312,7 +314,7 @@ public class InvoiceController implements Initializable{
 			PDFGenerator.drawTotalTable(billRow, Float.parseFloat(total.getText()), document, page, yPosition);
 			
 			document.addPage(page);
-			document.save("C:\\"+ invoiceNumber.getText() +".pdf");
+			document.save("C:\\Users\\welcome\\Desktop\\"+ invoiceNumber.getText() +".pdf");
 			document.close();
 			
 			System.out.println("Invoice generated");

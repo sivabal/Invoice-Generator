@@ -246,6 +246,7 @@ public class PDFGenerator {
 		Cell<PDPage> cell = null;
 		Double sgstTotal = billRow.stream().mapToDouble(x -> x.getSgstTotal()).reduce(0, (a, b) -> a+b);
 		Double cgstTotal = billRow.stream().mapToDouble(x -> x.getCgstTotal()).reduce(0, (a, b) -> a+b);
+		Double orderAmount = billRow.stream().mapToDouble(x -> x.getOrderAmount()).reduce(0, (a,b) -> a+b);
 		Integer roundTotal = Math.round(total);
 		try {
 			yPosition -= 20;
@@ -253,6 +254,14 @@ public class PDFGenerator {
 			PDPageContentStream contentStream = new PDPageContentStream(document, page, AppendMode.APPEND, false) ;
 			
 
+			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 10);contentStream.newLineAtOffset(408, yPosition);
+			contentStream.showText("Order Amount :");
+			contentStream.endText();
+			
+			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 10);contentStream.newLineAtOffset(500, yPosition);
+			contentStream.showText("Rs." + orderAmount.toString());
+			contentStream.endText();yPosition -= 20;
+			
 			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 10);contentStream.newLineAtOffset(450, yPosition);
 			contentStream.showText("SGST  :");
 			contentStream.endText();
@@ -290,7 +299,7 @@ public class PDFGenerator {
 			BaseTable table = new BaseTable(yPosition+30, yStartNewPage, bottomMargin, tableWidth, margin, document, page, drawLine, drawContent);
 			    
 			row = table.createRow(10f);
-			cell = row.createCell(100, "Total in Wordss : ");cell.setFontSize(9);cell.setFont(PDType1Font.COURIER);
+			cell = row.createCell(100, "Total in Words : ");cell.setFontSize(9);cell.setFont(PDType1Font.COURIER);
 			
 			row = table.createRow(10f);
 			cell = row.createCell(100, Utility.rupeeInWords(roundTotal));cell.setFontSize(10);cell.setFont(PDType1Font.COURIER_BOLD);
