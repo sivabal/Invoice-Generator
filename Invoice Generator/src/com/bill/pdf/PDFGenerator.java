@@ -1,6 +1,7 @@
 package com.bill.pdf;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -267,7 +268,7 @@ public class PDFGenerator {
 			contentStream.endText();
 			
 			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 10);contentStream.newLineAtOffset(500, yPosition);
-			contentStream.showText("Rs." + sgstTotal.toString());
+			contentStream.showText("Rs." + new DecimalFormat("#.##").format(sgstTotal));
 			contentStream.endText();yPosition -= 20;
 			
 			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 10);contentStream.newLineAtOffset(450, yPosition);
@@ -275,7 +276,7 @@ public class PDFGenerator {
 			contentStream.endText();
 			
 			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 10);contentStream.newLineAtOffset(500, yPosition);
-			contentStream.showText("Rs." + cgstTotal.toString());
+			contentStream.showText("Rs." + new DecimalFormat("#.##").format(cgstTotal));
 			contentStream.endText();yPosition -= 20;
 			
 			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER_BOLD, 10);contentStream.newLineAtOffset(450, yPosition);

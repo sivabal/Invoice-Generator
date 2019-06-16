@@ -5,8 +5,6 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +18,7 @@ import org.controlsfx.control.textfield.TextFields;
 import com.bill.beans.Address;
 import com.bill.beans.BilledProducts;
 import com.bill.pdf.PDFGenerator;
+import com.bill.validator.FromDatabase;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -48,10 +47,9 @@ public class InvoiceController implements Initializable{
 	public ObservableList<String> placeItems = FXCollections.observableArrayList();
 	public ObservableList<String> toItems = FXCollections.observableArrayList();
 	public ObservableList<BilledProducts> billRow = FXCollections.observableArrayList();
-	public Map<String, ArrayList<Float>> productInfo = new HashMap<>();
+	public Map<String, Float[]> productInfo = new HashMap<>();
 	
-	public String[] suggestions = {"Kulambu milagai thool", "Groundnut oil","Sesame oil", "Turmeric powder", "Chilli powder", 
-							"Coriander powder", "Pepper powder", "Kumin powder"};
+	public String[] suggestions = null;
 	
 	public Address fromAddress = new Address("261", "No.2 Main Road", "Sitharkadum", "Mayiladuthurai", "", "609003","04364-259338", "9442419772");
 	public Address toAddress = new Address("261", "No.2 Main Road", "Sitharkadum", "Mayiladuthurai", "", "609003","04364-259338", "9442419772");
@@ -90,7 +88,8 @@ public class InvoiceController implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
-
+		productInfo = FromDatabase.getProductDetails();
+		suggestions = productInfo.keySet().toArray(new String[productInfo.size()]);
 		initializeDropdowns();
 		initializeBillingTable();
 		invoiceDate.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/uuuu")));
@@ -98,14 +97,6 @@ public class InvoiceController implements Initializable{
 		total.setText("0.0");
 		tableView.selectionModelProperty().getValue().selectFirst();
 		
-		productInfo.put("Kulambu milagai thool",new ArrayList<>(Arrays.asList(75.0f,2.5f,2.5f)));
-		productInfo.put("Groundnut oil",new ArrayList<>(Arrays.asList(120f,2.5f,2.5f)));
-		productInfo.put("Sesame oil",new ArrayList<>(Arrays.asList(200f,2.5f,2.5f)));
-		productInfo.put("Turmeric powder",new ArrayList<>(Arrays.asList(80f,2.5f,2.5f)));
-		productInfo.put("Chilli powder",new ArrayList<>(Arrays.asList(65f,2.5f,2.5f)));
-		productInfo.put("Coriander powder",new ArrayList<>(Arrays.asList(70f,2.5f,2.5f)));
-		productInfo.put("Pepper powder",new ArrayList<>(Arrays.asList(90f,2.5f,2.5f)));
-		productInfo.put("Kumin powder",new ArrayList<>(Arrays.asList(85f,2.5f,2.5f)));
 	}	
 	
 	/**
@@ -191,20 +182,20 @@ public class InvoiceController implements Initializable{
 		
 		itemNameField.setOnAction((actionEvent) -> {
 				BilledProducts currentlySelected = tableView.getSelectionModel().getSelectedItem();
-				currentlySelected.setOrderAmount(productInfo.get(currentlySelected.getItemName().getText()).get(0) * Float.parseFloat(currentlySelected.getQuantity().getText()));
-				currentlySelected.setSgstTotal((productInfo.get(currentlySelected.getItemName().getText()).get(1)*
-						(productInfo.get(currentlySelected.getItemName().getText()).get(0) * Float.parseFloat(currentlySelected.getQuantity().getText())))/100);
+				currentlySelected.setOrderAmount(productInfo.get(currentlySelected.getItemName().getText())[0] * Float.parseFloat(currentlySelected.getQuantity().getText()));
+				currentlySelected.setSgstTotal((productInfo.get(currentlySelected.getItemName().getText())[1]*
+						(productInfo.get(currentlySelected.getItemName().getText())[0] * Float.parseFloat(currentlySelected.getQuantity().getText())))/100);
 				
-				currentlySelected.setCgstTotal((productInfo.get(currentlySelected.getItemName().getText()).get(2)*
-						(productInfo.get(currentlySelected.getItemName().getText()).get(0) * Float.parseFloat(currentlySelected.getQuantity().getText())))/100);
+				currentlySelected.setCgstTotal((productInfo.get(currentlySelected.getItemName().getText())[2]*
+						(productInfo.get(currentlySelected.getItemName().getText())[0] * Float.parseFloat(currentlySelected.getQuantity().getText())))/100);
 				
 				currentlySelected.getAmount().setText(new DecimalFormat("#.##").format(
-					(productInfo.get(currentlySelected.getItemName().getText()).get(0) * Float.parseFloat(currentlySelected.getQuantity().getText()))
+					(productInfo.get(currentlySelected.getItemName().getText())[0] * Float.parseFloat(currentlySelected.getQuantity().getText()))
 					+ currentlySelected.getSgstTotal() 
 					+ currentlySelected.getCgstTotal()));
-				currentlySelected.getUnitRate().setText(productInfo.get(currentlySelected.getItemName().getText()).get(0).toString());
-				currentlySelected.getSgst().setText(productInfo.get(currentlySelected.getItemName().getText()).get(1).toString());
-				currentlySelected.getCgst().setText(productInfo.get(currentlySelected.getItemName().getText()).get(2).toString());
+				currentlySelected.getUnitRate().setText(productInfo.get(currentlySelected.getItemName().getText())[0].toString());
+				currentlySelected.getSgst().setText(productInfo.get(currentlySelected.getItemName().getText())[1].toString());
+				currentlySelected.getCgst().setText(productInfo.get(currentlySelected.getItemName().getText())[2].toString());
 				
 				Float sum = billRow.stream().map(x -> Float.parseFloat(x.getAmount().getText())).reduce(0.0f, (a,b) -> a+b);		
 				total.setText(new DecimalFormat("#.##").format(sum)); 
@@ -225,15 +216,15 @@ public class InvoiceController implements Initializable{
 		quantityField.setOnAction((actionEvent) -> {
 			
 				BilledProducts currentlySelected = tableView.getSelectionModel().getSelectedItem();		
-				currentlySelected.setOrderAmount(productInfo.get(currentlySelected.getItemName().getText()).get(0) * Float.parseFloat(currentlySelected.getQuantity().getText()));
-				currentlySelected.setSgstTotal((productInfo.get(currentlySelected.getItemName().getText()).get(1)*
-						(productInfo.get(currentlySelected.getItemName().getText()).get(0) * Float.parseFloat(currentlySelected.getQuantity().getText())))/100);
+				currentlySelected.setOrderAmount(productInfo.get(currentlySelected.getItemName().getText())[0] * Float.parseFloat(currentlySelected.getQuantity().getText()));
+				currentlySelected.setSgstTotal((productInfo.get(currentlySelected.getItemName().getText())[1]*
+						(productInfo.get(currentlySelected.getItemName().getText())[0] * Float.parseFloat(currentlySelected.getQuantity().getText())))/100);
 				
-				currentlySelected.setCgstTotal((productInfo.get(currentlySelected.getItemName().getText()).get(2)*
-						(productInfo.get(currentlySelected.getItemName().getText()).get(0) * Float.parseFloat(currentlySelected.getQuantity().getText())))/100);
+				currentlySelected.setCgstTotal((productInfo.get(currentlySelected.getItemName().getText())[2]*
+						(productInfo.get(currentlySelected.getItemName().getText())[0] * Float.parseFloat(currentlySelected.getQuantity().getText())))/100);
 				
 				currentlySelected.getAmount().setText(new DecimalFormat("#.##").format(
-					(productInfo.get(currentlySelected.getItemName().getText()).get(0) * Float.parseFloat(currentlySelected.getQuantity().getText()))
+					(productInfo.get(currentlySelected.getItemName().getText())[0] * Float.parseFloat(currentlySelected.getQuantity().getText()))
 					+ currentlySelected.getSgstTotal() 
 					+ currentlySelected.getCgstTotal()));
 				
