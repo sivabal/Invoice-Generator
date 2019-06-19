@@ -20,4 +20,16 @@ public class FromDatabase {
 		return resultSet;
 	}
 
+	public static ResultSet getLastInvoiceNumber() {
+		PreparedStatement preparedStmt = null;
+		ResultSet resultSet = null;
+		String query = "select * from productDetails";
+		try {
+			preparedStmt = GetConnection.connection.prepareStatement(query);
+			resultSet = preparedStmt.executeQuery();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return resultSet;
+	}
 }

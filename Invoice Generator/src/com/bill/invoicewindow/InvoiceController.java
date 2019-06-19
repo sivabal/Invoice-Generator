@@ -18,7 +18,7 @@ import org.controlsfx.control.textfield.TextFields;
 import com.bill.beans.Address;
 import com.bill.beans.BilledProducts;
 import com.bill.pdf.PDFGenerator;
-import com.bill.validator.FromDatabase;
+import com.bill.validator.FromDatabasevalidator;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -88,12 +88,12 @@ public class InvoiceController implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
-		productInfo = FromDatabase.getProductDetails();
+		productInfo = FromDatabasevalidator.getProductDetails();
 		suggestions = productInfo.keySet().toArray(new String[productInfo.size()]);
 		initializeDropdowns();
 		initializeBillingTable();
 		invoiceDate.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/uuuu")));
-		invoiceNumber.setText("INV-500123");
+		invoiceNumber.setText(FromDatabasevalidator.getLastInvoiceNumber());
 		total.setText("0.0");
 		tableView.selectionModelProperty().getValue().selectFirst();
 		
