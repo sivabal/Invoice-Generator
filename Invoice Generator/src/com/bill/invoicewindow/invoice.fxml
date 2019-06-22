@@ -21,7 +21,7 @@
       <Button layoutX="611.0" layoutY="629.0" mnemonicParsing="false" onAction="#generatePdf" text="Print" />
       <Button layoutX="703.0" layoutY="629.0" mnemonicParsing="false" text="Save" />
       <Button layoutX="788.0" layoutY="629.0" mnemonicParsing="false" text="Print &amp; Save" />
-      <Label layoutX="389.0" layoutY="53.0" prefHeight="22.0" prefWidth="102.0" text="Invoide Number :" />
+      <Label layoutX="389.0" layoutY="53.0" prefHeight="22.0" prefWidth="102.0" text="Invoice Number :" />
       <Label layoutX="597.0" layoutY="54.0" prefHeight="22.0" prefWidth="88.0" text="Invoice Date :" />
       <TableView fx:id="tableView" editable="true" layoutX="389.0" layoutY="110.0" prefHeight="417.0" prefWidth="789.0">
         <columns>

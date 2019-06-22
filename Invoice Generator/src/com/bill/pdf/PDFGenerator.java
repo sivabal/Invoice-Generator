@@ -224,9 +224,9 @@ public class PDFGenerator {
 			    	cell = productRow.createCell(7, billedProducts.getQuantity().getText());cell.setFontSize(8);cell.setFont(PDType1Font.COURIER);
 			    	cell = productRow.createCell(8, billedProducts.getUnitRate().getText());cell.setFontSize(8);cell.setFont(PDType1Font.COURIER);
 			    	cell = productRow.createCell(7, billedProducts.getSgst().getText());cell.setFontSize(8);cell.setFont(PDType1Font.COURIER);
-			    	cell = productRow.createCell(7, billedProducts.getSgstTotal()+"");cell.setFontSize(8);cell.setFont(PDType1Font.COURIER);
+			    	cell = productRow.createCell(7, new DecimalFormat("#.##").format(billedProducts.getSgstTotal()));cell.setFontSize(8);cell.setFont(PDType1Font.COURIER);
 			    	cell = productRow.createCell(7, billedProducts.getCgst().getText());cell.setFontSize(8);cell.setFont(PDType1Font.COURIER);
-			    	cell = productRow.createCell(7, billedProducts.getCgstTotal()+"");cell.setFontSize(8);cell.setFont(PDType1Font.COURIER);
+			    	cell = productRow.createCell(7, new DecimalFormat("#.##").format(billedProducts.getCgstTotal()));cell.setFontSize(8);cell.setFont(PDType1Font.COURIER);
 			    	cell = productRow.createCell(10, billedProducts.getAmount().getText());cell.setFontSize(8);cell.setFont(PDType1Font.COURIER);
 			    	 yPosition -= 20;
 			    }
@@ -241,14 +241,12 @@ public class PDFGenerator {
 		 return yPosition;
 	}
 	
-	public static void drawTotalTable(ObservableList<BilledProducts> billRow, Float total, PDDocument document, PDPage page, float yPosition) {
+	public static void drawTotalTable(Float orderAmount, Float sgstTotal, Float cgstTotal, Integer total,
+			PDDocument document, PDPage page, float yPosition) {
 		
 		Row<PDPage> row = null;
 		Cell<PDPage> cell = null;
-		Double sgstTotal = billRow.stream().mapToDouble(x -> x.getSgstTotal()).reduce(0, (a, b) -> a+b);
-		Double cgstTotal = billRow.stream().mapToDouble(x -> x.getCgstTotal()).reduce(0, (a, b) -> a+b);
-		Double orderAmount = billRow.stream().mapToDouble(x -> x.getOrderAmount()).reduce(0, (a,b) -> a+b);
-		Integer roundTotal = Math.round(total);
+	
 		try {
 			yPosition -= 20;
 			
@@ -260,7 +258,7 @@ public class PDFGenerator {
 			contentStream.endText();
 			
 			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 10);contentStream.newLineAtOffset(500, yPosition);
-			contentStream.showText("Rs." + orderAmount.toString());
+			contentStream.showText("Rs." + new DecimalFormat("#.##").format(orderAmount));
 			contentStream.endText();yPosition -= 20;
 			
 			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 10);contentStream.newLineAtOffset(450, yPosition);
@@ -284,7 +282,7 @@ public class PDFGenerator {
 			contentStream.endText();
 			
 			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER_BOLD, 10);contentStream.newLineAtOffset(500, yPosition);
-			contentStream.showText("Rs." + roundTotal.toString());
+			contentStream.showText("Rs." + total.toString());
 			contentStream.endText();
 			
 			
@@ -303,7 +301,7 @@ public class PDFGenerator {
 			cell = row.createCell(100, "Total in Words : ");cell.setFontSize(9);cell.setFont(PDType1Font.COURIER);
 			
 			row = table.createRow(10f);
-			cell = row.createCell(100, Utility.rupeeInWords(roundTotal));cell.setFontSize(10);cell.setFont(PDType1Font.COURIER_BOLD);
+			cell = row.createCell(100, Utility.rupeeInWords(total));cell.setFontSize(10);cell.setFont(PDType1Font.COURIER_BOLD);
 			
 			table.draw();
 			

@@ -19,12 +19,15 @@ import com.bill.beans.Address;
 import com.bill.beans.BilledProducts;
 import com.bill.pdf.PDFGenerator;
 import com.bill.validator.FromDatabasevalidator;
+import com.bill.validator.ToDatabaseValidator;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -292,7 +295,11 @@ public class InvoiceController implements Initializable{
 	 */
 	public void generatePdf() {
 		
-		
+		Float sgstTotal = (float)billRow.stream().mapToDouble(x -> x.getSgstTotal()).reduce(0, (a, b) -> a+b);
+		Float cgstTotal = (float)billRow.stream().mapToDouble(x -> x.getCgstTotal()).reduce(0, (a, b) -> a+b);
+		Float orderAmount = (float)billRow.stream().mapToDouble(x -> x.getOrderAmount()).reduce(0, (a,b) -> a+b);
+		Integer roundTotal = Math.round(Float.parseFloat(total.getText()));
+
 		try {
 			
 			PDDocument document = new PDDocument();
@@ -302,13 +309,20 @@ public class InvoiceController implements Initializable{
 			PDFGenerator.drawInvoiceTable(toComboBox.getValue(), toAddress, invoiceNumber.getText(), invoiceDate.getText()
 					, placeComboBox.getValue(), document, page);
 			float yPosition = PDFGenerator.drawProductsTable(billRow, document, page);
-			PDFGenerator.drawTotalTable(billRow, Float.parseFloat(total.getText()), document, page, yPosition);
+			PDFGenerator.drawTotalTable(orderAmount, sgstTotal, cgstTotal, roundTotal, document, page,yPosition);
 			
 			document.addPage(page);
-			document.save("C:\\Users\\welcome\\Desktop\\"+ invoiceNumber.getText() +".pdf");
+			document.save("C:\\Users\\welcome\\Desktop\\invoice\\"+ invoiceNumber.getText() +".pdf");
 			document.close();
 			
-			System.out.println("Invoice generated");
+			ToDatabaseValidator.insertInvoiceDataAndBilledProducts(billRow, invoiceNumber.getText(), invoiceDate.getText(), fromComboBox.getValue(), 
+					toComboBox.getValue(), orderAmount, sgstTotal, cgstTotal, roundTotal);
+
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Dialog");
+			alert.setHeaderText("Success..Your Invoice is generated..");
+			alert.showAndWait();
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

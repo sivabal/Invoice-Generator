@@ -1,7 +1,5 @@
 package com.bill.beans;
 
-import java.text.DecimalFormat;
-
 import javafx.scene.control.TextField;
 
 public class BilledProducts {
@@ -42,7 +40,7 @@ public class BilledProducts {
 
 
 	public void setSgstTotal(Float sgstTotal) {
-		this.sgstTotal = Float.valueOf(new DecimalFormat("#.##").format(sgstTotal));
+		this.sgstTotal = sgstTotal;
 	}
 
 
@@ -52,7 +50,8 @@ public class BilledProducts {
 
 
 	public void setCgstTotal(Float cgstTotal) {
-		this.cgstTotal = Float.valueOf(new DecimalFormat("#.##").format(cgstTotal));
+		this.cgstTotal = cgstTotal;
+
 	}
 
 

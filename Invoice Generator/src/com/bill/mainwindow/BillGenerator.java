@@ -1,7 +1,5 @@
 package com.bill.mainwindow;
 
-import com.bill.dao.GetConnection;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,7 +12,6 @@ public class BillGenerator extends Application {
 
 	    
 	public static void main(String[] args) {
-		GetConnection.getConnection();
 		launch();
 	}
 
@@ -28,5 +25,4 @@ public class BillGenerator extends Application {
 		stage.show();
 
 	}
-
 }
