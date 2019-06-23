@@ -2,11 +2,15 @@ package com.bill.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+
 import com.bill.beans.BilledProducts;
 
 import javafx.collections.ObservableList;
 
 public class ToDatabase {
+	
+	private static DecimalFormat format = new DecimalFormat("#.##");
 
 	public static void insertInvoiceData(String invoiceNumber, String date, int daysDifference, String billFrom, String billTo,
 			Float orderAmount, Float sgst, Float cgst, Integer total) {
@@ -20,9 +24,9 @@ public class ToDatabase {
 			preparedStmt.setInt(3, daysDifference);
 			preparedStmt.setString(4, billFrom);
 			preparedStmt.setString(5, billTo);
-			preparedStmt.setFloat(6, orderAmount);
-			preparedStmt.setFloat(7, sgst);
-			preparedStmt.setFloat(8, cgst);
+			preparedStmt.setString(6, format.format(orderAmount));
+			preparedStmt.setString(7, format.format(sgst));
+			preparedStmt.setString(8, format.format(cgst));
 			preparedStmt.setInt(9, total);
 			
 			preparedStmt.executeUpdate();
@@ -41,12 +45,12 @@ public class ToDatabase {
 				preparedStmt.setString(1, invoiceNumber);
 				preparedStmt.setString(2, b.getItemName().getText());
 				preparedStmt.setInt(3, Integer.parseInt(b.getQuantity().getText()));
-				preparedStmt.setFloat(4, Float.valueOf(b.getUnitRate().getText()));
-				preparedStmt.setFloat(5, b.getSgstTotal());
+				preparedStmt.setString(4, b.getUnitRate().getText());
+				preparedStmt.setString(5, format.format(b.getSgstTotal()));
 				preparedStmt.setString(6, b.getSgst().getText());
-				preparedStmt.setFloat(7, b.getCgstTotal());
+				preparedStmt.setString(7, format.format(b.getCgstTotal()));
 				preparedStmt.setString(8, b.getCgst().getText());
-				preparedStmt.setFloat(9, Float.valueOf(b.getAmount().getText()));
+				preparedStmt.setString(9, b.getAmount().getText());
 				preparedStmt.executeUpdate();
 			}			
 			

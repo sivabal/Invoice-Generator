@@ -1,16 +1,23 @@
 package com.bill.validator;
 
-import com.bill.dao.FromDatabase;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFDataFormat;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import com.bill.dao.FromDatabase;
 
 public class FromDatabasevalidator {
+	
 	
 	/*
 	 * this method will return the products information from database
@@ -22,9 +29,9 @@ public class FromDatabasevalidator {
 		try {
 			while(resultSet.next()){
 				Float[] rateAndTax = new Float[3];
-				rateAndTax[0] = resultSet.getFloat("rate");
-				rateAndTax[1] = resultSet.getFloat("sgst");
-				rateAndTax[2] = resultSet.getFloat("cgst");
+				rateAndTax[0] = Float.valueOf(resultSet.getString("rate"));
+				rateAndTax[1] = Float.valueOf(resultSet.getFloat("sgst"));
+				rateAndTax[2] = Float.valueOf(resultSet.getFloat("cgst"));
 				productInfo.put(resultSet.getString("prodName"), rateAndTax);
 			}
 		} catch (SQLException e) {
@@ -48,34 +55,59 @@ public class FromDatabasevalidator {
 		return null;
 	}
 	
-	public static void getInvoiceData(XSSFSheet invoiceDataSheet, int fromDateDiff, int toDateDiff) {
+	/*
+	 * 
+	 */
+	public static List<String> getInvoiceData(XSSFWorkbook workbook, XSSFSheet invoiceDataSheet, XSSFDataFormat format,
+			int fromDateDiff, int toDateDiff) {
+		
 		ResultSet resultSet = FromDatabase.getIvoiceData(fromDateDiff, toDateDiff);
+		String invoiceNumber = null;
+		List<String> invoiceNumArray = new ArrayList<>();
 		int rowCount = 1;
+		XSSFCell cell = null;
+		XSSFCellStyle cellStyle = null;
 		try {
 			while(resultSet.next()){
 				XSSFRow row = invoiceDataSheet.createRow(rowCount);
-				row.createCell(0).setCellValue(resultSet.getString("invoiceNumber"));
+				invoiceNumber = resultSet.getString("invoiceNumber");
+				invoiceNumArray.add(invoiceNumber);
+				row.createCell(0).setCellValue(invoiceNumber);
+				
 				row.createCell(1).setCellValue(resultSet.getString("date"));
 				row.createCell(2).setCellValue(resultSet.getString("billFrom"));
 				row.createCell(3).setCellValue(resultSet.getString("billTo"));
-				row.createCell(4).setCellValue(resultSet.getDouble("orderAmount"));
-				row.createCell(5).setCellValue(resultSet.getDouble("sgst"));
-				row.createCell(6).setCellValue(resultSet.getDouble("cgst"));
+				
+				cell = row.createCell(4);
+				cell.setCellValue(Float.parseFloat(resultSet.getString("orderAmount")));
+				cellStyle = workbook.createCellStyle();
+				cellStyle.setDataFormat(format.getFormat("0.00"));
+				cell.setCellStyle(cellStyle);
+				
+				cell = row.createCell(5);
+				cell.setCellValue(Float.parseFloat(resultSet.getString("sgst")));
+				cell.setCellStyle(cellStyle);
+				
+				cell = row.createCell(6);
+				cell.setCellValue(Float.parseFloat(resultSet.getString("cgst")));
+				cell.setCellStyle(cellStyle);
+				
 				row.createCell(7).setCellValue(resultSet.getInt("total"));
 				rowCount++;
 			}
-			
-			invoiceDataSheet.autoSizeColumn(0);
-			invoiceDataSheet.autoSizeColumn(1);
-			invoiceDataSheet.autoSizeColumn(2);
-			invoiceDataSheet.autoSizeColumn(3);
-			invoiceDataSheet.autoSizeColumn(4);
-			invoiceDataSheet.autoSizeColumn(5);
-			invoiceDataSheet.autoSizeColumn(6);
-			invoiceDataSheet.autoSizeColumn(7);
+		
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
+		return invoiceNumArray;
+	}
+	
+	/*
+	 * 
+	 */
+	public static ResultSet getDataToCreateExcel(int fromDateDiff, int toDateDiff) {
+		ResultSet resultSet = FromDatabase.getDataToCreateExcel(fromDateDiff, toDateDiff);
+		return resultSet;
 	}
 }

@@ -18,6 +18,7 @@ import org.controlsfx.control.textfield.TextFields;
 import com.bill.beans.Address;
 import com.bill.beans.BilledProducts;
 import com.bill.pdf.PDFGenerator;
+import com.bill.popus.ShowPopups;
 import com.bill.validator.FromDatabasevalidator;
 import com.bill.validator.ToDatabaseValidator;
 
@@ -26,7 +27,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -317,11 +317,8 @@ public class InvoiceController implements Initializable{
 			
 			ToDatabaseValidator.insertInvoiceDataAndBilledProducts(billRow, invoiceNumber.getText(), invoiceDate.getText(), fromComboBox.getValue(), 
 					toComboBox.getValue(), orderAmount, sgstTotal, cgstTotal, roundTotal);
-
-			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Dialog");
-			alert.setHeaderText("Success..Your Invoice is generated..");
-			alert.showAndWait();
+			
+			ShowPopups.showPopups(AlertType.INFORMATION, "Success....", "Invoice is generated Successfully....");
 			
 		} catch (IOException e) {
 			e.printStackTrace();
