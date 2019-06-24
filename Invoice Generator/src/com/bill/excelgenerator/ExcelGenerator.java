@@ -1,4 +1,4 @@
-package com.bill.excel;
+package com.bill.excelgenerator;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

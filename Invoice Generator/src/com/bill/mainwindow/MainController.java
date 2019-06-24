@@ -42,7 +42,7 @@ public class MainController implements Initializable {
 			Stage stage = new Stage();
 			Parent parent = FXMLLoader.load(getClass().getResource("../invoicewindow/invoice.fxml"));
 			Scene scene = new Scene(parent);
-			stage.setTitle("SKP bill");
+			stage.setTitle("Invoice Window");
 			stage.setScene(scene);
 			stage.show();
 
@@ -59,7 +59,7 @@ public class MainController implements Initializable {
 			Stage stage = new Stage();
 			Parent parent = FXMLLoader.load(getClass().getResource("../excelwindow/excel.fxml"));
 			Scene scene = new Scene(parent);
-			stage.setTitle("Generate Excel");
+			stage.setTitle("Excel Generator Window");
 			stage.setScene(scene);
 			stage.show();
 

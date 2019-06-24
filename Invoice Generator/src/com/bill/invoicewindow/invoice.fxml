@@ -8,7 +8,7 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="695.0" prefWidth="1360.0" xmlns="http://javafx.com/javafx/8.0.172" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bill.invoicewindow.InvoiceController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="695.0" prefWidth="1360.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bill.invoicewindow.InvoiceController">
    <children>
       <ComboBox fx:id="fromComboBox" cache="true" cacheHint="SPEED" layoutX="76.0" layoutY="49.0" onAction="#onClickFromComboBox" prefHeight="29.0" prefWidth="224.0" promptText="--SELECT--" />
       <Label layoutX="33.0" layoutY="49.0" prefHeight="22.0" prefWidth="42.0" text="From : " />
@@ -18,9 +18,8 @@
       <TextArea fx:id="toTextArea" layoutX="76.0" layoutY="364.0" prefHeight="168.0" prefWidth="224.0" wrapText="true" />
       <ComboBox fx:id="placeComboBox" cache="true" cacheHint="SPEED" layoutX="135.0" layoutY="575.0" prefHeight="29.0" prefWidth="147.0" promptText="--SELECT--" />
       <Label layoutX="31.0" layoutY="575.0" prefHeight="22.0" prefWidth="110.0" text="Place of Supply :" />
-      <Button layoutX="611.0" layoutY="629.0" mnemonicParsing="false" onAction="#generatePdf" text="Print" />
-      <Button layoutX="703.0" layoutY="629.0" mnemonicParsing="false" text="Save" />
-      <Button layoutX="788.0" layoutY="629.0" mnemonicParsing="false" text="Print &amp; Save" />
+      <Button layoutX="644.0" layoutY="629.0" mnemonicParsing="false" onAction="#generatePdf" text="Print" />
+      <Button layoutX="722.0" layoutY="629.0" mnemonicParsing="false" text="Print &amp; Save" />
       <Label layoutX="389.0" layoutY="53.0" prefHeight="22.0" prefWidth="102.0" text="Invoice Number :" />
       <Label layoutX="597.0" layoutY="54.0" prefHeight="22.0" prefWidth="88.0" text="Invoice Date :" />
       <TableView fx:id="tableView" editable="true" layoutX="389.0" layoutY="110.0" prefHeight="417.0" prefWidth="789.0">

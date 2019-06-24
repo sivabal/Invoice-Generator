@@ -17,7 +17,7 @@ import org.controlsfx.control.textfield.TextFields;
 
 import com.bill.beans.Address;
 import com.bill.beans.BilledProducts;
-import com.bill.pdf.PDFGenerator;
+import com.bill.pdfgenerator.PDFGenerator;
 import com.bill.popus.ShowPopups;
 import com.bill.validator.FromDatabasevalidator;
 import com.bill.validator.ToDatabaseValidator;
@@ -37,13 +37,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class InvoiceController implements Initializable{
-	
-	
-	public static void main(String[] args) {
-		
-		new InvoiceController().generatePdf();
-		
-	}
 	
 	
 	public ObservableList<String> fromItems = FXCollections.observableArrayList();

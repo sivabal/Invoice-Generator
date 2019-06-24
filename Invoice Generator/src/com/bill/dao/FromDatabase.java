@@ -3,7 +3,6 @@ package com.bill.dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 public class FromDatabase {
 	
@@ -27,35 +26,6 @@ public class FromDatabase {
 		String query = "select max(invoiceNumber) from invoiceData";
 		try {
 			preparedStmt = GetConnection.connection.prepareStatement(query);
-			resultSet = preparedStmt.executeQuery();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return resultSet;
-	}
-	
-	public static ResultSet getIvoiceData(int fromDateDiff, int toDateDiff) {
-		PreparedStatement preparedStmt = null;
-		ResultSet resultSet = null;
-		String query = "select * from invoiceData where daysDifference >= ? and daysDifference <= ?";
-		try {
-			preparedStmt = GetConnection.connection.prepareStatement(query);
-			preparedStmt.setInt(1, fromDateDiff);
-			preparedStmt.setInt(2, toDateDiff);
-			resultSet = preparedStmt.executeQuery();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return resultSet;
-	}
-	
-	public static ResultSet getBilledProducts(List<String> invoiceNumArray) {
-		PreparedStatement preparedStmt = null;
-		ResultSet resultSet = null;
-		String query = "select * from invoiceData where daysDifference >= ? and daysDifference <= ?";
-		try {
-			preparedStmt = GetConnection.connection.prepareStatement(query);
-//			preparedStmt.setInt(1, fromDateDiff);
 			resultSet = preparedStmt.executeQuery();
 		} catch (SQLException e) {
 			e.printStackTrace();

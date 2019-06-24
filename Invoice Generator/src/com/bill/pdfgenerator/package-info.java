@@ -5,4 +5,4 @@
  * @author sivabalakrishnan.m
  *
  */
-package com.bill.pdf;
+package com.bill.pdfgenerator;

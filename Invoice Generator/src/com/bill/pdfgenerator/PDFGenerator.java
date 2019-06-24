@@ -1,4 +1,4 @@
-package com.bill.pdf;
+package com.bill.pdfgenerator;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -20,12 +20,6 @@ import be.quodlibet.boxable.Row;
 import javafx.collections.ObservableList;
 
 public class PDFGenerator {
-
-	public static void main(String[] args) {
-//		ObservableList<BilledProducts> billRow = FXCollections.observableArrayList();
-//		drawProductsTable(billRow);
-
-	}
 	
 	
 	public static void drawTitleTable(String name, Address fromAddress, PDDocument document, PDPage page) {

@@ -6,12 +6,12 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bill.mainwindow.MainController">
    <children>
-      <Button layoutX="68.0" layoutY="70.0" mnemonicParsing="false" onAction="#printInvoice" prefHeight="87.0" prefWidth="127.0" text="Print Invoice" />
-      <Button layoutX="68.0" layoutY="173.0" mnemonicParsing="false" prefHeight="87.0" prefWidth="127.0" text="Delete Customer" />
-      <Button layoutX="382.0" layoutY="70.0" mnemonicParsing="false" prefHeight="87.0" prefWidth="127.0" text="Add Customer" />
-      <Button layoutX="220.0" layoutY="173.0" mnemonicParsing="false" prefHeight="87.0" prefWidth="141.0" text="Edit Customer Details" textAlignment="JUSTIFY" />
-      <Label layoutX="430.0" layoutY="23.0" text="DB Status :" />
-      <Label fx:id="dbStatus" layoutX="493.0" layoutY="23.0" />
-      <Button layoutX="220.0" layoutY="70.0" mnemonicParsing="false" onAction="#generateExcel" prefHeight="87.0" prefWidth="141.0" text="Generate Excel" />
+      <Button layoutX="68.0" layoutY="68.0" mnemonicParsing="false" onAction="#printInvoice" prefHeight="97.0" prefWidth="215.0" text="Print Invoice" />
+      <Button layoutX="305.0" layoutY="68.0" mnemonicParsing="false" onAction="#generateExcel" prefHeight="97.0" prefWidth="228.0" text="Generate Excel" />
+      <Button layoutX="68.0" layoutY="192.0" mnemonicParsing="false" prefHeight="87.0" prefWidth="127.0" text="Edit Product Details" />
+      <Button layoutX="218.0" layoutY="192.0" mnemonicParsing="false" prefHeight="87.0" prefWidth="148.0" text="Edit 'From Bill' Address" />
+      <Button layoutX="388.0" layoutY="192.0" mnemonicParsing="false" prefHeight="87.0" prefWidth="141.0" text="Edit 'To Bill' Address" textAlignment="JUSTIFY" />
+      <Label layoutX="401.0" layoutY="23.0" text="DataBase Status :" />
+      <Label fx:id="dbStatus" layoutX="498.0" layoutY="23.0" prefHeight="17.0" prefWidth="79.0" text="Disconnected" />
    </children>
 </AnchorPane>
