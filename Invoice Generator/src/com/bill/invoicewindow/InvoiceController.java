@@ -29,6 +29,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -44,7 +45,10 @@ public class InvoiceController implements Initializable{
 	public ObservableList<String> toItems = FXCollections.observableArrayList();
 	public ObservableList<BilledProducts> billRow = FXCollections.observableArrayList();
 	public Map<String, Float[]> productInfo = new HashMap<>();
-	
+	public Float tempQty;
+	public Float[] tempPrdDetail;
+	Float tempSum;
+	public DecimalFormat decimalFormat = new DecimalFormat("#.##");
 	public String[] suggestions = null;
 	
 	public Address fromAddress = new Address("261", "No.2 Main Road", "Sitharkadum", "Mayiladuthurai", "", "609003","04364-259338", "9442419772");
@@ -52,9 +56,8 @@ public class InvoiceController implements Initializable{
 	
 	
 
-	
-	@FXML private Label invoiceNumber;
-	@FXML private Label invoiceDate;
+	@FXML private TextField invoiceNumber;
+	@FXML private DatePicker invoiceDate;
 	@FXML private Label total;
 	
 	@FXML private ComboBox<String> fromComboBox;
@@ -88,7 +91,8 @@ public class InvoiceController implements Initializable{
 		suggestions = productInfo.keySet().toArray(new String[productInfo.size()]);
 		initializeDropdowns();
 		initializeBillingTable();
-		invoiceDate.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/uuuu")));
+		//invoiceDate.set(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/uuuu")));
+		invoiceDate.setValue(LocalDate.now());
 		invoiceNumber.setText(FromDatabasevalidator.getLastInvoiceNumber());
 		total.setText("0.0");
 		tableView.selectionModelProperty().getValue().selectFirst();
@@ -156,6 +160,7 @@ public class InvoiceController implements Initializable{
 	/**
 	 * this method will create a new row for the billing table each time it is called.
 	 */
+	@FXML
 	public ObservableList<BilledProducts> createNewRow(){
 		
 		TextField itemNameField = new TextField("");
@@ -178,23 +183,21 @@ public class InvoiceController implements Initializable{
 		
 		itemNameField.setOnAction((actionEvent) -> {
 				BilledProducts currentlySelected = tableView.getSelectionModel().getSelectedItem();
-				currentlySelected.setOrderAmount(productInfo.get(currentlySelected.getItemName().getText())[0] * Float.parseFloat(currentlySelected.getQuantity().getText()));
-				currentlySelected.setSgstTotal((productInfo.get(currentlySelected.getItemName().getText())[1]*
-						(productInfo.get(currentlySelected.getItemName().getText())[0] * Float.parseFloat(currentlySelected.getQuantity().getText())))/100);
 				
-				currentlySelected.setCgstTotal((productInfo.get(currentlySelected.getItemName().getText())[2]*
-						(productInfo.get(currentlySelected.getItemName().getText())[0] * Float.parseFloat(currentlySelected.getQuantity().getText())))/100);
+				tempQty = Float.parseFloat(currentlySelected.getQuantity().getText());
+				tempPrdDetail = productInfo.get(currentlySelected.getItemName().getText());
 				
+				currentlySelected.setOrderAmount(tempPrdDetail[0] * tempQty);
+				currentlySelected.setSgstTotal((tempPrdDetail[1]*(tempPrdDetail[0] * tempQty))/100);
+				currentlySelected.setCgstTotal((tempPrdDetail[2]*(tempPrdDetail[0] * tempQty))/100);
 				currentlySelected.getAmount().setText(new DecimalFormat("#.##").format(
-					(productInfo.get(currentlySelected.getItemName().getText())[0] * Float.parseFloat(currentlySelected.getQuantity().getText()))
-					+ currentlySelected.getSgstTotal() 
-					+ currentlySelected.getCgstTotal()));
-				currentlySelected.getUnitRate().setText(productInfo.get(currentlySelected.getItemName().getText())[0].toString());
-				currentlySelected.getSgst().setText(productInfo.get(currentlySelected.getItemName().getText())[1].toString());
-				currentlySelected.getCgst().setText(productInfo.get(currentlySelected.getItemName().getText())[2].toString());
+					(tempPrdDetail[0] * tempQty)+ currentlySelected.getSgstTotal() + currentlySelected.getCgstTotal()));
+				currentlySelected.getUnitRate().setText(tempPrdDetail[0].toString());
+				currentlySelected.getSgst().setText(tempPrdDetail[1].toString());
+				currentlySelected.getCgst().setText(tempPrdDetail[2].toString());
 				
-				Float sum = billRow.stream().map(x -> Float.parseFloat(x.getAmount().getText())).reduce(0.0f, (a,b) -> a+b);		
-				total.setText(new DecimalFormat("#.##").format(sum)); 
+				tempSum = billRow.stream().map(x -> Float.parseFloat(x.getAmount().getText())).reduce(0.0f, (a,b) -> a+b);		
+				total.setText(decimalFormat.format(tempSum)); 
 				
 		});
 	
@@ -212,20 +215,17 @@ public class InvoiceController implements Initializable{
 		quantityField.setOnAction((actionEvent) -> {
 			
 				BilledProducts currentlySelected = tableView.getSelectionModel().getSelectedItem();		
-				currentlySelected.setOrderAmount(productInfo.get(currentlySelected.getItemName().getText())[0] * Float.parseFloat(currentlySelected.getQuantity().getText()));
-				currentlySelected.setSgstTotal((productInfo.get(currentlySelected.getItemName().getText())[1]*
-						(productInfo.get(currentlySelected.getItemName().getText())[0] * Float.parseFloat(currentlySelected.getQuantity().getText())))/100);
 				
-				currentlySelected.setCgstTotal((productInfo.get(currentlySelected.getItemName().getText())[2]*
-						(productInfo.get(currentlySelected.getItemName().getText())[0] * Float.parseFloat(currentlySelected.getQuantity().getText())))/100);
+				tempQty = Float.parseFloat(currentlySelected.getQuantity().getText());
+				tempPrdDetail = productInfo.get(currentlySelected.getItemName().getText());
 				
+				currentlySelected.setOrderAmount(tempPrdDetail[0] * tempQty);
+				currentlySelected.setSgstTotal((tempPrdDetail[1]*(tempPrdDetail[0] * tempQty))/100);
+				currentlySelected.setCgstTotal((tempPrdDetail[2]*(tempPrdDetail[0] * tempQty))/100);
 				currentlySelected.getAmount().setText(new DecimalFormat("#.##").format(
-					(productInfo.get(currentlySelected.getItemName().getText())[0] * Float.parseFloat(currentlySelected.getQuantity().getText()))
-					+ currentlySelected.getSgstTotal() 
-					+ currentlySelected.getCgstTotal()));
-				
-				Float sum = billRow.stream().map(x -> Float.parseFloat(x.getAmount().getText())).reduce(0.0f, (a,b) -> a+b);
-				total.setText(new DecimalFormat("#.##").format(sum)); 
+					(tempPrdDetail[0] * tempQty) + currentlySelected.getSgstTotal() + currentlySelected.getCgstTotal()));
+				tempSum = billRow.stream().map(x -> Float.parseFloat(x.getAmount().getText())).reduce(0.0f, (a,b) -> a+b);
+				total.setText(decimalFormat.format(tempSum)); 
 		});
 		
 		quantityField.focusedProperty().addListener((observableValue,oldValue,newValue) -> {
@@ -269,11 +269,12 @@ public class InvoiceController implements Initializable{
 	/**
 	 * this method will delete any selected bill row
 	 */
+	@FXML
 	public void deleteRow() {
 		BilledProducts currentlySelected = tableView.getSelectionModel().getSelectedItem();
 		if(currentlySelected != null) {
 			int i = billRow.indexOf(currentlySelected);
-			total.setText(new DecimalFormat("#.##").format(Float.parseFloat(total.getText()) - Float.parseFloat(currentlySelected.getAmount().getText())));
+			total.setText(decimalFormat.format(Float.parseFloat(total.getText()) - Float.parseFloat(currentlySelected.getAmount().getText())));
 			billRow.remove(currentlySelected);	
 					
 			for(int j = i; j < billRow.size(); j++) {
@@ -283,10 +284,20 @@ public class InvoiceController implements Initializable{
 		
 	}
 	
+	@FXML
+	public void print() {
+		generatePdf(false);
+	}
+	
+	@FXML
+	public void printAndSave() {
+		generatePdf(true);
+	}
+	
 	/**
-	 * this method will be called when "print" button is clicked
+	 * 
 	 */
-	public void generatePdf() {
+	public void generatePdf(boolean save) {
 		
 		Float sgstTotal = (float)billRow.stream().mapToDouble(x -> x.getSgstTotal()).reduce(0, (a, b) -> a+b);
 		Float cgstTotal = (float)billRow.stream().mapToDouble(x -> x.getCgstTotal()).reduce(0, (a, b) -> a+b);
@@ -299,7 +310,7 @@ public class InvoiceController implements Initializable{
 			PDPage page = new PDPage();
 			
 			PDFGenerator.drawTitleTable(fromComboBox.getValue(), fromAddress, document, page);
-			PDFGenerator.drawInvoiceTable(toComboBox.getValue(), toAddress, invoiceNumber.getText(), invoiceDate.getText()
+			PDFGenerator.drawInvoiceTable(toComboBox.getValue(), toAddress, invoiceNumber.getText(), invoiceDate.getValue().format(DateTimeFormatter.ofPattern("dd/MM/uuuu"))
 					, placeComboBox.getValue(), document, page);
 			float yPosition = PDFGenerator.drawProductsTable(billRow, document, page);
 			PDFGenerator.drawTotalTable(orderAmount, sgstTotal, cgstTotal, roundTotal, document, page,yPosition);
@@ -308,10 +319,13 @@ public class InvoiceController implements Initializable{
 			document.save("C:\\Users\\welcome\\Desktop\\invoice\\"+ invoiceNumber.getText() +".pdf");
 			document.close();
 			
-			ToDatabaseValidator.insertInvoiceDataAndBilledProducts(billRow, invoiceNumber.getText(), invoiceDate.getText(), fromComboBox.getValue(), 
-					toComboBox.getValue(), orderAmount, sgstTotal, cgstTotal, roundTotal);
 			
-			ShowPopups.showPopups(AlertType.INFORMATION, "Success....", "Invoice is generated Successfully....");
+			if(save) {
+				ToDatabaseValidator.insertInvoiceDataAndBilledProducts(billRow, invoiceNumber.getText(), invoiceDate.getValue().format(DateTimeFormatter.ofPattern("dd/MM/uuuu")), fromComboBox.getValue(), 
+						toComboBox.getValue(), orderAmount, sgstTotal, cgstTotal, roundTotal);
+			}
+			
+			ShowPopups.showPopups(AlertType.INFORMATION, "Success....", (save)?"Invoice is Generated and Saved Successfully....":"Invoice is Generated Successfully....");
 			
 		} catch (IOException e) {
 			e.printStackTrace();

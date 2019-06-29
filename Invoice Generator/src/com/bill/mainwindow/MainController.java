@@ -66,8 +66,49 @@ public class MainController implements Initializable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 	}
 	
+	@FXML
+	public void editProductDetails() {
+		
+		try {
+			Stage stage = new Stage();
+			Parent parent = FXMLLoader.load(getClass().getResource("../editproductdetails/editproductdetails.fxml"));
+			Scene scene = new Scene(parent);
+			stage.setTitle("Edit Product Details");
+			stage.setScene(scene);
+			stage.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@FXML
+	public void editfromaddress() {
+		try {
+			Stage stage = new Stage();
+			Parent parent = FXMLLoader.load(getClass().getResource("../editfromaddress/editfromaddress.fxml"));
+			Scene scene = new Scene(parent);
+			stage.setTitle("Edit 'Bill From' Address");
+			stage.setScene(scene);
+			stage.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@FXML
+	public void edittoaddress() {
+		try {
+			Stage stage = new Stage();
+			Parent parent = FXMLLoader.load(getClass().getResource("../edittoaddress/edittoaddress.fxml"));
+			Scene scene = new Scene(parent);
+			stage.setTitle("Edit 'Bill To' Address");
+			stage.setScene(scene);
+			stage.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 }

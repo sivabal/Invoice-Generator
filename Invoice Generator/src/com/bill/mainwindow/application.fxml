@@ -8,9 +8,9 @@
    <children>
       <Button layoutX="68.0" layoutY="68.0" mnemonicParsing="false" onAction="#printInvoice" prefHeight="97.0" prefWidth="215.0" text="Print Invoice" />
       <Button layoutX="305.0" layoutY="68.0" mnemonicParsing="false" onAction="#generateExcel" prefHeight="97.0" prefWidth="228.0" text="Generate Excel" />
-      <Button layoutX="68.0" layoutY="192.0" mnemonicParsing="false" prefHeight="87.0" prefWidth="127.0" text="Edit Product Details" />
-      <Button layoutX="218.0" layoutY="192.0" mnemonicParsing="false" prefHeight="87.0" prefWidth="148.0" text="Edit 'From Bill' Address" />
-      <Button layoutX="388.0" layoutY="192.0" mnemonicParsing="false" prefHeight="87.0" prefWidth="141.0" text="Edit 'To Bill' Address" textAlignment="JUSTIFY" />
+      <Button layoutX="68.0" layoutY="192.0" mnemonicParsing="false" onAction="#editProductDetails" prefHeight="87.0" prefWidth="127.0" text="Edit Product Details" />
+      <Button layoutX="218.0" layoutY="192.0" mnemonicParsing="false" onAction="#editfromaddress" prefHeight="87.0" prefWidth="148.0" text="Edit 'Bill From' Address" />
+      <Button layoutX="388.0" layoutY="192.0" mnemonicParsing="false" onAction="#edittoaddress" prefHeight="87.0" prefWidth="141.0" text="Edit 'Bill To' Address" textAlignment="JUSTIFY" />
       <Label layoutX="401.0" layoutY="23.0" text="DataBase Status :" />
       <Label fx:id="dbStatus" layoutX="498.0" layoutY="23.0" prefHeight="17.0" prefWidth="79.0" text="Disconnected" />
    </children>

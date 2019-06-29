@@ -19,4 +19,18 @@ public class ToDatabaseValidator {
 		ToDatabase.insertBilledProducts(billrow, invoiceNumber);
 		
 	}
+	
+	/*
+	 * 
+	 */
+	public static void updateProduct(int prodId, String prodName, String unitRate, String sgst, String cgst) {
+		ToDatabase.updateProduct(prodId, prodName, unitRate, sgst, cgst);
+	}
+	
+	/*
+	 * 
+	 */
+	public static void insertProduct(int prodId, String prodName, String unitRate, String sgst, String cgst) {
+		ToDatabase.insertProduct(prodId, prodName, unitRate, sgst, cgst);
+	}
 }
