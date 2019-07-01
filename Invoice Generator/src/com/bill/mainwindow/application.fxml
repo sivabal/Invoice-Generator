@@ -13,5 +13,6 @@
       <Button layoutX="388.0" layoutY="192.0" mnemonicParsing="false" onAction="#edittoaddress" prefHeight="87.0" prefWidth="141.0" text="Edit 'Bill To' Address" textAlignment="JUSTIFY" />
       <Label layoutX="401.0" layoutY="23.0" text="DataBase Status :" />
       <Label fx:id="dbStatus" layoutX="498.0" layoutY="23.0" prefHeight="17.0" prefWidth="79.0" text="Disconnected" />
+      <Button layoutX="439.0" layoutY="317.0" mnemonicParsing="false" onAction="#refreshData" text="Referesh Data" />
    </children>
 </AnchorPane>

@@ -2,8 +2,9 @@ package com.bill.editproductdetails;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-
+import com.bill.exception.EditProductException;
 import com.bill.popus.ShowPopups;
+import com.bill.utility.Utility;
 import com.bill.validator.FromDatabasevalidator;
 import com.bill.validator.ToDatabaseValidator;
 
@@ -23,6 +24,7 @@ public class EditProductDetailsController implements Initializable{
 	@FXML private TextField insertCgst;
 	
 	@FXML private Button updateProductBtn;
+	
 	@FXML private TextField updateProdId;
 	@FXML private TextField updateProdName;
 	@FXML private TextField updateUnitRate;
@@ -45,10 +47,22 @@ public class EditProductDetailsController implements Initializable{
 	@FXML
 	public void insertProduct() {
 		
-		ToDatabaseValidator.insertProduct(Integer.parseInt(insertProdId.getText()), insertProdName.getText(),
-				insertUnitRate.getText(), insertSgst.getText(), insertCgst.getText());
-		
-		ShowPopups.showPopups(AlertType.INFORMATION, "Success....", "Product Inserted to Database Successfully....");
+		try {
+			
+			if(!Utility.regexProdId.matcher(insertProdId.getText()).matches())
+				throw new EditProductException("Please Provide a Three digit(minimum) Number for Product Id.");
+			
+			
+			ToDatabaseValidator.insertProduct(Integer.parseInt(insertProdId.getText()), insertProdName.getText(),
+					insertUnitRate.getText(), insertSgst.getText(), insertCgst.getText());
+			
+			ShowPopups.showPopups(AlertType.INFORMATION,"Product Inserted to Database Successfully....", "");
+			
+		} catch (EditProductException e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.getMessage(), "");
+		}catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@FXML

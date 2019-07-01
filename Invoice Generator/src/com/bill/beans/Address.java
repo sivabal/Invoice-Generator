@@ -2,66 +2,75 @@ package com.bill.beans;
 
 public class Address {
 	
-	private String number;
-	private String street;
-	private String area;
-	private String town;
+	private String shopName;
+	private String addressLine1;
+	private String addressLine2;
+	private String city;
 	private String district;
+	private String state;
 	private String pincode;
 	private String telephone;
 	private String mobile;
+	private String gstNo;
 	
-	
-	public Address(String number, String street, String area, String town, String district, String pincode,
-			String telephone, String mobile) {
-		this.number = number;
-		this.street = street;
-		this.area = area;
-		this.town = town;
-		this.district = district;
-		this.pincode = pincode;
-		this.telephone = telephone;
-		this.mobile = mobile;
+
+	public String getShopName() {
+		return shopName;
 	}
 
 
-	public String getNumber() {
-		return number;
+	public void setShopName(String shopName) {
+		this.shopName = shopName;
 	}
 
 
-	public void setNumber(String number) {
-		this.number = number;
+	public String getGstNo() {
+		return gstNo;
 	}
 
 
-	public String getStreet() {
-		return street;
+	public void setGstNo(String gstNo) {
+		this.gstNo = gstNo;
 	}
 
 
-	public void setStreet(String street) {
-		this.street = street;
+	public String getAddressLine1() {
+		return addressLine1;
 	}
 
 
-	public String getArea() {
-		return area;
+	public void setAddressLine1(String addressLine1) {
+		this.addressLine1 = addressLine1;
 	}
 
 
-	public void setArea(String area) {
-		this.area = area;
+	public String getAddressLine2() {
+		return addressLine2;
 	}
 
 
-	public String getTown() {
-		return town;
+	public void setAddressLine2(String addressLine2) {
+		this.addressLine2 = addressLine2;
 	}
 
 
-	public void setTown(String town) {
-		this.town = town;
+	public String getCity() {
+		return city;
+	}
+
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+
+	public String getState() {
+		return state;
+	}
+
+
+	public void setState(String state) {
+		this.state = state;
 	}
 
 
@@ -105,7 +114,8 @@ public class Address {
 	}
 	
 	public String toString() {
-		return number + ", " + street +", " + area +", "+ town+", " + district+"-" + pincode+", " + telephone +"/"+ mobile;
+		return addressLine1 + ", " + addressLine2 +", " + city +", "+ district+"-" + pincode+ ", "
+	+ state + ", "+ telephone +"/"+ mobile + ", " + gstNo;
 	}
 	
 }

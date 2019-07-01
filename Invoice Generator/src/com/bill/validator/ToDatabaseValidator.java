@@ -33,4 +33,51 @@ public class ToDatabaseValidator {
 	public static void insertProduct(int prodId, String prodName, String unitRate, String sgst, String cgst) {
 		ToDatabase.insertProduct(prodId, prodName, unitRate, sgst, cgst);
 	}
+	
+	/*
+	 * 
+	 */
+	public static void insertFromAddress(String shopName, String addressLine1, String addressLine2, String city, String district,
+			String state, String pincode, String telephone, String mobile, String gstNo) {
+		
+		ToDatabase.insertFromAddress(shopName, ((addressLine1 == null)?"":addressLine1), ((addressLine2 == null)?"":addressLine2),
+				((city == null)?"":city), ((district == null)?"":district),((state == null)?"":state) , 
+				((pincode == null)?"":pincode), ((telephone == null)?"":telephone),((mobile == null)?"":mobile) ,((gstNo == null)?"":gstNo));
+		
+	}
+	
+	
+	/*
+	 * 
+	 */
+	public static void updateFromAddress(String oldShopName, String newShopName, String addressLine1, String addressLine2, String city, String district,
+			String state, String pincode, String telephone, String mobile, String gstNo) {
+		
+		ToDatabase.updateFromAddress(oldShopName, newShopName, ((addressLine1 == null)?"":addressLine1), ((addressLine2 == null)?"":addressLine2),
+				((city == null)?"":city), ((district == null)?"":district),((state == null)?"":state) , 
+				((pincode == null)?"":pincode), ((telephone == null)?"":telephone),((mobile == null)?"":mobile) ,((gstNo == null)?"":gstNo));
+	}
+	/*
+	 * 
+	 */
+	public static void insertToAddress(String shopName, String addressLine1, String addressLine2, String city, String district,
+			String state, String pincode, String telephone, String mobile, String gstNo) {
+		
+		ToDatabase.insertToAddress(shopName, ((addressLine1 == null)?"":addressLine1), ((addressLine2 == null)?"":addressLine2),
+				((city == null)?"":city), ((district == null)?"":district),((state == null)?"":state) , 
+				((pincode == null)?"":pincode), ((telephone == null)?"":telephone),((mobile == null)?"":mobile) ,((gstNo == null)?"":gstNo));
+		
+	}
+	
+	/*
+	 * 
+	 */
+	public static void updateToAddress(String oldShopName, String newShopName, String addressLine1, String addressLine2, String city, String district,
+			String state, String pincode, String telephone, String mobile, String gstNo) {
+		
+		ToDatabase.updateToAddress(oldShopName, newShopName, ((addressLine1 == null)?"":addressLine1), ((addressLine2 == null)?"":addressLine2),
+				((city == null)?"":city), ((district == null)?"":district),((state == null)?"":state) , 
+				((pincode == null)?"":pincode), ((telephone == null)?"":telephone),((mobile == null)?"":mobile) ,((gstNo == null)?"":gstNo));
+	}
+		
 }

@@ -95,4 +95,113 @@ public class ToDatabase {
 			e.printStackTrace();
 		}
 	}
+	
+
+	/*
+	 * 
+	 */
+	public static void insertFromAddress(String shopName, String addressLine1, String addressLine2, String city, String district,
+			String state, String pincode, String telephone, String mobile, String gstNo) {
+		
+		String query = "insert into fromAddress values(?,?,?,?,?,?,?,?,?,?)";
+		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query)) {
+			preparedStmt.setString(1, shopName);
+			preparedStmt.setString(2, addressLine1);
+			preparedStmt.setString(3, addressLine2);
+			preparedStmt.setString(4, city);
+			preparedStmt.setString(5, district);
+			preparedStmt.setString(6, state);
+			preparedStmt.setString(7, pincode);
+			preparedStmt.setString(8, telephone);
+			preparedStmt.setString(9, mobile);
+			preparedStmt.setString(10, gstNo);
+			
+			preparedStmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * 
+	 */
+	public static void updateFromAddress(String oldShopName, String newShopName, String addressLine1, String addressLine2, String city, String district,
+			String state, String pincode, String telephone, String mobile, String gstNo) {
+		
+		String query = "update fromAddress set shopName = ?, addressLine1 = ?, addressLine2 = ? , city = ?, district = ?, state = ?, "
+				+ "pincode = ?, telephone = ?, mobile = ?, gstNo = ? where shopName = ?";
+		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query)) {
+			preparedStmt.setString(1, newShopName);
+			preparedStmt.setString(2, addressLine1);
+			preparedStmt.setString(3, addressLine2);
+			preparedStmt.setString(4, city);
+			preparedStmt.setString(5, district);
+			preparedStmt.setString(6, state);
+			preparedStmt.setString(7, pincode);
+			preparedStmt.setString(8, telephone);
+			preparedStmt.setString(9, mobile);
+			preparedStmt.setString(10, gstNo);
+			preparedStmt.setString(11, oldShopName);
+			
+			preparedStmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * 
+	 */
+	public static void insertToAddress(String shopName, String addressLine1, String addressLine2, String city, String district,
+			String state, String pincode, String telephone, String mobile, String gstNo) {
+		
+		String query = "insert into toAddress values(?,?,?,?,?,?,?,?,?,?)";
+		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query)) {
+			preparedStmt.setString(1, shopName);
+			preparedStmt.setString(2, addressLine1);
+			preparedStmt.setString(3, addressLine2);
+			preparedStmt.setString(4, city);
+			preparedStmt.setString(5, district);
+			preparedStmt.setString(6, state);
+			preparedStmt.setString(7, pincode);
+			preparedStmt.setString(8, telephone);
+			preparedStmt.setString(9, mobile);
+			preparedStmt.setString(10, gstNo);
+			
+			preparedStmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * 
+	 */
+	public static void updateToAddress(String oldShopName, String newShopName, String addressLine1, String addressLine2, String city, String district,
+			String state, String pincode, String telephone, String mobile, String gstNo) {
+		
+		String query = "update toAddress set shopName = ?, addressLine1 = ?, addressLine2 = ? , city = ?, district = ?, state = ?, "
+				+ "pincode = ?, telephone = ?, mobile = ?, gstNo = ? where shopName = ?";
+		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query)) {
+			preparedStmt.setString(1, newShopName);
+			preparedStmt.setString(2, addressLine1);
+			preparedStmt.setString(3, addressLine2);
+			preparedStmt.setString(4, city);
+			preparedStmt.setString(5, district);
+			preparedStmt.setString(6, state);
+			preparedStmt.setString(7, pincode);
+			preparedStmt.setString(8, telephone);
+			preparedStmt.setString(9, mobile);
+			preparedStmt.setString(10, gstNo);
+			preparedStmt.setString(11, oldShopName);
+			
+			preparedStmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }

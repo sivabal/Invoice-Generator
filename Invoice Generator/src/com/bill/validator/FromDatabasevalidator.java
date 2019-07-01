@@ -1,12 +1,10 @@
 package com.bill.validator;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Map;
 
-
+import com.bill.beans.Address;
 import com.bill.dao.FromDatabase;
+import javafx.collections.ObservableList;
 import javafx.scene.control.TextField;
 
 public class FromDatabasevalidator {
@@ -17,74 +15,75 @@ public class FromDatabasevalidator {
 	 */
 	public static Map<String, Float[]> getProductDetails(){
 		
-		Map<String, Float[]> productInfo = new HashMap<>();
-		try {
-			ResultSet resultSet = FromDatabase.getProductDetails();
-			while(resultSet.next()){
-				Float[] rateAndTax = new Float[3];
-				rateAndTax[0] = Float.valueOf(resultSet.getString("rate"));
-				rateAndTax[1] = Float.valueOf(resultSet.getFloat("sgst"));
-				rateAndTax[2] = Float.valueOf(resultSet.getFloat("cgst"));
-				productInfo.put(resultSet.getString("prodName"), rateAndTax);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
+		Map<String, Float[]> productInfo = FromDatabase.getProductDetails();
 		return productInfo;
+		
+		
+		
 	}
 
 	/*
 	 * this method will return the last invoice number
 	 */
 	public static String getLastInvoiceNumber() {
-		try {
-			ResultSet resultSet = FromDatabase.getLastInvoiceNumber();
-			String[] invoiceNumber = resultSet.getString("max(invoiceNumber)").split("-");
-			return invoiceNumber[0] + "-" + (Integer.parseInt(invoiceNumber[1])+1);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return "";
+
+		String[] invoiceNumber = FromDatabase.getLastInvoiceNumber().split("-");
+		return invoiceNumber[0] + "-" + (Integer.parseInt(invoiceNumber[1])+1);
+		
 	}
 	
 	/*
 	 * 
 	 */
-	public static ResultSet getDataToCreateExcel(int fromDateDiff, int toDateDiff) {
-		 ResultSet resultSet = FromDatabase.getDataToCreateExcel(fromDateDiff, toDateDiff);
-		 return resultSet;
+	public static void getDataToCreateExcel(int fromDateDiff, int toDateDiff) {
+		 FromDatabase.getDataToCreateExcel(fromDateDiff, toDateDiff);
 	}
 	
 	/*
 	 * this method will return the last product id
 	 */
 	public static String getLastProductId() {
-		String prodId = "";
-		try {
-			ResultSet resultSet = FromDatabase.getLastProductId();
-			prodId = Integer.toString(resultSet.getInt("max(prodId)") + 1);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return prodId;
+		return Integer.toString(FromDatabase.getLastProductId() + 1);
 	}
 	/*
 	 * 
 	 */
 	public static void getProduct(int prodId, TextField updateProdName, TextField updateUnitRate, TextField updateSgst, TextField updateCgst) {
 
-			try {
-				ResultSet resultSet = FromDatabase.getProduct(prodId);
-				
-				updateProdName.setText(resultSet.getString("prodName"));
-				updateUnitRate.setText(resultSet.getString("rate"));
-				updateSgst.setText(resultSet.getString("sgst"));
-				updateCgst.setText(resultSet.getString("cgst"));
-				
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+		FromDatabase.getProduct(prodId, updateProdName, updateUnitRate, updateSgst, updateCgst);
 			
+	}
+	
+	/*
+	 * 
+	 */
+	public static ObservableList<String> getFromAddressShopNames(){
+		 return FromDatabase.getFromAddressShopNames();
+			
+	}
+	
+	/*
+	 * 
+	 */
+	public static ObservableList<String> getToAddressShopNames(){
+		
+		return FromDatabase.getToAddressShopNames();
+	}
+	
+	/*
+	 * 
+	 */
+	public static Address getFromAddress(String shopName){
+	
+		return FromDatabase.getFromAddress(shopName); 
+	}
+	
+	/*
+	 * 
+	 */
+	public static Address getToAddress(String shopName){
+
+		return FromDatabase.getToAddress(shopName);
+
 	}
 }

@@ -5,9 +5,7 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -19,6 +17,7 @@ import com.bill.beans.Address;
 import com.bill.beans.BilledProducts;
 import com.bill.pdfgenerator.PDFGenerator;
 import com.bill.popus.ShowPopups;
+import com.bill.utility.Utility;
 import com.bill.validator.FromDatabasevalidator;
 import com.bill.validator.ToDatabaseValidator;
 
@@ -39,35 +38,27 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 public class InvoiceController implements Initializable{
 	
+
 	
-	public ObservableList<String> fromItems = FXCollections.observableArrayList();
 	public ObservableList<String> placeItems = FXCollections.observableArrayList();
-	public ObservableList<String> toItems = FXCollections.observableArrayList();
 	public ObservableList<BilledProducts> billRow = FXCollections.observableArrayList();
-	public Map<String, Float[]> productInfo = new HashMap<>();
+	
 	public Float tempQty;
 	public Float[] tempPrdDetail;
 	Float tempSum;
 	public DecimalFormat decimalFormat = new DecimalFormat("#.##");
 	public String[] suggestions = null;
 	
-	public Address fromAddress = new Address("261", "No.2 Main Road", "Sitharkadum", "Mayiladuthurai", "", "609003","04364-259338", "9442419772");
-	public Address toAddress = new Address("261", "No.2 Main Road", "Sitharkadum", "Mayiladuthurai", "", "609003","04364-259338", "9442419772");
+	public Address fromAddress;
+	public Address toAddress;
 	
-	
-
 	@FXML private TextField invoiceNumber;
 	@FXML private DatePicker invoiceDate;
 	@FXML private Label total;
-	
 	@FXML private ComboBox<String> fromComboBox;
-	
 	@FXML private TextArea fromTextArea;
-
 	@FXML private ComboBox<String> toComboBox;
-
 	@FXML private TextArea toTextArea;
-
 	@FXML private ComboBox<String> placeComboBox;
 	
 	@FXML private TableView<BilledProducts> tableView;
@@ -87,8 +78,7 @@ public class InvoiceController implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
-		productInfo = FromDatabasevalidator.getProductDetails();
-		suggestions = productInfo.keySet().toArray(new String[productInfo.size()]);
+		suggestions = Utility.productInfo.keySet().toArray(new String[Utility.productInfo.size()]);
 		initializeDropdowns();
 		initializeBillingTable();
 		//invoiceDate.set(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/uuuu")));
@@ -104,15 +94,9 @@ public class InvoiceController implements Initializable{
 	 */
 	public void initializeDropdowns() {
 		
-		fromItems.addAll("S.K.P Foods and Masalas", "Pillai Masalas");
-		fromComboBox.getItems().addAll(fromItems);
-		fromComboBox.selectionModelProperty().getValue().selectFirst();
-		fromTextArea.setText(fromAddress.toString());
+		fromComboBox.getItems().addAll(Utility.fromAddressShopNames);
 		
-		toItems.addAll("S.K.P Foods and Masalas", "Pillai Masalas");
-		toComboBox.getItems().addAll(toItems);
-		toComboBox.selectionModelProperty().getValue().selectFirst();
-		toTextArea.setText(toAddress.toString());
+		toComboBox.getItems().addAll(Utility.toAddressShopNames);
 				
 		placeItems.addAll("Tamil Nadu", "Karaikkal");
 		placeComboBox.getItems().addAll(placeItems);
@@ -142,6 +126,7 @@ public class InvoiceController implements Initializable{
 	 */
 	@FXML
 	public void onClickFromComboBox(ActionEvent event){
+		fromAddress = FromDatabasevalidator.getFromAddress(fromComboBox.getValue());
 		fromTextArea.setText(fromAddress.toString());
 		
 	}
@@ -153,6 +138,7 @@ public class InvoiceController implements Initializable{
 	 */
 	@FXML
 	public void onClickToComboBox(ActionEvent event){
+		toAddress = FromDatabasevalidator.getToAddress(toComboBox.getValue());
 		toTextArea.setText(toAddress.toString());
 		
 	}
@@ -185,7 +171,7 @@ public class InvoiceController implements Initializable{
 				BilledProducts currentlySelected = tableView.getSelectionModel().getSelectedItem();
 				
 				tempQty = Float.parseFloat(currentlySelected.getQuantity().getText());
-				tempPrdDetail = productInfo.get(currentlySelected.getItemName().getText());
+				tempPrdDetail = Utility.productInfo.get(currentlySelected.getItemName().getText());
 				
 				currentlySelected.setOrderAmount(tempPrdDetail[0] * tempQty);
 				currentlySelected.setSgstTotal((tempPrdDetail[1]*(tempPrdDetail[0] * tempQty))/100);
@@ -217,7 +203,7 @@ public class InvoiceController implements Initializable{
 				BilledProducts currentlySelected = tableView.getSelectionModel().getSelectedItem();		
 				
 				tempQty = Float.parseFloat(currentlySelected.getQuantity().getText());
-				tempPrdDetail = productInfo.get(currentlySelected.getItemName().getText());
+				tempPrdDetail = Utility.productInfo.get(currentlySelected.getItemName().getText());
 				
 				currentlySelected.setOrderAmount(tempPrdDetail[0] * tempQty);
 				currentlySelected.setSgstTotal((tempPrdDetail[1]*(tempPrdDetail[0] * tempQty))/100);
@@ -309,10 +295,10 @@ public class InvoiceController implements Initializable{
 			PDDocument document = new PDDocument();
 			PDPage page = new PDPage();
 			
-			PDFGenerator.drawTitleTable(fromComboBox.getValue(), fromAddress, document, page);
-			PDFGenerator.drawInvoiceTable(toComboBox.getValue(), toAddress, invoiceNumber.getText(), invoiceDate.getValue().format(DateTimeFormatter.ofPattern("dd/MM/uuuu"))
-					, placeComboBox.getValue(), document, page);
-			float yPosition = PDFGenerator.drawProductsTable(billRow, document, page);
+			float yPosition = PDFGenerator.drawTitleTable(fromComboBox.getValue(), fromAddress, document, page);
+			yPosition = PDFGenerator.drawInvoiceTable(toComboBox.getValue(), toAddress, invoiceNumber.getText(), invoiceDate.getValue().format(DateTimeFormatter.ofPattern("dd/MM/uuuu"))
+					, placeComboBox.getValue(), document, page, yPosition);
+			yPosition = PDFGenerator.drawProductsTable(billRow, document, page, yPosition);
 			PDFGenerator.drawTotalTable(orderAmount, sgstTotal, cgstTotal, roundTotal, document, page,yPosition);
 			
 			document.addPage(page);

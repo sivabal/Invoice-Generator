@@ -14,12 +14,12 @@
    <children>
       <ComboBox fx:id="fromComboBox" cache="true" cacheHint="SPEED" layoutX="76.0" layoutY="49.0" onAction="#onClickFromComboBox" prefHeight="29.0" prefWidth="224.0" promptText="--SELECT--" />
       <Label layoutX="33.0" layoutY="49.0" prefHeight="22.0" prefWidth="42.0" text="From : " />
-      <TextArea fx:id="fromTextArea" layoutX="76.0" layoutY="106.0" prefHeight="168.0" prefWidth="224.0" wrapText="true" />
-      <ComboBox fx:id="toComboBox" cache="true" cacheHint="SPEED" layoutX="69.0" layoutY="307.0" prefHeight="29.0" prefWidth="224.0" promptText="--SELECT--" />
+      <TextArea fx:id="fromTextArea" editable="false" layoutX="76.0" layoutY="106.0" prefHeight="139.0" prefWidth="224.0" wrapText="true" />
+      <ComboBox fx:id="toComboBox" cache="true" cacheHint="SPEED" layoutX="69.0" layoutY="307.0" onAction="#onClickToComboBox" prefHeight="29.0" prefWidth="224.0" promptText="--SELECT--" />
       <Label layoutX="41.0" layoutY="307.0" prefHeight="22.0" prefWidth="42.0" text="To :" />
-      <TextArea fx:id="toTextArea" layoutX="76.0" layoutY="364.0" prefHeight="168.0" prefWidth="224.0" wrapText="true" />
-      <ComboBox fx:id="placeComboBox" cache="true" cacheHint="SPEED" layoutX="135.0" layoutY="575.0" prefHeight="29.0" prefWidth="147.0" promptText="--SELECT--" />
-      <Label layoutX="31.0" layoutY="575.0" prefHeight="22.0" prefWidth="110.0" text="Place of Supply :" />
+      <TextArea fx:id="toTextArea" editable="false" layoutX="76.0" layoutY="364.0" prefHeight="139.0" prefWidth="224.0" wrapText="true" />
+      <ComboBox fx:id="placeComboBox" cache="true" cacheHint="SPEED" layoutX="135.0" layoutY="559.0" prefHeight="29.0" prefWidth="147.0" promptText="--SELECT--" />
+      <Label layoutX="41.0" layoutY="561.0" prefHeight="22.0" prefWidth="110.0" text="Place of Supply :" />
       <Button layoutX="644.0" layoutY="629.0" mnemonicParsing="false" onAction="#print" text="Print" />
       <Button layoutX="722.0" layoutY="629.0" mnemonicParsing="false" onAction="#printAndSave" text="Print &amp; Save" />
       <Label layoutX="389.0" layoutY="53.0" prefHeight="22.0" prefWidth="102.0" text="Invoice Number :" />

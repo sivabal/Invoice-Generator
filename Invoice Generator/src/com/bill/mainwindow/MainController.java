@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import com.bill.dao.GetConnection;
+import com.bill.popus.ShowPopups;
+import com.bill.utility.Utility;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,6 +17,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
 
@@ -28,11 +31,17 @@ public class MainController implements Initializable {
 		try {
 			GetConnection.getConnection();
 			dbStatus.setText(((GetConnection.connection.isClosed())?"Disconnected":"Connected"));
+			Utility.getDetailsReady();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
+	@FXML
+	public void refreshData() {
+		Utility.getDetailsReady();
+		ShowPopups.showPopups(AlertType.INFORMATION, "Success....","Data Refreshed Successfully....");
+	}
 	
 	@FXML
 	public void printInvoice(ActionEvent event) {		
@@ -110,5 +119,7 @@ public class MainController implements Initializable {
 			e.printStackTrace();
 		}
 	}
+	
+	
 
 }

@@ -22,10 +22,11 @@ import javafx.collections.ObservableList;
 public class PDFGenerator {
 	
 	
-	public static void drawTitleTable(String name, Address fromAddress, PDDocument document, PDPage page) {
+	public static float drawTitleTable(String name, Address fromAddress, PDDocument document, PDPage page) {
 		
 		Row<PDPage> row = null;
 		Cell<PDPage> cell = null;
+		float yPosition = 0;
 		try {
 			
 				float margin = 50;
@@ -38,7 +39,7 @@ public class PDFGenerator {
 			    boolean drawLine = false;
 			    float bottomMargin = 0;
 			// y position is your coordinate of top left corner of the table
-			    float yPosition = 730;
+			    yPosition = 730;
 
 			    BaseTable table = new BaseTable(yPosition, yStartNewPage, bottomMargin, tableWidth, margin, document, page, drawLine, drawContent);
 			    
@@ -58,102 +59,143 @@ public class PDFGenerator {
 			    cell.setBottomPadding(0);
 			    cell.setTopPadding(0);
 			    
+				row = table.createRow(5f);  
+				cell = row.createCell(50, fromAddress.getAddressLine1());
+				cell.setFont(PDType1Font.COURIER);
+				cell.setFontSize(9);
+				cell.setBottomPadding(0);
+				cell.setTopPadding(0);
+			    
+			    
+			    if(fromAddress.getAddressLine2() != "") {
+				    row = table.createRow(5f);  
+				    cell = row.createCell(50, fromAddress.getAddressLine2());
+				    cell.setFont(PDType1Font.COURIER);
+				    cell.setFontSize(9);
+				    cell.setBottomPadding(0);
+				    cell.setTopPadding(0);
+			    }
+			    
+
+				row = table.createRow(5f);  
+				cell = row.createCell(50, fromAddress.getCity());
+				cell.setFont(PDType1Font.COURIER);
+				cell.setFontSize(9);
+				cell.setBottomPadding(0);
+				cell.setTopPadding(0);
+			    
 			    row = table.createRow(5f);  
-			    cell = row.createCell(50, fromAddress.getNumber() + ", " + fromAddress.getStreet());
+			    cell = row.createCell(50, fromAddress.getDistrict() + " - " + fromAddress.getPincode());
+			    cell.setFont(PDType1Font.COURIER);
+			    cell.setFontSize(9);
+			    cell.setBottomPadding(0);
+			    cell.setTopPadding(0);
+
+			    row = table.createRow(5f);  
+				cell = row.createCell(50, fromAddress.getState());
+				cell.setFont(PDType1Font.COURIER);
+				cell.setFontSize(9);
+				cell.setBottomPadding(0);
+				cell.setTopPadding(0);
+			    
+
+				row = table.createRow(5f);  
+				cell = row.createCell(50, (fromAddress.getTelephone() != "")?fromAddress.getTelephone()+" / "+fromAddress.getMobile():fromAddress.getMobile());
+				cell.setFont(PDType1Font.COURIER);
+				cell.setFontSize(9);
+				cell.setBottomPadding(0);
+				cell.setTopPadding(0);
+			   
+			    row = table.createRow(5f);  
+			    cell = row.createCell(50, fromAddress.getGstNo());
 			    cell.setFont(PDType1Font.COURIER);
 			    cell.setFontSize(9);
 			    cell.setBottomPadding(0);
 			    cell.setTopPadding(0);
 			    
-			    row = table.createRow(5f);  
-			    cell = row.createCell(50, fromAddress.getArea());
-			    cell.setFont(PDType1Font.COURIER);
-			    cell.setFontSize(9);
-			    cell.setBottomPadding(0);
-			    cell.setTopPadding(0);
-			    
-			    row = table.createRow(5f);  
-			    cell = row.createCell(50, fromAddress.getTown() + " - " + fromAddress.getPincode());
-			    cell.setFont(PDType1Font.COURIER);
-			    cell.setFontSize(9);
-			    cell.setBottomPadding(0);
-			    cell.setTopPadding(0);
-			    
-			    row = table.createRow(5f);  
-			    cell = row.createCell(50, fromAddress.getTelephone() + "/" + fromAddress.getMobile());
-			    cell.setFont(PDType1Font.COURIER);
-			    cell.setFontSize(9);
-			    cell.setBottomPadding(0);
-			    cell.setTopPadding(0);
-			    
-			    
-			    
-			    table.draw();
+			    yPosition = table.draw();
 			    
 			    
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
+		return yPosition;
+		
 	}
 	
 	
-	public static void drawInvoiceTable(String name, Address toAddress, String invoiceNumber, String date, String placeOfSupply, PDDocument document, PDPage page) {
-
+	public static float drawInvoiceTable(String name, Address toAddress, String invoiceNumber, String date, String placeOfSupply, PDDocument document, PDPage page, float yPosition) {
+		yPosition -= 10;
+		float temp = yPosition;
 		try {
 			PDPageContentStream contentStream = new PDPageContentStream(document, page, AppendMode.APPEND, false) ;
 			
-			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 10);contentStream.newLineAtOffset(55, 660);
+			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 10);contentStream.newLineAtOffset(55, yPosition);
 			contentStream.showText("____________________________________________________________________________________");
-			contentStream.endText();
+			contentStream.endText();yPosition-=20;
 			
-			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 10);contentStream.newLineAtOffset(55, 640);
+			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 10);contentStream.newLineAtOffset(55, yPosition);
 			contentStream.showText("Invoice Number :");
 			contentStream.endText();
 			
-			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER_BOLD, 10);contentStream.newLineAtOffset(170, 640);
+			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER_BOLD, 10);contentStream.newLineAtOffset(170, yPosition);
 			contentStream.showText(invoiceNumber);
-			contentStream.endText();
+			contentStream.endText();yPosition-=20;
 			
-			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 10);contentStream.newLineAtOffset(55, 620);
+			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 10);contentStream.newLineAtOffset(55, yPosition);
 			contentStream.showText("Invoice Date :");
 			contentStream.endText();
 			
-			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER_BOLD, 10);contentStream.newLineAtOffset(170, 620);
+			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER_BOLD, 10);contentStream.newLineAtOffset(170, yPosition);
 			contentStream.showText(date);
-			contentStream.endText();
+			contentStream.endText();yPosition-=20;
 			
-			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 10);contentStream.newLineAtOffset(55, 600);
+			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 10);contentStream.newLineAtOffset(55, yPosition);
 			contentStream.showText("Place of Supply :");
 			contentStream.endText();
 			
-			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER_BOLD, 10);contentStream.newLineAtOffset(170, 600);
+			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER_BOLD, 10);contentStream.newLineAtOffset(170, yPosition);
 			contentStream.showText(placeOfSupply);
 			contentStream.endText();
 			
-			
-			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(300, 640);
+			yPosition = temp-20;
+			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(300, yPosition);
 			contentStream.showText("Billing Address :");
 			contentStream.endText();
 			
-			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER_BOLD, 10);contentStream.newLineAtOffset(400, 640);
+			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER_BOLD, 10);contentStream.newLineAtOffset(400, yPosition);
 			contentStream.showText(name);
-			contentStream.endText();
+			contentStream.endText();yPosition -= 10;
 			
-			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, 630);
-			contentStream.showText(toAddress.getNumber() + ", " + toAddress.getStreet());
-			contentStream.endText();
+			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, yPosition);
+			contentStream.showText(toAddress.getAddressLine1());
+			contentStream.endText();yPosition -= 10;
 			
-			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, 620);
-			contentStream.showText(toAddress.getArea());
-			contentStream.endText();
+			if(toAddress.getAddressLine2() != "") {
+				contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, yPosition);
+				contentStream.showText(toAddress.getAddressLine2());
+				contentStream.endText();yPosition -= 10;
+			}
 			
-			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, 610);
-			contentStream.showText(toAddress.getTown() + " - " + toAddress.getPincode());
-			contentStream.endText();
+			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, yPosition);
+			contentStream.showText(toAddress.getCity());
+			contentStream.endText();yPosition -= 10;
 			
-			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, 600);
-			contentStream.showText(toAddress.getTelephone() + "/" + toAddress.getMobile());
+			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, yPosition);
+			contentStream.showText(toAddress.getDistrict() + " - " + toAddress.getPincode());
+			contentStream.endText();yPosition -= 10;
+			
+			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, yPosition);
+			contentStream.showText(toAddress.getState());
+			contentStream.endText();yPosition -= 10;
+			
+			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, yPosition);
+			contentStream.showText((toAddress.getTelephone() != "")?toAddress.getTelephone()+" / "+toAddress.getMobile():toAddress.getMobile());
+			contentStream.endText();yPosition -= 10;
+			
+			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, yPosition);
+			contentStream.showText(toAddress.getGstNo());
 			contentStream.endText();
 			
 			
@@ -166,13 +208,14 @@ public class PDFGenerator {
 			e.printStackTrace();
 		}
 		
+		return yPosition;
 	}
-	public static float drawProductsTable(ObservableList<BilledProducts> billRow, PDDocument document, PDPage page) {
+	public static float drawProductsTable(ObservableList<BilledProducts> billRow, PDDocument document, PDPage page, float yPosition) {
 		
 		/*
 		 * Content Area in pdf --> Left to Right : 70-500	, Top to Bottom : 730-70 	
 		 */
-		float yPosition = 580;
+		yPosition -= 20;
 		Cell<PDPage> cell = null;
 		try {
 			
@@ -192,36 +235,38 @@ public class PDFGenerator {
 			    BaseTable table = new BaseTable(yPosition, yStartNewPage, bottomMargin, tableWidth, margin, document, page, drawLine, drawContent);
 			    
 			    Row<PDPage> headerRowOne = table.createRow(10f);
-			    headerRowOne.createCell(62, "");
-			    cell = headerRowOne.createCell(14, "SGST");cell.setFontSize(9);cell.setAlign(HorizontalAlignment.CENTER);cell.setFont(PDType1Font.COURIER_BOLD);
-			    cell = headerRowOne.createCell(14, "CGST");cell.setFontSize(9);cell.setAlign(HorizontalAlignment.CENTER);cell.setFont(PDType1Font.COURIER_BOLD);
-			    headerRowOne.createCell(10, "");
+			    headerRowOne.createCell(41, "");
+			    cell = headerRowOne.createCell(7, "Qty");cell.setFontSize(9);cell.setAlign(HorizontalAlignment.CENTER);cell.setFont(PDType1Font.COURIER_BOLD);
+			    cell = headerRowOne.createCell(9, "Rate");cell.setFontSize(9);cell.setAlign(HorizontalAlignment.CENTER);cell.setFont(PDType1Font.COURIER_BOLD);
+			    cell = headerRowOne.createCell(16, "SGST");cell.setFontSize(9);cell.setAlign(HorizontalAlignment.CENTER);cell.setFont(PDType1Font.COURIER_BOLD);
+			    cell = headerRowOne.createCell(16, "CGST");cell.setFontSize(9);cell.setAlign(HorizontalAlignment.CENTER);cell.setFont(PDType1Font.COURIER_BOLD);
+			    cell = headerRowOne.createCell(11, "Amount");cell.setFontSize(9);cell.setAlign(HorizontalAlignment.CENTER);cell.setFont(PDType1Font.COURIER_BOLD);
 			    yPosition -= 20;
 			    
 			    
 			    Row<PDPage> headerRowTwo = table.createRow(10f);
 			    cell = headerRowTwo.createCell(7, "S.no");cell.setFontSize(9);cell.setAlign(HorizontalAlignment.CENTER);cell.setFont(PDType1Font.COURIER_BOLD);
-			    cell = headerRowTwo.createCell(40, "Item Name");cell.setFontSize(9);cell.setAlign(HorizontalAlignment.CENTER);cell.setFont(PDType1Font.COURIER_BOLD);
-			    cell = headerRowTwo.createCell(7, "Qty");cell.setFontSize(9);cell.setAlign(HorizontalAlignment.CENTER);cell.setFont(PDType1Font.COURIER_BOLD);
-			    cell = headerRowTwo.createCell(8, "Rate");cell.setFontSize(9);cell.setAlign(HorizontalAlignment.CENTER);cell.setFont(PDType1Font.COURIER_BOLD);
-			    cell = headerRowTwo.createCell(7, "%");cell.setFontSize(9);cell.setAlign(HorizontalAlignment.CENTER);cell.setFont(PDType1Font.COURIER_BOLD);
-			    cell = headerRowTwo.createCell(7, "Rs.");cell.setFontSize(9);cell.setAlign(HorizontalAlignment.CENTER);cell.setFont(PDType1Font.COURIER_BOLD);
-			    cell = headerRowTwo.createCell(7, "%");cell.setFontSize(9);cell.setAlign(HorizontalAlignment.CENTER);cell.setFont(PDType1Font.COURIER_BOLD);
-			    cell = headerRowTwo.createCell(7, "Rs.");cell.setFontSize(9);cell.setAlign(HorizontalAlignment.CENTER);cell.setFont(PDType1Font.COURIER_BOLD);
-			    cell = headerRowTwo.createCell(10, "Amount");cell.setFontSize(9);cell.setAlign(HorizontalAlignment.CENTER);cell.setFont(PDType1Font.COURIER_BOLD);
+			    cell = headerRowTwo.createCell(34, "Item Name");cell.setFontSize(9);cell.setAlign(HorizontalAlignment.CENTER);cell.setFont(PDType1Font.COURIER_BOLD);
+			    cell = headerRowTwo.createCell(7, "(Kg)");cell.setFontSize(9);cell.setAlign(HorizontalAlignment.CENTER);cell.setFont(PDType1Font.COURIER_BOLD);
+			    cell = headerRowTwo.createCell(9, "(Rs)");cell.setFontSize(9);cell.setAlign(HorizontalAlignment.CENTER);cell.setFont(PDType1Font.COURIER_BOLD);
+			    cell = headerRowTwo.createCell(7, "(%)");cell.setFontSize(9);cell.setAlign(HorizontalAlignment.CENTER);cell.setFont(PDType1Font.COURIER_BOLD);
+			    cell = headerRowTwo.createCell(9, "(Rs)");cell.setFontSize(9);cell.setAlign(HorizontalAlignment.CENTER);cell.setFont(PDType1Font.COURIER_BOLD);
+			    cell = headerRowTwo.createCell(7, "(%)");cell.setFontSize(9);cell.setAlign(HorizontalAlignment.CENTER);cell.setFont(PDType1Font.COURIER_BOLD);
+			    cell = headerRowTwo.createCell(9, "(Rs)");cell.setFontSize(9);cell.setAlign(HorizontalAlignment.CENTER);cell.setFont(PDType1Font.COURIER_BOLD);
+			    cell = headerRowTwo.createCell(11, "(Rs)");cell.setFontSize(9);cell.setAlign(HorizontalAlignment.CENTER);cell.setFont(PDType1Font.COURIER_BOLD);
 			    yPosition -= 20;
 
 			    for(BilledProducts billedProducts : billRow) {
 			    	Row<PDPage> productRow = table.createRow(10f);
 			    	cell = productRow.createCell(7, billedProducts.getSno()+"");cell.setFontSize(8);cell.setFont(PDType1Font.COURIER);
-			    	cell = productRow.createCell(40, billedProducts.getItemName().getText());cell.setFontSize(8);cell.setFont(PDType1Font.COURIER);
+			    	cell = productRow.createCell(34, billedProducts.getItemName().getText());cell.setFontSize(8);cell.setFont(PDType1Font.COURIER);
 			    	cell = productRow.createCell(7, billedProducts.getQuantity().getText());cell.setFontSize(8);cell.setFont(PDType1Font.COURIER);
-			    	cell = productRow.createCell(8, billedProducts.getUnitRate().getText());cell.setFontSize(8);cell.setFont(PDType1Font.COURIER);
+			    	cell = productRow.createCell(9, billedProducts.getUnitRate().getText());cell.setFontSize(8);cell.setFont(PDType1Font.COURIER);
 			    	cell = productRow.createCell(7, billedProducts.getSgst().getText());cell.setFontSize(8);cell.setFont(PDType1Font.COURIER);
-			    	cell = productRow.createCell(7, new DecimalFormat("#.##").format(billedProducts.getSgstTotal()));cell.setFontSize(8);cell.setFont(PDType1Font.COURIER);
+			    	cell = productRow.createCell(9, new DecimalFormat("#.##").format(billedProducts.getSgstTotal()));cell.setFontSize(8);cell.setFont(PDType1Font.COURIER);
 			    	cell = productRow.createCell(7, billedProducts.getCgst().getText());cell.setFontSize(8);cell.setFont(PDType1Font.COURIER);
-			    	cell = productRow.createCell(7, new DecimalFormat("#.##").format(billedProducts.getCgstTotal()));cell.setFontSize(8);cell.setFont(PDType1Font.COURIER);
-			    	cell = productRow.createCell(10, billedProducts.getAmount().getText());cell.setFontSize(8);cell.setFont(PDType1Font.COURIER);
+			    	cell = productRow.createCell(9, new DecimalFormat("#.##").format(billedProducts.getCgstTotal()));cell.setFontSize(8);cell.setFont(PDType1Font.COURIER);
+			    	cell = productRow.createCell(11, billedProducts.getAmount().getText());cell.setFontSize(8);cell.setFont(PDType1Font.COURIER);
 			    	 yPosition -= 20;
 			    }
 

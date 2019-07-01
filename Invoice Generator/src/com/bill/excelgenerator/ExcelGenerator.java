@@ -25,20 +25,22 @@ import javafx.scene.control.Alert.AlertType;
 
 public class ExcelGenerator {
 
+	static XSSFWorkbook workbook = new XSSFWorkbook();
+	static XSSFSheet invoiceDataSheet = workbook.createSheet("Invoice Data");
+	static XSSFSheet billedProductsSheet = workbook.createSheet("Billed Products");
+	static XSSFRow row = null;
+	static XSSFCell cell = null;
+	static XSSFCellStyle cellStyle = null;
+	static XSSFFont font = null;
+	static String invoiceNumber = "";
+	static int invoiceDataRow = 1, billedProdRow = 1, firstRow = 1;
+	static XSSFDataFormat format = workbook.createDataFormat();
+	
 	public static void generateExcel(LocalDate fromDate, LocalDate toDate) {
 		
 		try {
 			int fromDateDiff = (int)LocalDate.of(2019,06,01).until(fromDate, ChronoUnit.DAYS);
 			int toDateDiff = (int)LocalDate.of(2019,06,01).until(toDate, ChronoUnit.DAYS);
-			
-			
-			XSSFWorkbook workbook = new XSSFWorkbook();
-			XSSFSheet invoiceDataSheet = workbook.createSheet("Invoice Data");
-			XSSFSheet billedProductsSheet = workbook.createSheet("Billed Products");
-			XSSFRow row = null;
-			XSSFCell cell = null;
-			XSSFCellStyle cellStyle = null;
-			XSSFFont font = null;
 			
 			row = invoiceDataSheet.createRow(0);
 			cell = row.createCell(0);cell.setCellValue("Invoice Number");
@@ -102,13 +104,13 @@ public class ExcelGenerator {
 			font.setBold(true);
 			cellStyle.setFont(font);cell.setCellStyle(cellStyle);
 			
-			cell = row.createCell(2);cell.setCellValue("Quantity");
+			cell = row.createCell(2);cell.setCellValue("Quantity(Kg)");
 			cellStyle = workbook.createCellStyle();
 			font = workbook.createFont();
 			font.setBold(true);
 			cellStyle.setFont(font);cell.setCellStyle(cellStyle);
 			
-			cell = row.createCell(3);cell.setCellValue("Unit Rate");
+			cell = row.createCell(3);cell.setCellValue("Unit Rate(Rs)");
 			cellStyle = workbook.createCellStyle();
 			font = workbook.createFont();
 			font.setBold(true);
@@ -144,12 +146,47 @@ public class ExcelGenerator {
 			font.setBold(true);
 			cellStyle.setFont(font);cell.setCellStyle(cellStyle);
 			
-			ResultSet resultSet = FromDatabasevalidator.getDataToCreateExcel(fromDateDiff, toDateDiff);
-			String invoiceNumber = "";
-			int invoiceDataRow = 1, billedProdRow = 1, firstRow = 1;
-			XSSFDataFormat format = workbook.createDataFormat();
 			
-			while(resultSet.next()) {
+			FromDatabasevalidator.getDataToCreateExcel(fromDateDiff, toDateDiff);
+			
+			billedProductsSheet.addMergedRegion(new CellRangeAddress(firstRow, billedProdRow, 0, 0));
+			
+			invoiceDataSheet.autoSizeColumn(0); 
+			invoiceDataSheet.autoSizeColumn(1);
+			invoiceDataSheet.autoSizeColumn(2);
+			invoiceDataSheet.autoSizeColumn(3);
+			invoiceDataSheet.autoSizeColumn(4);
+			invoiceDataSheet.autoSizeColumn(5);
+			invoiceDataSheet.autoSizeColumn(6);
+			invoiceDataSheet.autoSizeColumn(7);
+		
+			billedProductsSheet.autoSizeColumn(0); 
+			billedProductsSheet.autoSizeColumn(1);
+			billedProductsSheet.autoSizeColumn(2);
+			billedProductsSheet.autoSizeColumn(3);
+			billedProductsSheet.autoSizeColumn(4);
+			billedProductsSheet.autoSizeColumn(5);
+			billedProductsSheet.autoSizeColumn(6);
+			billedProductsSheet.autoSizeColumn(7);
+			billedProductsSheet.autoSizeColumn(8);
+	
+			workbook.write(new FileOutputStream("C:\\Users\\welcome\\Desktop\\excel\\Excel.xlsx"));
+			workbook.close();
+			
+			ShowPopups.showPopups(AlertType.INFORMATION, "Success....", "Excel is generated Successfully....");
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * 
+	 */
+	public static void writeContent(ResultSet resultSet) {
+			try {
 				if(!invoiceNumber.equals(resultSet.getString("invoiceNumber"))) {
 					if(!invoiceNumber.equals("")) {
 						billedProductsSheet.addMergedRegion(new CellRangeAddress(firstRow, billedProdRow, 0, 0));
@@ -233,41 +270,11 @@ public class ExcelGenerator {
 				cell.setCellStyle(cellStyle);
 				
 				billedProdRow++;
-				
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
-			billedProductsSheet.addMergedRegion(new CellRangeAddress(firstRow, billedProdRow, 0, 0));
 			
-			invoiceDataSheet.autoSizeColumn(0); 
-			invoiceDataSheet.autoSizeColumn(1);
-			invoiceDataSheet.autoSizeColumn(2);
-			invoiceDataSheet.autoSizeColumn(3);
-			invoiceDataSheet.autoSizeColumn(4);
-			invoiceDataSheet.autoSizeColumn(5);
-			invoiceDataSheet.autoSizeColumn(6);
-			invoiceDataSheet.autoSizeColumn(7);
-		
-			billedProductsSheet.autoSizeColumn(0); 
-			billedProductsSheet.autoSizeColumn(1);
-			billedProductsSheet.autoSizeColumn(2);
-			billedProductsSheet.autoSizeColumn(3);
-			billedProductsSheet.autoSizeColumn(4);
-			billedProductsSheet.autoSizeColumn(5);
-			billedProductsSheet.autoSizeColumn(6);
-			billedProductsSheet.autoSizeColumn(7);
-			billedProductsSheet.autoSizeColumn(8);
-	
-			workbook.write(new FileOutputStream("C:\\Users\\welcome\\Desktop\\excel\\Excel.xlsx"));
-			workbook.close();
-			
-			ShowPopups.showPopups(AlertType.INFORMATION, "Success....", "Excel is generated Successfully....");
-			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
 	}
 }
