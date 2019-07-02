@@ -21,10 +21,10 @@
                   <Label layoutX="186.0" layoutY="214.0" text="CGST(%) :" />
                   <Button layoutX="275.0" layoutY="281.0" mnemonicParsing="false" onAction="#insertProduct" text="Insert Product" />
                   <TextField fx:id="insertProdId" layoutX="247.0" layoutY="47.0" />
-                  <TextField layoutX="247.0" layoutY="86.0" />
-                  <TextField layoutX="247.0" layoutY="130.0" />
-                  <TextField layoutX="247.0" layoutY="167.0" />
-                  <TextField layoutX="247.0" layoutY="210.0" />
+                  <TextField fx:id="insertProdName" layoutX="247.0" layoutY="86.0" />
+                  <TextField fx:id="insertUnitRate" layoutX="247.0" layoutY="130.0" />
+                  <TextField fx:id="insertSgst" layoutX="247.0" layoutY="167.0" />
+                  <TextField fx:id="insertCgst" layoutX="247.0" layoutY="210.0" />
                   <Label layoutX="451.0" layoutY="12.0" prefHeight="10.0" prefWidth="10.0" text="*" textFill="#e41010">
                      <font>
                         <Font size="23.0" />

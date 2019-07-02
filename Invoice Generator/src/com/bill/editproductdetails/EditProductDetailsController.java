@@ -2,11 +2,11 @@ package com.bill.editproductdetails;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import com.bill.exception.EditProductException;
+
 import com.bill.popus.ShowPopups;
-import com.bill.utility.Utility;
 import com.bill.validator.FromDatabasevalidator;
 import com.bill.validator.ToDatabaseValidator;
+import com.bill.validator.ValidateUserInputs;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -47,45 +47,46 @@ public class EditProductDetailsController implements Initializable{
 	@FXML
 	public void insertProduct() {
 		
-		try {
-			
-			if(!Utility.regexProdId.matcher(insertProdId.getText()).matches())
-				throw new EditProductException("Please Provide a Three digit(minimum) Number for Product Id.");
-			
+		if(ValidateUserInputs.validateProductDetails(insertProdId.getText(), insertProdName.getText(),
+				insertUnitRate.getText(), insertSgst.getText(), insertCgst.getText())) {
 			
 			ToDatabaseValidator.insertProduct(Integer.parseInt(insertProdId.getText()), insertProdName.getText(),
 					insertUnitRate.getText(), insertSgst.getText(), insertCgst.getText());
-			
+				
 			ShowPopups.showPopups(AlertType.INFORMATION,"Product Inserted to Database Successfully....", "");
-			
-		} catch (EditProductException e) {
-			ShowPopups.showPopups(AlertType.ERROR, e.getMessage(), "");
-		}catch (NumberFormatException e) {
-			e.printStackTrace();
 		}
+			
+		
 	}
 	
 	@FXML
 	public void getProductDetails() {
 
-		FromDatabasevalidator.getProduct(Integer.parseInt(updateProdId.getText()), updateProdName,updateUnitRate, updateSgst, updateCgst);
-			
-		updateProdName.setDisable(false);
-		updateUnitRate.setDisable(false);
-		updateSgst.setDisable(false);
-		updateCgst.setDisable(false);
-		updateProductBtn.setDisable(false);
+		if(ValidateUserInputs.validateProuctId(updateProdId.getText())) {
+			FromDatabasevalidator.getProduct(Integer.parseInt(updateProdId.getText()), updateProdName,updateUnitRate, updateSgst, updateCgst);
+				
+			updateProdName.setDisable(false);
+			updateUnitRate.setDisable(false);
+			updateSgst.setDisable(false);
+			updateCgst.setDisable(false);
+			updateProductBtn.setDisable(false);
+		}
 
 	}
 	
 	@FXML
 	public void updateProduct() {
 	
-		ToDatabaseValidator.updateProduct(Integer.parseInt(updateProdId.getText()), updateProdName.getText(),
-				updateUnitRate.getText(), updateSgst.getText(), updateCgst.getText());
-		
-		ShowPopups.showPopups(AlertType.INFORMATION, "Success....", "Product Details Updated Successfully....");
+		if(ValidateUserInputs.validateProductDetails(updateProdId.getText(), updateProdName.getText(),
+				updateUnitRate.getText(), updateSgst.getText(), updateCgst.getText())) {
+			
+			ToDatabaseValidator.updateProduct(Integer.parseInt(updateProdId.getText()), updateProdName.getText(),
+					updateUnitRate.getText(), updateSgst.getText(), updateCgst.getText());
+			
+			ShowPopups.showPopups(AlertType.INFORMATION, "Product Details Updated Successfully....", "");
+		}
 	}
+		
 
 	
 

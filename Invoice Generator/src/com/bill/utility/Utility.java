@@ -1,15 +1,11 @@
 package com.bill.utility;
 
 import java.util.Map;
-import java.util.regex.Pattern;
-
 import com.bill.validator.FromDatabasevalidator;
 
 import javafx.collections.ObservableList;
 
 public class Utility {
-	
-	public static Pattern regexProdId = Pattern.compile("^[1-9][0-9]{2,}$");
 	
 	public static ObservableList<String> fromAddressShopNames;
 	public static ObservableList<String> toAddressShopNames;
