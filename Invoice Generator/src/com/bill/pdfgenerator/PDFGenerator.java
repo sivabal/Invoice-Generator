@@ -106,12 +106,14 @@ public class PDFGenerator {
 				cell.setBottomPadding(0);
 				cell.setTopPadding(0);
 			   
-			    row = table.createRow(5f);  
-			    cell = row.createCell(50, fromAddress.getGstNo());
-			    cell.setFont(PDType1Font.COURIER);
-			    cell.setFontSize(9);
-			    cell.setBottomPadding(0);
-			    cell.setTopPadding(0);
+				if(fromAddress.getGstNo() != "") {
+				    row = table.createRow(5f);  
+				    cell = row.createCell(50, fromAddress.getGstNo());
+				    cell.setFont(PDType1Font.COURIER);
+				    cell.setFontSize(9);
+				    cell.setBottomPadding(0);
+				    cell.setTopPadding(0);
+				}
 			    
 			    yPosition = table.draw();
 			    
@@ -125,90 +127,96 @@ public class PDFGenerator {
 	}
 	
 	
-	public static float drawInvoiceTable(String name, Address toAddress, String invoiceNumber, String date, String placeOfSupply, PDDocument document, PDPage page, float yPosition) {
+	public static float drawInvoiceTable(String ShopName, Address toAddress, String invoiceNumber, String date, String placeOfSupply, PDDocument document, PDPage page, float yPosition) {
 		yPosition -= 10;
-		float temp = yPosition;
+		float YPositionLeft = yPosition, YPositionRight = yPosition-20;
+		
 		try {
 			PDPageContentStream contentStream = new PDPageContentStream(document, page, AppendMode.APPEND, false) ;
 			
-			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 10);contentStream.newLineAtOffset(55, yPosition);
+			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 10);contentStream.newLineAtOffset(55, YPositionLeft);
 			contentStream.showText("____________________________________________________________________________________");
-			contentStream.endText();yPosition-=20;
+			contentStream.endText();YPositionLeft-=20;
 			
-			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 10);contentStream.newLineAtOffset(55, yPosition);
+			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 10);contentStream.newLineAtOffset(55, YPositionLeft);
 			contentStream.showText("Invoice Number :");
 			contentStream.endText();
 			
-			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER_BOLD, 10);contentStream.newLineAtOffset(170, yPosition);
+			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER_BOLD, 10);contentStream.newLineAtOffset(170, YPositionLeft);
 			contentStream.showText(invoiceNumber);
-			contentStream.endText();yPosition-=20;
+			contentStream.endText();YPositionLeft-=20;
 			
-			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 10);contentStream.newLineAtOffset(55, yPosition);
+			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 10);contentStream.newLineAtOffset(55, YPositionLeft);
 			contentStream.showText("Invoice Date :");
 			contentStream.endText();
 			
-			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER_BOLD, 10);contentStream.newLineAtOffset(170, yPosition);
+			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER_BOLD, 10);contentStream.newLineAtOffset(170, YPositionLeft);
 			contentStream.showText(date);
-			contentStream.endText();yPosition-=20;
+			contentStream.endText();YPositionLeft-=20;
 			
-			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 10);contentStream.newLineAtOffset(55, yPosition);
+			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 10);contentStream.newLineAtOffset(55, YPositionLeft);
 			contentStream.showText("Place of Supply :");
 			contentStream.endText();
 			
-			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER_BOLD, 10);contentStream.newLineAtOffset(170, yPosition);
+			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER_BOLD, 10);contentStream.newLineAtOffset(170, YPositionLeft);
 			contentStream.showText(placeOfSupply);
 			contentStream.endText();
 			
-			yPosition = temp-20;
-			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(300, yPosition);
+			// printing "to Address" starts here
+			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(300, YPositionRight);
 			contentStream.showText("Billing Address :");
 			contentStream.endText();
 			
-			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER_BOLD, 10);contentStream.newLineAtOffset(400, yPosition);
-			contentStream.showText(name);
-			contentStream.endText();yPosition -= 10;
-			
-			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, yPosition);
-			contentStream.showText(toAddress.getAddressLine1());
-			contentStream.endText();yPosition -= 10;
-			
-			if(toAddress.getAddressLine2() != "") {
-				contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, yPosition);
-				contentStream.showText(toAddress.getAddressLine2());
-				contentStream.endText();yPosition -= 10;
-			}
-			
-			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, yPosition);
-			contentStream.showText(toAddress.getCity());
-			contentStream.endText();yPosition -= 10;
-			
-			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, yPosition);
-			contentStream.showText(toAddress.getDistrict() + " - " + toAddress.getPincode());
-			contentStream.endText();yPosition -= 10;
-			
-			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, yPosition);
-			contentStream.showText(toAddress.getState());
-			contentStream.endText();yPosition -= 10;
-			
-			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, yPosition);
-			contentStream.showText((toAddress.getTelephone() != "")?toAddress.getTelephone()+" / "+toAddress.getMobile():toAddress.getMobile());
-			contentStream.endText();yPosition -= 10;
-			
-			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, yPosition);
-			contentStream.showText(toAddress.getGstNo());
+				
+			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER_BOLD, 10);contentStream.newLineAtOffset(400, YPositionRight);
+			contentStream.showText(ShopName);
 			contentStream.endText();
 			
+			if(!ShopName.equals("Counter Sales")) {
+				
+				YPositionRight -= 10;
+				contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, YPositionRight);
+				contentStream.showText(toAddress.getAddressLine1());
+				contentStream.endText();YPositionRight -= 10;
+				
+				if(toAddress.getAddressLine2() != "") {
+					contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, YPositionRight);
+					contentStream.showText(toAddress.getAddressLine2());
+					contentStream.endText();YPositionRight -= 10;
+				}
+				
+				contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, YPositionRight);
+				contentStream.showText(toAddress.getCity());
+				contentStream.endText();YPositionRight -= 10;
+				
+				contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, YPositionRight);
+				contentStream.showText(toAddress.getDistrict() + " - " + toAddress.getPincode());
+				contentStream.endText();YPositionRight -= 10;
+				
+				contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, YPositionRight);
+				contentStream.showText(toAddress.getState());
+				contentStream.endText();YPositionRight -= 10;
+				
+				contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, YPositionRight);
+				contentStream.showText((toAddress.getTelephone() != "")?toAddress.getTelephone()+" / "+toAddress.getMobile():toAddress.getMobile());
+				contentStream.endText();
+				
+				if(toAddress.getGstNo() != "") {
+					YPositionRight -= 10;
+					contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, yPosition);
+					contentStream.showText(toAddress.getGstNo());
+					contentStream.endText();
+				}
+			}
 			
 			
 			contentStream.close();
 			
-			
-		
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		return yPosition;
+		return (YPositionLeft < YPositionRight)?YPositionLeft:YPositionRight;
 	}
 	public static float drawProductsTable(ObservableList<BilledProducts> billRow, PDDocument document, PDPage page, float yPosition) {
 		

@@ -4,6 +4,8 @@ import java.util.Map;
 
 import com.bill.beans.Address;
 import com.bill.dao.FromDatabase;
+import com.bill.utility.Utility;
+
 import javafx.collections.ObservableList;
 import javafx.scene.control.TextField;
 
@@ -48,9 +50,9 @@ public class FromDatabasevalidator {
 	/*
 	 * 
 	 */
-	public static void getProduct(int prodId, TextField updateProdName, TextField updateUnitRate, TextField updateSgst, TextField updateCgst) {
+	public static void getProduct(String updateOldProdName, TextField updateNewProdName, TextField updateUnitRate, TextField updateSgst, TextField updateCgst) {
 
-		FromDatabase.getProduct(prodId, updateProdName, updateUnitRate, updateSgst, updateCgst);
+		FromDatabase.getProduct(Utility.productInfo.get(updateOldProdName)[3].intValue(), updateNewProdName, updateUnitRate, updateSgst, updateCgst);
 			
 	}
 	
@@ -66,7 +68,6 @@ public class FromDatabasevalidator {
 	 * 
 	 */
 	public static ObservableList<String> getToAddressShopNames(){
-		
 		return FromDatabase.getToAddressShopNames();
 	}
 	

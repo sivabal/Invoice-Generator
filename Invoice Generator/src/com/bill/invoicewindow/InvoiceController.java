@@ -138,8 +138,10 @@ public class InvoiceController implements Initializable{
 	 */
 	@FXML
 	public void onClickToComboBox(ActionEvent event){
-		toAddress = FromDatabasevalidator.getToAddress(toComboBox.getValue());
-		toTextArea.setText(toAddress.toString());
+		if(!toComboBox.getValue().equals("Counter Sales")) {
+			toAddress = FromDatabasevalidator.getToAddress(toComboBox.getValue());
+			toTextArea.setText(toAddress.toString());
+		}
 		
 	}
 	

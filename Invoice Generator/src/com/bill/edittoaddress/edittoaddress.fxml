@@ -77,11 +77,6 @@
                         <Font size="23.0" />
                      </font>
                   </Label>
-                  <Label layoutX="373.0" layoutY="428.0" prefHeight="10.0" prefWidth="10.0" text="*" textFill="#e41010">
-                     <font>
-                        <Font size="23.0" />
-                     </font>
-                  </Label>
                </children>
             </AnchorPane>
          </content>
@@ -155,11 +150,17 @@
                         <Font size="23.0" />
                      </font>
                   </Label>
-                  <Label layoutX="376.0" layoutY="455.0" prefHeight="10.0" prefWidth="10.0" text="*" textFill="#e41010">
-                     <font>
-                        <Font size="23.0" />
-                     </font>
-                  </Label>
+               </children>
+            </AnchorPane>
+         </content>
+      </Tab>
+      <Tab text="Delete Address">
+         <content>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="557.0" prefWidth="630.0">
+               <children>
+                  <Label layoutX="149.0" layoutY="123.0" text="Select Any shop :" />
+                  <ComboBox fx:id="deleteShopName" layoutX="253.0" layoutY="119.0" prefHeight="25.0" prefWidth="214.0" promptText="--SELECT--" />
+                  <Button layoutX="265.0" layoutY="223.0" mnemonicParsing="false" onAction="#deleteAddress" text="Delete Address" />
                </children>
             </AnchorPane>
          </content>

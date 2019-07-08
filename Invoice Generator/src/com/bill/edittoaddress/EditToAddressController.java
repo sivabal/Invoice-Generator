@@ -8,6 +8,7 @@ import com.bill.popus.ShowPopups;
 import com.bill.utility.Utility;
 import com.bill.validator.FromDatabasevalidator;
 import com.bill.validator.ToDatabaseValidator;
+import com.bill.validator.ValidateUserInputs;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -43,11 +44,14 @@ public class EditToAddressController implements Initializable {
 	@FXML private TextField updateGstNo;
 	@FXML private Button updateAddressBtn;
 	
+	@FXML private ComboBox<String> deleteShopName;
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		
-		updateOldShopName.getItems().addAll(Utility.toAddressShopNames);	
+		updateOldShopName.getItems().addAll(Utility.toAddressShopNames);
+		deleteShopName.getItems().addAll(Utility.toAddressShopNames);
+		
 		updateNewShopName.setDisable(true);
 		updateAddressLine1.setDisable(true);
 		updateAddressLine2.setDisable(true);
@@ -64,50 +68,73 @@ public class EditToAddressController implements Initializable {
 	@FXML
 	public void getAddress() {
 		
-		Address address = FromDatabasevalidator.getToAddress(updateOldShopName.getValue());
-		
-		updateNewShopName.setText(address.getShopName());
-		updateAddressLine1.setText(address.getAddressLine1());
-		updateAddressLine2.setText(address.getAddressLine2());
-		updateCity.setText(address.getCity());
-		updateDistrict.setText(address.getDistrict());
-		updateState.setText(address.getState());
-		updatePincode.setText(address.getPincode());
-		updateTelephone.setText(address.getTelephone());
-		updateMobile.setText(address.getMobile());
-		updateGstNo.setText(address.getGstNo());
-		
-		updateNewShopName.setDisable(false);
-		updateAddressLine1.setDisable(false);
-		updateAddressLine2.setDisable(false);
-		updateCity.setDisable(false);
-		updateDistrict.setDisable(false);
-		updateState.setDisable(false);
-		updatePincode.setDisable(false);
-		updateTelephone.setDisable(false);
-		updateMobile.setDisable(false);
-		updateGstNo.setDisable(false);
-		updateAddressBtn.setDisable(false);
+		if(ValidateUserInputs.ValidateShopName(updateOldShopName.getValue())) {
+			
+			Address address = FromDatabasevalidator.getToAddress(updateOldShopName.getValue());
+			
+			updateNewShopName.setText(address.getShopName());
+			updateAddressLine1.setText(address.getAddressLine1());
+			updateAddressLine2.setText(address.getAddressLine2());
+			updateCity.setText(address.getCity());
+			updateDistrict.setText(address.getDistrict());
+			updateState.setText(address.getState());
+			updatePincode.setText(address.getPincode());
+			updateTelephone.setText(address.getTelephone());
+			updateMobile.setText(address.getMobile());
+			updateGstNo.setText(address.getGstNo());
+			
+			updateNewShopName.setDisable(false);
+			updateAddressLine1.setDisable(false);
+			updateAddressLine2.setDisable(false);
+			updateCity.setDisable(false);
+			updateDistrict.setDisable(false);
+			updateState.setDisable(false);
+			updatePincode.setDisable(false);
+			updateTelephone.setDisable(false);
+			updateMobile.setDisable(false);
+			updateGstNo.setDisable(false);
+			updateAddressBtn.setDisable(false);
+		}
 	}
 	
 	@FXML
 	public void updateAddress() {
 		
-		ToDatabaseValidator.updateToAddress(updateOldShopName.getValue(), updateNewShopName.getText(), updateAddressLine1.getText(),
+		if(ValidateUserInputs.ValidateAddressDetails(updateNewShopName.getText(), updateAddressLine1.getText(),
 				updateAddressLine2.getText(), updateCity.getText(), updateDistrict.getText(), updateState.getText(), 
-				updatePincode.getText(), updateTelephone.getText(), updateMobile.getText(), updateGstNo.getText());
-		
-		ShowPopups.showPopups(AlertType.INFORMATION, "Success....", "Address Updated Successfully....");
+				updatePincode.getText(), updateTelephone.getText(), updateMobile.getText(), updateGstNo.getText())) {
+			
+			ToDatabaseValidator.updateToAddress(updateOldShopName.getValue(), updateNewShopName.getText(), updateAddressLine1.getText(),
+					updateAddressLine2.getText(), updateCity.getText(), updateDistrict.getText(), updateState.getText(), 
+					updatePincode.getText(), updateTelephone.getText(), updateMobile.getText(), updateGstNo.getText());
+			
+			ShowPopups.showPopups(AlertType.INFORMATION, "Success....", "Address Updated Successfully....");
+		}
 	}
 	
 	@FXML
 	public void insertAddress() {
 		
-		ToDatabaseValidator.insertToAddress(insertShopName.getText(), insertAddressLine1.getText(),
+		if(ValidateUserInputs.ValidateAddressDetails(insertShopName.getText(), insertAddressLine1.getText(),
 				insertAddressLine2.getText(), insertCity.getText(), insertDistrict.getText(), insertState.getText(), 
-				insertPincode.getText(), insertTelephone.getText(), insertMobile.getText(), insertGstNo.getText());
-		
-		ShowPopups.showPopups(AlertType.INFORMATION, "Success....", "Address Inserted to Database Successfully....");
+				insertPincode.getText(), insertTelephone.getText(), insertMobile.getText(), insertGstNo.getText())) {
+			
+			ToDatabaseValidator.insertToAddress(insertShopName.getText(), insertAddressLine1.getText(),
+					insertAddressLine2.getText(), insertCity.getText(), insertDistrict.getText(), insertState.getText(), 
+					insertPincode.getText(), insertTelephone.getText(), insertMobile.getText(), insertGstNo.getText());
+			
+			ShowPopups.showPopups(AlertType.INFORMATION, "Success....", "Address Inserted to Database Successfully....");
+	
+		}
 	}
 	
+	@FXML
+	public void deleteAddress() {
+		
+		if(ValidateUserInputs.ValidateShopName(deleteShopName.getValue())) {
+			
+			ToDatabaseValidator.deleteToAddress(deleteShopName.getValue());
+			ShowPopups.showPopups(AlertType.INFORMATION, "Success....", "Address Deleted from the Database Successfully....");
+		}
+	}
 }

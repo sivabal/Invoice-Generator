@@ -1,5 +1,6 @@
 package com.bill.utility;
 
+import java.time.LocalDate;
 import java.util.Map;
 import com.bill.validator.FromDatabasevalidator;
 
@@ -10,6 +11,7 @@ public class Utility {
 	public static ObservableList<String> fromAddressShopNames;
 	public static ObservableList<String> toAddressShopNames;
 	public static Map<String, Float[]> productInfo;
+	public static LocalDate startDate = LocalDate.of(2018,01,01);
 	
 	public static String rupeeInWords(int rupee) {
 		

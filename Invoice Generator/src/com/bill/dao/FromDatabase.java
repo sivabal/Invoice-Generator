@@ -24,10 +24,11 @@ public class FromDatabase {
 				ResultSet resultSet = preparedStmt.executeQuery();){
 			
 			while(resultSet.next()){
-				Float[] rateAndTax = new Float[3];
+				Float[] rateAndTax = new Float[4];
 				rateAndTax[0] = Float.valueOf(resultSet.getString("rate"));
-				rateAndTax[1] = Float.valueOf(resultSet.getFloat("sgst"));
-				rateAndTax[2] = Float.valueOf(resultSet.getFloat("cgst"));
+				rateAndTax[1] = Float.valueOf(resultSet.getString("sgst"));
+				rateAndTax[2] = Float.valueOf(resultSet.getString("cgst"));
+				rateAndTax[3] = Float.valueOf(resultSet.getString("prodId"));
 				productInfo.put(resultSet.getString("prodName"), rateAndTax);
 			}
 			
@@ -55,8 +56,8 @@ public class FromDatabase {
 	 * 
 	 */
 	public static void getDataToCreateExcel(int fromDateDiff, int toDateDiff) {
-		String query = "SELECT ID.invoiceNumber, date, billFrom, billTo, orderAmount, sgst, cgst, total, productName, "
-				+ "qty, unitRate, sgstTotal, sgstPercentage, cgstTotal, cgstPercentage, amount "
+		String query = "SELECT ID.invoiceNumber, date, billFrom, billTo, ID.orderAmount, sgst, cgst, total, productName, "
+				+ "qty, unitRate, BP.orderAmount as amountExTax, sgstTotal, sgstPercentage, cgstTotal, cgstPercentage, amount "
 				+ "FROM (SELECT * FROM invoiceData where daysDifference >= ? and daysDifference <= ?) as ID "
 				+ "INNER JOIN billedProducts as BP "
 				+ "ON ID.invoiceNumber = BP.invoiceNumber";
@@ -142,6 +143,8 @@ public class FromDatabase {
 	public static ObservableList<String> getToAddressShopNames(){
 		
 		ObservableList<String> shopNames = FXCollections.observableArrayList();
+		shopNames.add("Counter Sales");
+		
 		String query = "select shopName from toAddress";
 		
 		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query);

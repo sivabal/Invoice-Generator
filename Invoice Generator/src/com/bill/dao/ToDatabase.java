@@ -36,7 +36,7 @@ public class ToDatabase {
 	}
 	
 	public static void insertBilledProducts(ObservableList<BilledProducts> billrow, String invoiceNumber) {
-		String query = "insert into billedProducts values(?,?,?,?,?,?,?,?,?)";
+		String query = "insert into billedProducts values(?,?,?,?,?,?,?,?,?,?)";
 		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query)) {
 			
 			for(BilledProducts b: billrow) {
@@ -44,11 +44,12 @@ public class ToDatabase {
 				preparedStmt.setString(2, b.getItemName().getText());
 				preparedStmt.setString(3, b.getQuantity().getText());
 				preparedStmt.setString(4, b.getUnitRate().getText());
-				preparedStmt.setString(5, format.format(b.getSgstTotal()));
-				preparedStmt.setString(6, b.getSgst().getText());
-				preparedStmt.setString(7, format.format(b.getCgstTotal()));
-				preparedStmt.setString(8, b.getCgst().getText());
-				preparedStmt.setString(9, b.getAmount().getText());
+				preparedStmt.setString(5, format.format(b.getOrderAmount()));
+				preparedStmt.setString(6, format.format(b.getSgstTotal()));
+				preparedStmt.setString(7, b.getSgst().getText());
+				preparedStmt.setString(8, format.format(b.getCgstTotal()));
+				preparedStmt.setString(9, b.getCgst().getText());
+				preparedStmt.setString(10, b.getAmount().getText());
 				preparedStmt.executeUpdate();
 			}			
 			
@@ -197,6 +198,53 @@ public class ToDatabase {
 			preparedStmt.setString(9, mobile);
 			preparedStmt.setString(10, gstNo);
 			preparedStmt.setString(11, oldShopName);
+			
+			preparedStmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * 
+	 */
+	public static void deleteFromAddress(String shopName) {
+		
+		String query = "DELETE FROM fromAddress WHERE shopName = ?";
+		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query)) {
+			preparedStmt.setString(1, shopName);
+			
+			preparedStmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * 
+	 */
+	public static void deleteToAddress(String shopName) {
+		
+		String query = "DELETE FROM toAddress WHERE shopName = ?";
+		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query)) {
+			preparedStmt.setString(1, shopName);
+			
+			preparedStmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * 
+	 */
+	public static void deleteProduct(int prodId) {
+		String query = "DELETE FROM productDetails WHERE prodId = ?";
+		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query)) {
+			preparedStmt.setInt(1, prodId);
 			
 			preparedStmt.executeUpdate();
 			

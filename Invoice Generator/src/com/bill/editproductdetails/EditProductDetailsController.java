@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.bill.popus.ShowPopups;
+import com.bill.utility.Utility;
 import com.bill.validator.FromDatabasevalidator;
 import com.bill.validator.ToDatabaseValidator;
 import com.bill.validator.ValidateUserInputs;
@@ -11,6 +12,7 @@ import com.bill.validator.ValidateUserInputs;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 
@@ -25,29 +27,32 @@ public class EditProductDetailsController implements Initializable{
 	
 	@FXML private Button updateProductBtn;
 	
-	@FXML private TextField updateProdId;
-	@FXML private TextField updateProdName;
+	@FXML private ComboBox<String> updateOldProdName;
+	@FXML private TextField updateNewProdName;
 	@FXML private TextField updateUnitRate;
 	@FXML private TextField updateSgst;
 	@FXML private TextField updateCgst;
 	
+	@FXML private ComboBox<String> deleteProductName;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
 		updateProductBtn.setDisable(true);
-		updateProdName.setDisable(true);
+		updateNewProdName.setDisable(true);
 		updateUnitRate.setDisable(true);
 		updateSgst.setDisable(true);
 		updateCgst.setDisable(true);
 		
+		updateOldProdName.getItems().addAll(Utility.productInfo.keySet().toArray(new String[Utility.productInfo.size()]));
+		deleteProductName.getItems().addAll(updateOldProdName.getItems());
 		insertProdId.setText(FromDatabasevalidator.getLastProductId());
 	}
 	
 	@FXML
 	public void insertProduct() {
 		
-		if(ValidateUserInputs.validateProductDetails(insertProdId.getText(), insertProdName.getText(),
+		if(ValidateUserInputs.validateProductDetails(insertProdName.getText(),
 				insertUnitRate.getText(), insertSgst.getText(), insertCgst.getText())) {
 			
 			ToDatabaseValidator.insertProduct(Integer.parseInt(insertProdId.getText()), insertProdName.getText(),
@@ -62,10 +67,10 @@ public class EditProductDetailsController implements Initializable{
 	@FXML
 	public void getProductDetails() {
 
-		if(ValidateUserInputs.validateProuctId(updateProdId.getText())) {
-			FromDatabasevalidator.getProduct(Integer.parseInt(updateProdId.getText()), updateProdName,updateUnitRate, updateSgst, updateCgst);
-				
-			updateProdName.setDisable(false);
+		if(ValidateUserInputs.validateProuctName(updateOldProdName.getValue())) {
+			FromDatabasevalidator.getProduct(updateOldProdName.getValue(), updateNewProdName, updateUnitRate, updateSgst, updateCgst);
+			
+			updateNewProdName.setDisable(false);
 			updateUnitRate.setDisable(false);
 			updateSgst.setDisable(false);
 			updateCgst.setDisable(false);
@@ -77,17 +82,25 @@ public class EditProductDetailsController implements Initializable{
 	@FXML
 	public void updateProduct() {
 	
-		if(ValidateUserInputs.validateProductDetails(updateProdId.getText(), updateProdName.getText(),
+		if(ValidateUserInputs.validateProductDetails(updateNewProdName.getText(),
 				updateUnitRate.getText(), updateSgst.getText(), updateCgst.getText())) {
 			
-			ToDatabaseValidator.updateProduct(Integer.parseInt(updateProdId.getText()), updateProdName.getText(),
+			ToDatabaseValidator.updateProduct(updateOldProdName.getValue(), updateNewProdName.getText(),
 					updateUnitRate.getText(), updateSgst.getText(), updateCgst.getText());
 			
 			ShowPopups.showPopups(AlertType.INFORMATION, "Product Details Updated Successfully....", "");
 		}
 	}
 		
-
+	@FXML
+	public void deleteProduct() {
+		if(ValidateUserInputs.validateProuctName(deleteProductName.getValue())) {
+			
+			ToDatabaseValidator.deleteProduct(deleteProductName.getValue());
+			ShowPopups.showPopups(AlertType.INFORMATION, "Product details Successfully deleted from the database....", "");
+		}
+		
+	}
 	
 
 }
