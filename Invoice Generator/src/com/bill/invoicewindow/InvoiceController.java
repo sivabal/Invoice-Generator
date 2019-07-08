@@ -20,6 +20,7 @@ import com.bill.popus.ShowPopups;
 import com.bill.utility.Utility;
 import com.bill.validator.FromDatabasevalidator;
 import com.bill.validator.ToDatabaseValidator;
+import com.bill.validator.ValidateUserInputs;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -78,14 +79,18 @@ public class InvoiceController implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
-		suggestions = Utility.productInfo.keySet().toArray(new String[Utility.productInfo.size()]);
-		initializeDropdowns();
-		initializeBillingTable();
-		//invoiceDate.set(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/uuuu")));
-		invoiceDate.setValue(LocalDate.now());
-		invoiceNumber.setText(FromDatabasevalidator.getLastInvoiceNumber());
-		total.setText("0.0");
-		tableView.selectionModelProperty().getValue().selectFirst();
+		try {
+			suggestions = Utility.productInfo.keySet().toArray(new String[Utility.productInfo.size()]);
+			initializeDropdowns();
+			initializeBillingTable();
+			//invoiceDate.set(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/uuuu")));
+			invoiceDate.setValue(LocalDate.now());
+			invoiceNumber.setText(FromDatabasevalidator.getLastInvoiceNumber());
+			total.setText("0.0");
+			tableView.selectionModelProperty().getValue().selectFirst();
+		} catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}
 		
 	}	
 	
@@ -94,13 +99,17 @@ public class InvoiceController implements Initializable{
 	 */
 	public void initializeDropdowns() {
 		
-		fromComboBox.getItems().addAll(Utility.fromAddressShopNames);
-		
-		toComboBox.getItems().addAll(Utility.toAddressShopNames);
-				
-		placeItems.addAll("Tamil Nadu", "Karaikkal");
-		placeComboBox.getItems().addAll(placeItems);
-		placeComboBox.selectionModelProperty().getValue().selectFirst();
+		try {
+			fromComboBox.getItems().addAll(Utility.fromAddressShopNames);
+			
+			toComboBox.getItems().addAll(Utility.toAddressShopNames);
+					
+			placeItems.addAll("Tamil Nadu", "Karaikkal");
+			placeComboBox.getItems().addAll(placeItems);
+			placeComboBox.selectionModelProperty().getValue().selectFirst();
+		} catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}
 	}
 	
 	/**
@@ -108,14 +117,18 @@ public class InvoiceController implements Initializable{
 	 */
 	public void initializeBillingTable() {
 		
-		sno.setCellValueFactory(new PropertyValueFactory<BilledProducts, Integer>("sno"));
-		itemName.setCellValueFactory(new PropertyValueFactory<BilledProducts, TextField>("itemName"));
-		quantity.setCellValueFactory(new PropertyValueFactory<BilledProducts, TextField>("quantity"));
-		unitRate.setCellValueFactory(new PropertyValueFactory<BilledProducts, TextField>("unitRate"));
-		sgst.setCellValueFactory(new PropertyValueFactory<BilledProducts, TextField>("sgst"));
-		cgst.setCellValueFactory(new PropertyValueFactory<BilledProducts, TextField>("cgst"));
-		amount.setCellValueFactory(new PropertyValueFactory<BilledProducts, TextField>("amount"));
-		tableView.setItems(createNewRow());
+		try {
+			sno.setCellValueFactory(new PropertyValueFactory<BilledProducts, Integer>("sno"));
+			itemName.setCellValueFactory(new PropertyValueFactory<BilledProducts, TextField>("itemName"));
+			quantity.setCellValueFactory(new PropertyValueFactory<BilledProducts, TextField>("quantity"));
+			unitRate.setCellValueFactory(new PropertyValueFactory<BilledProducts, TextField>("unitRate"));
+			sgst.setCellValueFactory(new PropertyValueFactory<BilledProducts, TextField>("sgst"));
+			cgst.setCellValueFactory(new PropertyValueFactory<BilledProducts, TextField>("cgst"));
+			amount.setCellValueFactory(new PropertyValueFactory<BilledProducts, TextField>("amount"));
+			tableView.setItems(createNewRow());
+		} catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}
 	}
 	
 	
@@ -126,8 +139,12 @@ public class InvoiceController implements Initializable{
 	 */
 	@FXML
 	public void onClickFromComboBox(ActionEvent event){
-		fromAddress = FromDatabasevalidator.getFromAddress(fromComboBox.getValue());
-		fromTextArea.setText(fromAddress.toString());
+		try {
+			fromAddress = FromDatabasevalidator.getFromAddress(fromComboBox.getValue());
+			fromTextArea.setText(fromAddress.toString());
+		} catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}
 		
 	}
 	
@@ -138,9 +155,16 @@ public class InvoiceController implements Initializable{
 	 */
 	@FXML
 	public void onClickToComboBox(ActionEvent event){
-		if(!toComboBox.getValue().equals("Counter Sales")) {
-			toAddress = FromDatabasevalidator.getToAddress(toComboBox.getValue());
-			toTextArea.setText(toAddress.toString());
+		try {
+			if(toComboBox.getValue().equals("Counter Sales")) {
+				toTextArea.setText("");
+			}
+			else {
+				toAddress = FromDatabasevalidator.getToAddress(toComboBox.getValue());
+				toTextArea.setText(toAddress.toString());
+			}
+		} catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 		
 	}
@@ -151,16 +175,26 @@ public class InvoiceController implements Initializable{
 	@FXML
 	public ObservableList<BilledProducts> createNewRow(){
 		
-		TextField itemNameField = new TextField("");
-		TextField quantityField = new TextField("1");
-		TextField unitRateField = new TextField("0.0");
-		TextField sgstField = new TextField("0.0");
-		TextField cgstField = new TextField("0.0");
-		TextField amountField = new TextField("0.0");
-		
-		setActionProperties(itemNameField,quantityField,unitRateField, sgstField,cgstField,amountField);
+		try {
+			TextField itemNameField = new TextField("");
+			TextField quantityField = new TextField("1");
+			TextField unitRateField = new TextField("0.0");
+			unitRateField.setEditable(false);
+			TextField sgstField = new TextField("0.0");
+			sgstField.setEditable(false);
+			TextField cgstField = new TextField("0.0");
+			cgstField.setEditable(false);
+			TextField amountField = new TextField("0.0");
+			amountField.setEditable(false);
+			
+			setActionProperties(itemNameField,quantityField,unitRateField, sgstField,cgstField,amountField);
 
-		billRow.add(new BilledProducts(billRow.size()+1, itemNameField,quantityField,unitRateField, sgstField,cgstField,amountField));
+			billRow.add(new BilledProducts(billRow.size()+1, itemNameField,quantityField,unitRateField, sgstField,cgstField,amountField));
+			
+		} catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}
+		
 		return billRow;
 	}
 	
@@ -170,22 +204,30 @@ public class InvoiceController implements Initializable{
 	public void setActionProperties(TextField itemNameField, TextField quantityField, TextField unitRateField, TextField sgstField, TextField cgstField, TextField amountField) {
 		
 		itemNameField.setOnAction((actionEvent) -> {
-				BilledProducts currentlySelected = tableView.getSelectionModel().getSelectedItem();
-				
-				tempQty = Float.parseFloat(currentlySelected.getQuantity().getText());
-				tempPrdDetail = Utility.productInfo.get(currentlySelected.getItemName().getText());
-				
-				currentlySelected.setOrderAmount(tempPrdDetail[0] * tempQty);
-				currentlySelected.setSgstTotal((tempPrdDetail[1]*(tempPrdDetail[0] * tempQty))/100);
-				currentlySelected.setCgstTotal((tempPrdDetail[2]*(tempPrdDetail[0] * tempQty))/100);
-				currentlySelected.getAmount().setText(new DecimalFormat("#.##").format(
-					(tempPrdDetail[0] * tempQty)+ currentlySelected.getSgstTotal() + currentlySelected.getCgstTotal()));
-				currentlySelected.getUnitRate().setText(tempPrdDetail[0].toString());
-				currentlySelected.getSgst().setText(tempPrdDetail[1].toString());
-				currentlySelected.getCgst().setText(tempPrdDetail[2].toString());
-				
-				tempSum = billRow.stream().map(x -> Float.parseFloat(x.getAmount().getText())).reduce(0.0f, (a,b) -> a+b);		
-				total.setText(decimalFormat.format(tempSum)); 
+				try {
+					BilledProducts currentlySelected = tableView.getSelectionModel().getSelectedItem();
+					
+					tempQty = Float.parseFloat(currentlySelected.getQuantity().getText());
+					tempPrdDetail = Utility.productInfo.get(currentlySelected.getItemName().getText());
+					
+					currentlySelected.setOrderAmount(tempPrdDetail[0] * tempQty);
+					currentlySelected.setSgstTotal((tempPrdDetail[1]*(tempPrdDetail[0] * tempQty))/100);
+					currentlySelected.setCgstTotal((tempPrdDetail[2]*(tempPrdDetail[0] * tempQty))/100);
+					currentlySelected.getAmount().setText(new DecimalFormat("#.##").format(
+						(tempPrdDetail[0] * tempQty)+ currentlySelected.getSgstTotal() + currentlySelected.getCgstTotal()));
+					currentlySelected.getUnitRate().setText(tempPrdDetail[0].toString());
+					currentlySelected.getSgst().setText(tempPrdDetail[1].toString());
+					currentlySelected.getCgst().setText(tempPrdDetail[2].toString());
+					
+					tempSum = billRow.stream().map(x -> Float.parseFloat(x.getAmount().getText())).reduce(0.0f, (a,b) -> a+b);		
+					total.setText(decimalFormat.format(tempSum));
+				} catch (NumberFormatException e) {
+					ShowPopups.showPopups(AlertType.ERROR, "Please Provide Valid Quantity..", "");
+				} catch(NullPointerException e) {
+					ShowPopups.showPopups(AlertType.ERROR, "Please Provide Valid Product Name..", "");
+				}catch (Exception e) {
+					ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+				}
 				
 		});
 	
@@ -202,18 +244,27 @@ public class InvoiceController implements Initializable{
 		
 		quantityField.setOnAction((actionEvent) -> {
 			
-				BilledProducts currentlySelected = tableView.getSelectionModel().getSelectedItem();		
-				
-				tempQty = Float.parseFloat(currentlySelected.getQuantity().getText());
-				tempPrdDetail = Utility.productInfo.get(currentlySelected.getItemName().getText());
-				
-				currentlySelected.setOrderAmount(tempPrdDetail[0] * tempQty);
-				currentlySelected.setSgstTotal((tempPrdDetail[1]*(tempPrdDetail[0] * tempQty))/100);
-				currentlySelected.setCgstTotal((tempPrdDetail[2]*(tempPrdDetail[0] * tempQty))/100);
-				currentlySelected.getAmount().setText(new DecimalFormat("#.##").format(
-					(tempPrdDetail[0] * tempQty) + currentlySelected.getSgstTotal() + currentlySelected.getCgstTotal()));
-				tempSum = billRow.stream().map(x -> Float.parseFloat(x.getAmount().getText())).reduce(0.0f, (a,b) -> a+b);
-				total.setText(decimalFormat.format(tempSum)); 
+				try {
+					BilledProducts currentlySelected = tableView.getSelectionModel().getSelectedItem();		
+					
+					tempQty = Float.parseFloat(currentlySelected.getQuantity().getText());
+					tempPrdDetail = Utility.productInfo.get(currentlySelected.getItemName().getText());
+					
+					currentlySelected.setOrderAmount(tempPrdDetail[0] * tempQty);
+					currentlySelected.setSgstTotal((tempPrdDetail[1]*(tempPrdDetail[0] * tempQty))/100);
+					currentlySelected.setCgstTotal((tempPrdDetail[2]*(tempPrdDetail[0] * tempQty))/100);
+					currentlySelected.getAmount().setText(new DecimalFormat("#.##").format(
+						(tempPrdDetail[0] * tempQty) + currentlySelected.getSgstTotal() + currentlySelected.getCgstTotal()));
+					tempSum = billRow.stream().map(x -> Float.parseFloat(x.getAmount().getText())).reduce(0.0f, (a,b) -> a+b);
+					total.setText(decimalFormat.format(tempSum));
+					
+				} catch (NumberFormatException e) {
+					ShowPopups.showPopups(AlertType.ERROR, "Please Provide Valid Quantity..", "");
+				} catch(NullPointerException e) {
+					ShowPopups.showPopups(AlertType.ERROR, "Please Provide Valid Product Name..", "");
+				}catch (Exception e) {
+					ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+				}
 		});
 		
 		quantityField.focusedProperty().addListener((observableValue,oldValue,newValue) -> {
@@ -287,36 +338,42 @@ public class InvoiceController implements Initializable{
 	 */
 	public void generatePdf(boolean save) {
 		
-		Float sgstTotal = (float)billRow.stream().mapToDouble(x -> x.getSgstTotal()).reduce(0, (a, b) -> a+b);
-		Float cgstTotal = (float)billRow.stream().mapToDouble(x -> x.getCgstTotal()).reduce(0, (a, b) -> a+b);
-		Float orderAmount = (float)billRow.stream().mapToDouble(x -> x.getOrderAmount()).reduce(0, (a,b) -> a+b);
-		Integer roundTotal = Math.round(Float.parseFloat(total.getText()));
-
-		try {
+		if(ValidateUserInputs.validateInvoiceDetails(fromComboBox.getValue(),toComboBox.getValue(),invoiceNumber.getText())
+			 && ValidateUserInputs.validateBilledRow(billRow)) {
 			
-			PDDocument document = new PDDocument();
-			PDPage page = new PDPage();
-			
-			float yPosition = PDFGenerator.drawTitleTable(fromComboBox.getValue(), fromAddress, document, page);
-			yPosition = PDFGenerator.drawInvoiceTable(toComboBox.getValue(), toAddress, invoiceNumber.getText(), invoiceDate.getValue().format(DateTimeFormatter.ofPattern("dd/MM/uuuu"))
-					, placeComboBox.getValue(), document, page, yPosition);
-			yPosition = PDFGenerator.drawProductsTable(billRow, document, page, yPosition);
-			PDFGenerator.drawTotalTable(orderAmount, sgstTotal, cgstTotal, roundTotal, document, page,yPosition);
-			
-			document.addPage(page);
-			document.save("C:\\Users\\welcome\\Desktop\\invoice\\"+ invoiceNumber.getText() +".pdf");
-			document.close();
-			
-			
-			if(save) {
-				ToDatabaseValidator.insertInvoiceDataAndBilledProducts(billRow, invoiceNumber.getText(), invoiceDate.getValue().format(DateTimeFormatter.ofPattern("dd/MM/uuuu")), fromComboBox.getValue(), 
-						toComboBox.getValue(), orderAmount, sgstTotal, cgstTotal, roundTotal);
+			try {
+				
+				Float sgstTotal = (float)billRow.stream().mapToDouble(x -> x.getSgstTotal()).reduce(0, (a, b) -> a+b);
+				Float cgstTotal = (float)billRow.stream().mapToDouble(x -> x.getCgstTotal()).reduce(0, (a, b) -> a+b);
+				Float orderAmount = (float)billRow.stream().mapToDouble(x -> x.getOrderAmount()).reduce(0, (a,b) -> a+b);
+				Integer roundTotal = Math.round(Float.parseFloat(total.getText()));
+				
+				PDDocument document = new PDDocument();
+				PDPage page = new PDPage();
+				
+				float yPosition = PDFGenerator.drawTitleTable(fromComboBox.getValue(), fromAddress, document, page);
+				yPosition = PDFGenerator.drawInvoiceTable(toComboBox.getValue(), toAddress, invoiceNumber.getText(), invoiceDate.getValue().format(DateTimeFormatter.ofPattern("dd/MM/uuuu"))
+						, placeComboBox.getValue(), document, page, yPosition);
+				yPosition = PDFGenerator.drawProductsTable(billRow, document, page, yPosition);
+				PDFGenerator.drawTotalTable(orderAmount, sgstTotal, cgstTotal, roundTotal, document, page,yPosition);
+				
+				document.addPage(page);
+				document.save(Utility.invoicePath + invoiceNumber.getText() +".pdf");
+				document.close();
+				
+				
+				if(save) {
+					ToDatabaseValidator.insertInvoiceDataAndBilledProducts(billRow, invoiceNumber.getText(), invoiceDate.getValue().format(DateTimeFormatter.ofPattern("dd/MM/uuuu")), fromComboBox.getValue(), 
+							toComboBox.getValue(), orderAmount, sgstTotal, cgstTotal, roundTotal);
+				}
+				
+				ShowPopups.showPopups(AlertType.INFORMATION, "Success....", (save)?"Invoice is Generated and Saved Successfully....":"Invoice is Generated Successfully....");
+				
+			} catch (IOException e) {
+				ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+			}catch (Exception e) {
+				ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 			}
-			
-			ShowPopups.showPopups(AlertType.INFORMATION, "Success....", (save)?"Invoice is Generated and Saved Successfully....":"Invoice is Generated Successfully....");
-			
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 }

@@ -1,7 +1,6 @@
 package com.bill.dao;
 
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.text.DecimalFormat;
 
 import com.bill.beans.BilledProducts;
@@ -13,7 +12,7 @@ public class ToDatabase {
 	private static DecimalFormat format = new DecimalFormat("#.##");
 
 	public static void insertInvoiceData(String invoiceNumber, String date, int daysDifference, String billFrom, String billTo,
-			Float orderAmount, Float sgst, Float cgst, Integer total) {
+			Float orderAmount, Float sgst, Float cgst, Integer total) throws Exception{
 		
 		String query = "insert into invoiceData values(?,?,?,?,?,?,?,?,?)";
 		try (PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query)){
@@ -29,13 +28,11 @@ public class ToDatabase {
 			preparedStmt.setInt(9, total);
 			
 			preparedStmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 		
 	}
 	
-	public static void insertBilledProducts(ObservableList<BilledProducts> billrow, String invoiceNumber) {
+	public static void insertBilledProducts(ObservableList<BilledProducts> billrow, String invoiceNumber) throws Exception{
 		String query = "insert into billedProducts values(?,?,?,?,?,?,?,?,?,?)";
 		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query)) {
 			
@@ -53,15 +50,13 @@ public class ToDatabase {
 				preparedStmt.executeUpdate();
 			}			
 			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		} 
 	}
 	
 	/*
 	 * 
 	 */
-	public static void updateProduct(int prodId, String prodName, String unitRate, String sgst, String cgst) {
+	public static void updateProduct(int prodId, String prodName, String unitRate, String sgst, String cgst) throws Exception{
 		
 		String query = "update productDetails set prodName = ?, rate = ?, sgst = ?, cgst = ? where prodId = ?";
 		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query)) {
@@ -72,15 +67,13 @@ public class ToDatabase {
 			preparedStmt.setInt(5, prodId);
 			preparedStmt.executeUpdate();
 			
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 	}
 	
 	/*
 	 * 
 	 */
-	public static void insertProduct(int prodId, String prodName, String unitRate, String sgst, String cgst) {
+	public static void insertProduct(int prodId, String prodName, String unitRate, String sgst, String cgst)throws Exception {
 		
 		String query = "insert into productDetails values(?,?,?,?,?)";
 		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query)) {
@@ -92,8 +85,6 @@ public class ToDatabase {
 			
 			preparedStmt.executeUpdate();
 			
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 	}
 	
@@ -102,7 +93,7 @@ public class ToDatabase {
 	 * 
 	 */
 	public static void insertFromAddress(String shopName, String addressLine1, String addressLine2, String city, String district,
-			String state, String pincode, String telephone, String mobile, String gstNo) {
+			String state, String pincode, String telephone, String mobile, String gstNo) throws Exception{
 		
 		String query = "insert into fromAddress values(?,?,?,?,?,?,?,?,?,?)";
 		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query)) {
@@ -119,8 +110,6 @@ public class ToDatabase {
 			
 			preparedStmt.executeUpdate();
 			
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 	}
 	
@@ -128,7 +117,7 @@ public class ToDatabase {
 	 * 
 	 */
 	public static void updateFromAddress(String oldShopName, String newShopName, String addressLine1, String addressLine2, String city, String district,
-			String state, String pincode, String telephone, String mobile, String gstNo) {
+			String state, String pincode, String telephone, String mobile, String gstNo)throws Exception {
 		
 		String query = "update fromAddress set shopName = ?, addressLine1 = ?, addressLine2 = ? , city = ?, district = ?, state = ?, "
 				+ "pincode = ?, telephone = ?, mobile = ?, gstNo = ? where shopName = ?";
@@ -147,8 +136,6 @@ public class ToDatabase {
 			
 			preparedStmt.executeUpdate();
 			
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 	}
 	
@@ -156,7 +143,7 @@ public class ToDatabase {
 	 * 
 	 */
 	public static void insertToAddress(String shopName, String addressLine1, String addressLine2, String city, String district,
-			String state, String pincode, String telephone, String mobile, String gstNo) {
+			String state, String pincode, String telephone, String mobile, String gstNo)throws Exception {
 		
 		String query = "insert into toAddress values(?,?,?,?,?,?,?,?,?,?)";
 		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query)) {
@@ -173,8 +160,6 @@ public class ToDatabase {
 			
 			preparedStmt.executeUpdate();
 			
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 	}
 	
@@ -182,7 +167,7 @@ public class ToDatabase {
 	 * 
 	 */
 	public static void updateToAddress(String oldShopName, String newShopName, String addressLine1, String addressLine2, String city, String district,
-			String state, String pincode, String telephone, String mobile, String gstNo) {
+			String state, String pincode, String telephone, String mobile, String gstNo)throws Exception  {
 		
 		String query = "update toAddress set shopName = ?, addressLine1 = ?, addressLine2 = ? , city = ?, district = ?, state = ?, "
 				+ "pincode = ?, telephone = ?, mobile = ?, gstNo = ? where shopName = ?";
@@ -201,15 +186,13 @@ public class ToDatabase {
 			
 			preparedStmt.executeUpdate();
 			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		} 
 	}
 	
 	/*
 	 * 
 	 */
-	public static void deleteFromAddress(String shopName) {
+	public static void deleteFromAddress(String shopName)throws Exception {
 		
 		String query = "DELETE FROM fromAddress WHERE shopName = ?";
 		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query)) {
@@ -217,15 +200,13 @@ public class ToDatabase {
 			
 			preparedStmt.executeUpdate();
 			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		} 
 	}
 	
 	/*
 	 * 
 	 */
-	public static void deleteToAddress(String shopName) {
+	public static void deleteToAddress(String shopName) throws Exception{
 		
 		String query = "DELETE FROM toAddress WHERE shopName = ?";
 		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query)) {
@@ -233,23 +214,19 @@ public class ToDatabase {
 			
 			preparedStmt.executeUpdate();
 			
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 	}
 	
 	/*
 	 * 
 	 */
-	public static void deleteProduct(int prodId) {
+	public static void deleteProduct(int prodId) throws Exception{
 		String query = "DELETE FROM productDetails WHERE prodId = ?";
 		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query)) {
 			preparedStmt.setInt(1, prodId);
 			
 			preparedStmt.executeUpdate();
 			
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 	}
 }

@@ -6,8 +6,10 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -26,24 +28,28 @@ import javafx.scene.control.Alert.AlertType;
 
 public class ExcelGenerator {
 
-	static XSSFWorkbook workbook = new XSSFWorkbook();
-	static XSSFSheet invoiceDataSheet = workbook.createSheet("Invoice Data");
-	static XSSFRow row = null;
-	static XSSFCell cell = null;
-	static XSSFCellStyle cellStyle = null;
-	static XSSFFont font = null;
-	static String invoiceNumber = "";
-	static int invoiceDataRow = 1, firstRow = 1;
-	static XSSFDataFormat format = workbook.createDataFormat();
+	static XSSFWorkbook workbook;
+	static XSSFSheet invoiceDataSheet;
+	static XSSFRow row;
+	static XSSFCell cell;
+	static XSSFCellStyle cellStyle;
+	static XSSFFont font;
+	static String invoiceNumber;
+	static int invoiceDataRow, firstRow;
+	static XSSFDataFormat format;
 	static String amountExTax, sgstTotal, cgstTotal, amount;
 	
-	
+	/*
+	 * 
+	 */
 	public static void generateExcel(LocalDate fromDate, LocalDate toDate) {
 		
 		try {
 			int fromDateDiff = (int)Utility.startDate.until(fromDate, ChronoUnit.DAYS);
 			int toDateDiff = (int)Utility.startDate.until(toDate, ChronoUnit.DAYS);
 
+			initializeStaticVariables();
+			
 			row = invoiceDataSheet.createRow(0);
 			cell = row.createCell(0);cell.setCellValue("Invoice Number");
 			cellStyle = workbook.createCellStyle();
@@ -145,8 +151,11 @@ public class ExcelGenerator {
 			invoiceDataSheet.autoSizeColumn(11);
 			invoiceDataSheet.autoSizeColumn(12);
 	
-			workbook.write(new FileOutputStream("C:\\Users\\welcome\\Desktop\\excel\\Excel.xlsx"));
+			workbook.write(new FileOutputStream(Utility.excelSheetPath + "Report_" + fromDate.format(DateTimeFormatter.ofPattern("dd-MMM-uu")) + 
+					"_to_" + toDate.format(DateTimeFormatter.ofPattern("dd-MMM-uu")) +".xlsx"));
+			
 			workbook.close();
+			
 			
 			ShowPopups.showPopups(AlertType.INFORMATION, "Success....", "Excel is generated Successfully....");
 			
@@ -183,6 +192,7 @@ public class ExcelGenerator {
 					cell = row.createCell(0);
 					cell.setCellValue(invoiceNumber);
 					cellStyle = workbook.createCellStyle();
+					cellStyle.setAlignment(HorizontalAlignment.CENTER);
 					cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
 					cell.setCellStyle(cellStyle);
 					
@@ -286,5 +296,22 @@ public class ExcelGenerator {
 		font.setBold(true);
 		cellStyle.setFont(font);cell.setCellStyle(cellStyle);
 		
+	}
+
+	/*
+	 * 
+	 */
+	public static void initializeStaticVariables() {
+		
+		workbook = new XSSFWorkbook();
+		invoiceDataSheet = workbook.createSheet("Invoice Data");
+		row = null;
+		cell = null;
+		cellStyle = null;
+		font = null;
+		invoiceNumber = "";
+		invoiceDataRow = 1; firstRow = 1;
+		format = workbook.createDataFormat();
+		amountExTax = null; sgstTotal = null; cgstTotal = null; amount = null;
 	}
 }

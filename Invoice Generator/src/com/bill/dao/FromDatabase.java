@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.bill.beans.Address;
 import com.bill.excelgenerator.ExcelGenerator;
+import com.bill.exception.DatabaseException;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -39,17 +40,20 @@ public class FromDatabase {
 		return productInfo;
 	}
 
-	public static String getLastInvoiceNumber() {
+	public static String getLastInvoiceNumber()throws Exception {
 		String query = "select max(invoiceNumber) from invoiceData";
 		try (PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query);
 				ResultSet resultSet = preparedStmt.executeQuery();){
 			
+				if(resultSet.getString("max(invoiceNumber)") == null)
+					throw new DatabaseException("");
+
 				return resultSet.getString("max(invoiceNumber)");
 				
-		} catch (SQLException e) {
-			e.printStackTrace();
+		}catch(Exception e) {
+			throw e;
 		}
-		return null;
+
 	}
 	
 	/*

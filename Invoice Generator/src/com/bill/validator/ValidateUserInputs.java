@@ -1,8 +1,13 @@
 package com.bill.validator;
 
+import com.bill.beans.BilledProducts;
+import com.bill.exception.EditAddressException;
 import com.bill.exception.EditProductException;
+import com.bill.exception.InvoiceException;
 import com.bill.popus.ShowPopups;
 import com.bill.utility.Regex;
+
+import javafx.collections.ObservableList;
 import javafx.scene.control.Alert.AlertType;
 
 public class ValidateUserInputs {
@@ -24,9 +29,8 @@ public class ValidateUserInputs {
 			return true;
 		}catch (EditProductException e) {
 			ShowPopups.showPopups(AlertType.ERROR, e.getMessage(), "");
-		}catch (NumberFormatException e) {
-			e.printStackTrace();
 		}
+		
 		return false;
 		
 	}
@@ -47,51 +51,89 @@ public class ValidateUserInputs {
 		return false;
 	}
 
-	public static boolean ValidateAddressDetails(String newShopName, String addressLine1, String addressLine2, String city, String district,
+	public static boolean validateAddressDetails(String newShopName, String addressLine1, String addressLine2, String city, String district,
 			String state, String pincode, String telephone, String mobile, String gstNo) {
 		
 		try {
 			if(newShopName.trim().equals(""))
-				throw new EditProductException("Please Provide valid Shop Name.");
+				throw new EditAddressException("Please Provide valid Shop Name.");
 			if(addressLine1.trim().equals(""))
-				throw new EditProductException("Please Provide valid Address Line 1.");
+				throw new EditAddressException("Please Provide valid Address Line 1.");
 			if(city.trim().equals(""))
-				throw new EditProductException("Please Provide valid City.");
+				throw new EditAddressException("Please Provide valid City.");
 			if(district.trim().equals(""))
-				throw new EditProductException("Please Provide valid District.");
+				throw new EditAddressException("Please Provide valid District.");
 			if(state.trim().equals(""))
-				throw new EditProductException("Please Provide valid State.");
+				throw new EditAddressException("Please Provide valid State.");
 			if(pincode.trim().equals(""))
-				throw new EditProductException("Please Provide valid Pincode.");
+				throw new EditAddressException("Please Provide valid Pincode.");
 			if(mobile.trim().equals(""))
-				throw new EditProductException("Please Provide valid Mobile Number.");
+				throw new EditAddressException("Please Provide valid Mobile Number.");
 			
 			return true;
 			
-		}catch (EditProductException e) {
+		}catch (EditAddressException e) {
 			ShowPopups.showPopups(AlertType.ERROR, e.getMessage(), "");
-		}catch (NumberFormatException e) {
-			e.printStackTrace();
 		}
 		
 		return false;
 		
 	}
 
-	public static boolean ValidateShopName(String oldShopName) {
-		
+	public static boolean validateShopName(String oldShopName) {
 		try {
 			if(oldShopName == null)
-				throw new EditProductException("Please Select the Shop Name.");
+				throw new EditAddressException("Please Select the Shop Name.");
 			
 			return true;
 			
-		}catch (EditProductException e) {
+		}catch (EditAddressException e) {
 			ShowPopups.showPopups(AlertType.ERROR, e.getMessage(), "");
-		}catch (NumberFormatException e) {
-			e.printStackTrace();
 		}
 		
 		return false;
 	}
+	
+	public static boolean validateInvoiceDetails(String fromComboBox, String toComboBox, String invoiceNumber) {
+		
+		try {
+			if(fromComboBox == null)
+				throw new InvoiceException("Please Select 'Bill From' Address.");
+			if(toComboBox == null)
+				throw new InvoiceException("Please Select 'Bill To' Address.");
+			if(!Regex.regexInvoiceNumber.matcher(invoiceNumber).matches())
+				throw new InvoiceException("Please provide valid invoice number, starting with 'INV-' followed by valid four"
+						+ " digit number above 6000. Eg. INV-6000");
+			
+			return true;
+			
+		}catch (InvoiceException e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.getMessage(), "");
+		}
+		
+		return false;
+		
+	}
+
+	public static boolean validateBilledRow(ObservableList<BilledProducts> billRow) {
+		
+		try {
+			
+			for(BilledProducts b: billRow) {
+				if(b.getItemName().getText().equals("") || b.getQuantity().getText().equals("")) 
+					throw new InvoiceException("Blank entries are not Allowed...");
+			
+			}
+			
+			return true;
+			
+		}catch (InvoiceException e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.getMessage(), "");
+		}
+		return false;
+	}
+
+
+
+
 }

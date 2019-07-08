@@ -33,7 +33,7 @@ public class MainController implements Initializable {
 			dbStatus.setText(((GetConnection.connection.isClosed())?"Disconnected":"Connected"));
 			Utility.getDetailsReady();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 	}
 
@@ -56,7 +56,7 @@ public class MainController implements Initializable {
 			stage.show();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 	  }
 
@@ -73,7 +73,7 @@ public class MainController implements Initializable {
 			stage.show();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 	}
 	
@@ -88,7 +88,7 @@ public class MainController implements Initializable {
 			stage.setScene(scene);
 			stage.show();
 		} catch (IOException e) {
-			e.printStackTrace();
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 	}
 	
@@ -102,7 +102,7 @@ public class MainController implements Initializable {
 			stage.setScene(scene);
 			stage.show();
 		} catch (IOException e) {
-			e.printStackTrace();
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 	}
 	
@@ -116,7 +116,7 @@ public class MainController implements Initializable {
 			stage.setScene(scene);
 			stage.show();
 		} catch (IOException e) {
-			e.printStackTrace();
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 	}
 	

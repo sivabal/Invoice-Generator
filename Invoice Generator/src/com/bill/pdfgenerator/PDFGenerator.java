@@ -203,7 +203,7 @@ public class PDFGenerator {
 				
 				if(toAddress.getGstNo() != "") {
 					YPositionRight -= 10;
-					contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, yPosition);
+					contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, YPositionRight);
 					contentStream.showText(toAddress.getGstNo());
 					contentStream.endText();
 				}

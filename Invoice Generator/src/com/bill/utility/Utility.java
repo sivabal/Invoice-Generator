@@ -8,6 +8,9 @@ import javafx.collections.ObservableList;
 
 public class Utility {
 	
+	public static String excelSheetPath = "C:\\Users\\welcome\\Desktop\\excel\\";
+	public static String invoicePath = "C:\\Users\\welcome\\Desktop\\invoice\\";
+	
 	public static ObservableList<String> fromAddressShopNames;
 	public static ObservableList<String> toAddressShopNames;
 	public static Map<String, Float[]> productInfo;

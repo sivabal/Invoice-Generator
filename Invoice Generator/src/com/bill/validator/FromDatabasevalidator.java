@@ -4,10 +4,13 @@ import java.util.Map;
 
 import com.bill.beans.Address;
 import com.bill.dao.FromDatabase;
+import com.bill.exception.DatabaseException;
+import com.bill.popus.ShowPopups;
 import com.bill.utility.Utility;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 
 public class FromDatabasevalidator {
 	
@@ -29,9 +32,21 @@ public class FromDatabasevalidator {
 	 */
 	public static String getLastInvoiceNumber() {
 
-		String[] invoiceNumber = FromDatabase.getLastInvoiceNumber().split("-");
-		return invoiceNumber[0] + "-" + (Integer.parseInt(invoiceNumber[1])+1);
+		String invoiceNumber = "";
+		try {
+			
+			String[] invoiceNumberArray = FromDatabase.getLastInvoiceNumber().split("-");
+			invoiceNumber = invoiceNumberArray[0] + "-" + (Integer.parseInt(invoiceNumberArray[1])+1);
+			
+		} catch (DatabaseException e) {
+			invoiceNumber = "INV-6000";
+		}catch (NullPointerException e) {
+			ShowPopups.showPopups(AlertType.ERROR, "Null Pointer Exception Occured..",e.toString());
+		} catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(),"");
+		}
 		
+		return invoiceNumber;
 	}
 	
 	/*

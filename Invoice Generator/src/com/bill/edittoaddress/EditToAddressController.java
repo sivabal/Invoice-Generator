@@ -68,7 +68,7 @@ public class EditToAddressController implements Initializable {
 	@FXML
 	public void getAddress() {
 		
-		if(ValidateUserInputs.ValidateShopName(updateOldShopName.getValue())) {
+		if(ValidateUserInputs.validateShopName(updateOldShopName.getValue())) {
 			
 			Address address = FromDatabasevalidator.getToAddress(updateOldShopName.getValue());
 			
@@ -100,7 +100,7 @@ public class EditToAddressController implements Initializable {
 	@FXML
 	public void updateAddress() {
 		
-		if(ValidateUserInputs.ValidateAddressDetails(updateNewShopName.getText(), updateAddressLine1.getText(),
+		if(ValidateUserInputs.validateAddressDetails(updateNewShopName.getText(), updateAddressLine1.getText(),
 				updateAddressLine2.getText(), updateCity.getText(), updateDistrict.getText(), updateState.getText(), 
 				updatePincode.getText(), updateTelephone.getText(), updateMobile.getText(), updateGstNo.getText())) {
 			
@@ -115,7 +115,7 @@ public class EditToAddressController implements Initializable {
 	@FXML
 	public void insertAddress() {
 		
-		if(ValidateUserInputs.ValidateAddressDetails(insertShopName.getText(), insertAddressLine1.getText(),
+		if(ValidateUserInputs.validateAddressDetails(insertShopName.getText(), insertAddressLine1.getText(),
 				insertAddressLine2.getText(), insertCity.getText(), insertDistrict.getText(), insertState.getText(), 
 				insertPincode.getText(), insertTelephone.getText(), insertMobile.getText(), insertGstNo.getText())) {
 			
@@ -131,7 +131,7 @@ public class EditToAddressController implements Initializable {
 	@FXML
 	public void deleteAddress() {
 		
-		if(ValidateUserInputs.ValidateShopName(deleteShopName.getValue())) {
+		if(ValidateUserInputs.validateShopName(deleteShopName.getValue())) {
 			
 			ToDatabaseValidator.deleteToAddress(deleteShopName.getValue());
 			ShowPopups.showPopups(AlertType.INFORMATION, "Success....", "Address Deleted from the Database Successfully....");
