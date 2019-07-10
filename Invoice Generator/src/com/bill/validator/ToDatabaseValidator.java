@@ -6,9 +6,11 @@ import java.time.temporal.ChronoUnit;
 
 import com.bill.beans.BilledProducts;
 import com.bill.dao.ToDatabase;
+import com.bill.popus.ShowPopups;
 import com.bill.utility.Utility;
 
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert.AlertType;
 
 public class ToDatabaseValidator {
 	
@@ -20,8 +22,7 @@ public class ToDatabaseValidator {
 			ToDatabase.insertInvoiceData(invoiceNumber, date, daysDifference, billFrom, billTo, orderAmount, sgst, cgst, total);
 			ToDatabase.insertBilledProducts(billrow, invoiceNumber);
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			System.out.println(e.getLocalizedMessage());
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 		
 	}
@@ -33,7 +34,7 @@ public class ToDatabaseValidator {
 		try {
 			ToDatabase.updateProduct(Utility.productInfo.get(oldProdName)[3].intValue(), newProdName, unitRate, sgst, cgst);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 	}
 	
@@ -44,6 +45,7 @@ public class ToDatabaseValidator {
 		try {
 			ToDatabase.insertProduct(prodId, prodName, unitRate, sgst, cgst);
 		} catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 	}
 	
@@ -56,7 +58,7 @@ public class ToDatabaseValidator {
 		try {
 			ToDatabase.insertFromAddress(shopName, addressLine1, addressLine2 ,city, district,state,pincode, telephone,mobile ,gstNo);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 		
 	}
@@ -71,7 +73,7 @@ public class ToDatabaseValidator {
 		try {
 			ToDatabase.updateFromAddress(oldShopName, newShopName, addressLine1, addressLine2,city, district,state,pincode, telephone,mobile ,gstNo);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 	}
 	/*
@@ -83,7 +85,7 @@ public class ToDatabaseValidator {
 		try {
 			ToDatabase.insertToAddress(shopName, addressLine1, addressLine2,city , district,state, pincode,telephone,mobile ,gstNo);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 		
 	}
@@ -97,7 +99,7 @@ public class ToDatabaseValidator {
 		try {
 			ToDatabase.updateToAddress(oldShopName, newShopName, addressLine1, addressLine2,city, district,state,pincode, telephone,mobile ,gstNo);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 	}
 	
@@ -108,7 +110,7 @@ public class ToDatabaseValidator {
 		try {
 			ToDatabase.deleteFromAddress(shopName);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 	}
 	
@@ -119,7 +121,7 @@ public class ToDatabaseValidator {
 		try {
 			ToDatabase.deleteToAddress(shopName);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 	}
 	
@@ -130,7 +132,7 @@ public class ToDatabaseValidator {
 		try {
 			ToDatabase.deleteProduct(Utility.productInfo.get(prodName)[3].intValue());
 		} catch (Exception e) {
-			e.printStackTrace();
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 	}
 }

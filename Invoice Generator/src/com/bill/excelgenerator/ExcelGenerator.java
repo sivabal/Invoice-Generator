@@ -20,6 +20,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.bill.exception.ExcelGeneratorException;
 import com.bill.popus.ShowPopups;
 import com.bill.utility.Utility;
 import com.bill.validator.FromDatabasevalidator;
@@ -159,10 +160,14 @@ public class ExcelGenerator {
 			
 			ShowPopups.showPopups(AlertType.INFORMATION, "Success....", "Excel is generated Successfully....");
 			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		}catch (ExcelGeneratorException e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.getMessage(), "");
+		}catch (FileNotFoundException e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}catch (IOException e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 	}
 	

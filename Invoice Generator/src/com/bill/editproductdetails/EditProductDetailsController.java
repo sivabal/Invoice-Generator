@@ -52,13 +52,17 @@ public class EditProductDetailsController implements Initializable{
 	@FXML
 	public void insertProduct() {
 		
-		if(ValidateUserInputs.validateProductDetails(insertProdName.getText(),
-				insertUnitRate.getText(), insertSgst.getText(), insertCgst.getText())) {
-			
-			ToDatabaseValidator.insertProduct(Integer.parseInt(insertProdId.getText()), insertProdName.getText(),
-					insertUnitRate.getText(), insertSgst.getText(), insertCgst.getText());
+		try {
+			if(ValidateUserInputs.validateProductDetails(insertProdName.getText(),
+					insertUnitRate.getText(), insertSgst.getText(), insertCgst.getText())) {
 				
-			ShowPopups.showPopups(AlertType.INFORMATION,"Product Inserted to Database Successfully....", "");
+				ToDatabaseValidator.insertProduct(Integer.parseInt(insertProdId.getText()), insertProdName.getText(),
+						insertUnitRate.getText(), insertSgst.getText(), insertCgst.getText());
+					
+				ShowPopups.showPopups(AlertType.INFORMATION,"Product Inserted to Database Successfully....", "");
+			}
+		} catch (NumberFormatException e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 			
 		
@@ -67,14 +71,18 @@ public class EditProductDetailsController implements Initializable{
 	@FXML
 	public void getProductDetails() {
 
-		if(ValidateUserInputs.validateProuctName(updateOldProdName.getValue())) {
-			FromDatabasevalidator.getProduct(updateOldProdName.getValue(), updateNewProdName, updateUnitRate, updateSgst, updateCgst);
-			
-			updateNewProdName.setDisable(false);
-			updateUnitRate.setDisable(false);
-			updateSgst.setDisable(false);
-			updateCgst.setDisable(false);
-			updateProductBtn.setDisable(false);
+		try {
+			if(ValidateUserInputs.validateProuctName(updateOldProdName.getValue())) {
+				FromDatabasevalidator.getProduct(updateOldProdName.getValue(), updateNewProdName, updateUnitRate, updateSgst, updateCgst);
+				
+				updateNewProdName.setDisable(false);
+				updateUnitRate.setDisable(false);
+				updateSgst.setDisable(false);
+				updateCgst.setDisable(false);
+				updateProductBtn.setDisable(false);
+			}
+		} catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 
 	}
@@ -82,22 +90,30 @@ public class EditProductDetailsController implements Initializable{
 	@FXML
 	public void updateProduct() {
 	
-		if(ValidateUserInputs.validateProductDetails(updateNewProdName.getText(),
-				updateUnitRate.getText(), updateSgst.getText(), updateCgst.getText())) {
-			
-			ToDatabaseValidator.updateProduct(updateOldProdName.getValue(), updateNewProdName.getText(),
-					updateUnitRate.getText(), updateSgst.getText(), updateCgst.getText());
-			
-			ShowPopups.showPopups(AlertType.INFORMATION, "Product Details Updated Successfully....", "");
+		try {
+			if(ValidateUserInputs.validateProductDetails(updateNewProdName.getText(),
+					updateUnitRate.getText(), updateSgst.getText(), updateCgst.getText())) {
+				
+				ToDatabaseValidator.updateProduct(updateOldProdName.getValue(), updateNewProdName.getText(),
+						updateUnitRate.getText(), updateSgst.getText(), updateCgst.getText());
+				
+				ShowPopups.showPopups(AlertType.INFORMATION, "Product Details Updated Successfully....", "");
+			}
+		} catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 	}
 		
 	@FXML
 	public void deleteProduct() {
-		if(ValidateUserInputs.validateProuctName(deleteProductName.getValue())) {
-			
-			ToDatabaseValidator.deleteProduct(deleteProductName.getValue());
-			ShowPopups.showPopups(AlertType.INFORMATION, "Product details Successfully deleted from the database....", "");
+		try {
+			if(ValidateUserInputs.validateProuctName(deleteProductName.getValue())) {
+				
+				ToDatabaseValidator.deleteProduct(deleteProductName.getValue());
+				ShowPopups.showPopups(AlertType.INFORMATION, "Product details Successfully deleted from the database....", "");
+			}
+		} catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 		
 	}

@@ -5,6 +5,7 @@ import java.util.Map;
 import com.bill.beans.Address;
 import com.bill.dao.FromDatabase;
 import com.bill.exception.DatabaseException;
+import com.bill.exception.ExcelGeneratorException;
 import com.bill.popus.ShowPopups;
 import com.bill.utility.Utility;
 
@@ -20,10 +21,14 @@ public class FromDatabasevalidator {
 	 */
 	public static Map<String, Float[]> getProductDetails(){
 		
-		Map<String, Float[]> productInfo = FromDatabase.getProductDetails();
+		Map<String, Float[]> productInfo = null;
+		try {
+			productInfo = FromDatabase.getProductDetails();
+		} catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}
+		
 		return productInfo;
-		
-		
 		
 	}
 
@@ -52,22 +57,38 @@ public class FromDatabasevalidator {
 	/*
 	 * 
 	 */
-	public static void getDataToCreateExcel(int fromDateDiff, int toDateDiff) {
-		 FromDatabase.getDataToCreateExcel(fromDateDiff, toDateDiff);
+	public static void getDataToCreateExcel(int fromDateDiff, int toDateDiff) throws  ExcelGeneratorException{
+		 try {
+			FromDatabase.getDataToCreateExcel(fromDateDiff, toDateDiff);
+		}catch(ExcelGeneratorException e) {
+			throw e;
+		}catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}
 	}
 	
 	/*
 	 * this method will return the last product id
 	 */
 	public static String getLastProductId() {
-		return Integer.toString(FromDatabase.getLastProductId() + 1);
+		String productId = "";
+		try {
+			productId = Integer.toString(FromDatabase.getLastProductId() + 1);
+		} catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}
+		return productId;
 	}
 	/*
 	 * 
 	 */
 	public static void getProduct(String updateOldProdName, TextField updateNewProdName, TextField updateUnitRate, TextField updateSgst, TextField updateCgst) {
 
-		FromDatabase.getProduct(Utility.productInfo.get(updateOldProdName)[3].intValue(), updateNewProdName, updateUnitRate, updateSgst, updateCgst);
+		try {
+			FromDatabase.getProduct(Utility.productInfo.get(updateOldProdName)[3].intValue(), updateNewProdName, updateUnitRate, updateSgst, updateCgst);
+		} catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}
 			
 	}
 	
@@ -75,31 +96,52 @@ public class FromDatabasevalidator {
 	 * 
 	 */
 	public static ObservableList<String> getFromAddressShopNames(){
-		 return FromDatabase.getFromAddressShopNames();
-			
+		ObservableList<String> shopNames = null;
+		 try {
+			 shopNames = FromDatabase.getFromAddressShopNames();
+		} catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}
+		return shopNames;
 	}
 	
 	/*
 	 * 
 	 */
 	public static ObservableList<String> getToAddressShopNames(){
-		return FromDatabase.getToAddressShopNames();
+		ObservableList<String> shopNames = null;
+		 try {
+			 shopNames = FromDatabase.getToAddressShopNames();
+		} catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}
+		return shopNames;
 	}
 	
 	/*
 	 * 
 	 */
 	public static Address getFromAddress(String shopName){
-	
-		return FromDatabase.getFromAddress(shopName); 
+		Address address = null;
+		 try {
+			 address = FromDatabase.getFromAddress(shopName); 
+		} catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}
+		return address;
 	}
 	
 	/*
 	 * 
 	 */
 	public static Address getToAddress(String shopName){
-
-		return FromDatabase.getToAddress(shopName);
+		Address address = null;
+		 try {
+			 address = FromDatabase.getToAddress(shopName);
+		} catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}
+		return address;
 
 	}
 }

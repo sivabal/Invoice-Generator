@@ -12,7 +12,7 @@ public class GetConnection {
 		
 		try {
 			Class.forName("org.sqlite.JDBC");
-			connection = DriverManager.getConnection("jdbc:sqlite:Invoice.db");
+			connection = DriverManager.getConnection("jdbc:sqlite:../Invoice.db");
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}

@@ -2,14 +2,13 @@ package com.bill.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.bill.beans.Address;
 import com.bill.excelgenerator.ExcelGenerator;
 import com.bill.exception.DatabaseException;
-
+import com.bill.exception.ExcelGeneratorException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TextField;
@@ -17,7 +16,7 @@ import javafx.scene.control.TextField;
 public class FromDatabase {
 	
 	
-	public static Map<String, Float[]> getProductDetails(){
+	public static Map<String, Float[]> getProductDetails() throws Exception{
 		
 		Map<String, Float[]> productInfo = new HashMap<>();
 		String query = "select * from productDetails";
@@ -33,9 +32,7 @@ public class FromDatabase {
 				productInfo.put(resultSet.getString("prodName"), rateAndTax);
 			}
 			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		} 
 		
 		return productInfo;
 	}
@@ -59,7 +56,7 @@ public class FromDatabase {
 	/*
 	 * 
 	 */
-	public static void getDataToCreateExcel(int fromDateDiff, int toDateDiff) {
+	public static void getDataToCreateExcel(int fromDateDiff, int toDateDiff) throws Exception{
 		String query = "SELECT ID.invoiceNumber, date, billFrom, billTo, ID.orderAmount, sgst, cgst, total, productName, "
 				+ "qty, unitRate, BP.orderAmount as amountExTax, sgstTotal, sgstPercentage, cgstTotal, cgstPercentage, amount "
 				+ "FROM (SELECT * FROM invoiceData where daysDifference >= ? and daysDifference <= ?) as ID "
@@ -70,38 +67,35 @@ public class FromDatabase {
 			preparedStmt.setInt(1, fromDateDiff);
 			preparedStmt.setInt(2, toDateDiff);
 			ResultSet resultSet = preparedStmt.executeQuery();
-			
+			if(!resultSet.isBeforeFirst()) 
+				throw new ExcelGeneratorException("No data available with in the provided date..");
 			while(resultSet.next()) {
 				ExcelGenerator.writeContent(resultSet);
 			}
 			
 			resultSet.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 	}
 	
 	/*
 	 * 
 	 */
-	public static Integer getLastProductId() {
+	public static Integer getLastProductId() throws Exception{
 		String query = "select max(prodId) from productDetails";
 		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query);
 				ResultSet resultSet = preparedStmt.executeQuery();){
 			
 			return resultSet.getInt("max(prodId)");
 			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
+		} 
+		
 	}
 	
 	/*
 	 * 
 	 */
 	public static void getProduct(int prodId, TextField updateProdName, TextField updateUnitRate,
-			TextField updateSgst, TextField updateCgst) {
+			TextField updateSgst, TextField updateCgst)throws Exception {
 		String query = "select prodName, rate, sgst, cgst from productDetails where prodId = ?";
 		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query);){
 			
@@ -116,15 +110,13 @@ public class FromDatabase {
 			
 			resultSet.close();
 			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		} 
 	}
 	
 	/*
 	 * 
 	 */
-	public static ObservableList<String> getFromAddressShopNames(){
+	public static ObservableList<String> getFromAddressShopNames()throws Exception{
 		
 		ObservableList<String> shopNames = FXCollections.observableArrayList();
 		String query = "select shopName from fromAddress";
@@ -135,8 +127,6 @@ public class FromDatabase {
 				shopNames.add(resultSet.getString("shopName"));
 			}
 			
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 		return shopNames;
 	}
@@ -144,7 +134,7 @@ public class FromDatabase {
 	/*
 	 * 
 	 */
-	public static ObservableList<String> getToAddressShopNames(){
+	public static ObservableList<String> getToAddressShopNames()throws Exception{
 		
 		ObservableList<String> shopNames = FXCollections.observableArrayList();
 		shopNames.add("Counter Sales");
@@ -158,16 +148,14 @@ public class FromDatabase {
 				shopNames.add(resultSet.getString("shopName"));
 			}
 			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		} 
 		return shopNames;
 	}
 	
 	/*
 	 * 
 	 */
-	public static Address getFromAddress(String shopName){
+	public static Address getFromAddress(String shopName)throws Exception{
 		
 		Address address = new Address();
 		String query = "select * from fromAddress where shopName = ?";
@@ -189,16 +177,14 @@ public class FromDatabase {
 			address.setGstNo(resultSet.getString("gstNo"));
 			
 			resultSet.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		} 
 		return address;
 	}
 	
 	/*
 	 * 
 	 */
-	public static Address getToAddress(String shopName){
+	public static Address getToAddress(String shopName)throws Exception{
 		
 		Address address = new Address();
 		String query = "select * from toAddress where shopName = ?";
@@ -219,9 +205,7 @@ public class FromDatabase {
 			
 			resultSet.close();
 			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		} 
 		return address;
 	}
 }

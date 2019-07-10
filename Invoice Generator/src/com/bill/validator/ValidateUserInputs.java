@@ -1,8 +1,11 @@
 package com.bill.validator;
 
+import java.time.LocalDate;
+
 import com.bill.beans.BilledProducts;
 import com.bill.exception.EditAddressException;
 import com.bill.exception.EditProductException;
+import com.bill.exception.ExcelGeneratorException;
 import com.bill.exception.InvoiceException;
 import com.bill.popus.ShowPopups;
 import com.bill.utility.Regex;
@@ -51,10 +54,15 @@ public class ValidateUserInputs {
 		return false;
 	}
 
-	public static boolean validateAddressDetails(String newShopName, String addressLine1, String addressLine2, String city, String district,
+	public static boolean validateAddressDetails(String oldShopName , String newShopName, String addressLine1, String addressLine2, String city, String district,
 			String state, String pincode, String telephone, String mobile, String gstNo) {
 		
 		try {
+			
+			//For 'Bill TO Address' only
+			if(oldShopName.equals("Counter Sales"))
+				throw new EditAddressException("'Counter Sales' Cannot be Updated, Inserted or Deleted...");
+			
 			if(newShopName.trim().equals(""))
 				throw new EditAddressException("Please Provide valid Shop Name.");
 			if(addressLine1.trim().equals(""))
@@ -85,8 +93,11 @@ public class ValidateUserInputs {
 			if(oldShopName == null)
 				throw new EditAddressException("Please Select the Shop Name.");
 			
-			return true;
+			//For 'Bill TO Address' only
+			if(oldShopName.equals("Counter Sales"))
+				throw new EditAddressException("'Counter Sales' Cannot be Updated, Inserted or Deleted...");
 			
+			return true;
 		}catch (EditAddressException e) {
 			ShowPopups.showPopups(AlertType.ERROR, e.getMessage(), "");
 		}
@@ -133,6 +144,23 @@ public class ValidateUserInputs {
 		return false;
 	}
 
+	public static boolean validateDates(LocalDate fromDate, LocalDate toDate) {
+		
+		try {
+			
+			if(fromDate == null || toDate == null) 
+				throw new ExcelGeneratorException("Please Povide 'From date' and 'To date'...");
+			if(fromDate.isAfter(toDate))
+				throw new ExcelGeneratorException("'From date' Can't come after 'To date'...");
+			
+			return true;
+			
+		}catch (ExcelGeneratorException e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.getMessage(), "");
+		}
+		return false;
+		
+	}
 
 
 

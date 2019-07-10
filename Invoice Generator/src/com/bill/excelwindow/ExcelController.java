@@ -1,11 +1,10 @@
 package com.bill.excelwindow;
 
 import com.bill.excelgenerator.ExcelGenerator;
-import com.bill.popus.ShowPopups;
+import com.bill.validator.ValidateUserInputs;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Alert.AlertType;
 
 public class ExcelController {
 	
@@ -14,13 +13,9 @@ public class ExcelController {
 	
 	@FXML
 	public void generateExcel() {
-		
-		if(fromDate.getValue().isAfter(toDate.getValue())) {
-			ShowPopups.showPopups(AlertType.ERROR, "Error....", "From date should not come after To date..");
-			return;
+		if(ValidateUserInputs.validateDates(fromDate.getValue(), toDate.getValue())) {
+			ExcelGenerator.generateExcel(fromDate.getValue(), toDate.getValue());
 		}
-		
-		ExcelGenerator.generateExcel(fromDate.getValue(), toDate.getValue());
 	}
 
 }
