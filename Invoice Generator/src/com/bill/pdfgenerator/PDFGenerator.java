@@ -39,7 +39,7 @@ public class PDFGenerator {
 			    boolean drawLine = false;
 			    float bottomMargin = 0;
 			// y position is your coordinate of top left corner of the table
-			    yPosition = 730;
+			    yPosition =  760;
 
 			    BaseTable table = new BaseTable(yPosition, yStartNewPage, bottomMargin, tableWidth, margin, document, page, drawLine, drawContent);
 			    
@@ -128,7 +128,7 @@ public class PDFGenerator {
 	
 	
 	public static float drawInvoiceTable(String ShopName, Address toAddress, String invoiceNumber, String date, String placeOfSupply, PDDocument document, PDPage page, float yPosition) {
-		yPosition -= 10;
+		//yPosition -= 5;
 		float YPositionLeft = yPosition, YPositionRight = yPosition-20;
 		
 		try {
@@ -223,7 +223,7 @@ public class PDFGenerator {
 		/*
 		 * Content Area in pdf --> Left to Right : 70-500	, Top to Bottom : 730-70 	
 		 */
-		yPosition -= 20;
+		yPosition -= 10;
 		Cell<PDPage> cell = null;
 		try {
 			
@@ -352,7 +352,7 @@ public class PDFGenerator {
 			
 			table.draw();
 			
-			yPosition -= 100;
+			yPosition -= 40;
 			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 10);contentStream.newLineAtOffset(420, yPosition);
 			contentStream.showText(" _________________");
 			contentStream.endText();yPosition -= 15;

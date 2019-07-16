@@ -144,4 +144,19 @@ public class FromDatabasevalidator {
 		return address;
 
 	}
+	
+	/*
+	 * 
+	 */
+	public static ObservableList<String> getInvoiceNumbers(){
+		
+		ObservableList<String> invoice = null;
+		 try {
+			 invoice = FromDatabase.getInvoiceNumbers();
+		} catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}
+		return invoice;
+	}
 }
+

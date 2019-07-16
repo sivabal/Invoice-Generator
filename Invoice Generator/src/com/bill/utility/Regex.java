@@ -9,5 +9,5 @@ public class Regex {
 	public static Pattern regexProdRate = Pattern.compile("^[0-9]+([.]?[0-9]+)?$");
 	public static Pattern regexProdSgst = Pattern.compile("^[0-9]+([.]?[0-9]+)?$");
 	public static Pattern regexProdCgst = Pattern.compile("^[0-9]+([.]?[0-9]+)?$");
-	public static Pattern regexInvoiceNumber = Pattern.compile("^INV-[6-9][0-9]{3,}$");
+	public static Pattern regexInvoiceNumber = Pattern.compile("^INV-[0-9]{4,}$");
 }

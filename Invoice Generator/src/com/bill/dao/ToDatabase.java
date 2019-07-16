@@ -229,4 +229,31 @@ public class ToDatabase {
 			
 		}
 	}
+	
+	/*
+	 * 
+	 */
+	public static void deleteInvoice(String invoice) throws Exception{
+		String query = "DELETE FROM invoiceData WHERE invoiceNumber = ?";
+		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query)) {
+			preparedStmt.setString(1, invoice);
+			
+			preparedStmt.executeUpdate();
+			
+		}
+	}
+	
+
+	/*
+	 * 
+	 */
+	public static void deleteBilledProducts(String invoice) throws Exception{
+		String query = "DELETE FROM billedProducts WHERE invoiceNumber = ?";
+		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query)) {
+			preparedStmt.setString(1, invoice);
+			
+			preparedStmt.executeUpdate();
+			
+		}
+	}
 }

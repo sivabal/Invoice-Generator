@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import com.bill.utility.Utility;
+
 public class GetConnection {
 	
 	public static Connection connection;
@@ -12,7 +14,7 @@ public class GetConnection {
 		
 		try {
 			Class.forName("org.sqlite.JDBC");
-			connection = DriverManager.getConnection("jdbc:sqlite:../Invoice.db");
+			connection = DriverManager.getConnection(Utility.databaseConnectionString);
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}

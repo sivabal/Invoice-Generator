@@ -3,6 +3,7 @@ package com.bill.validator;
 import java.time.LocalDate;
 
 import com.bill.beans.BilledProducts;
+import com.bill.exception.DeleteInvoiceException;
 import com.bill.exception.EditAddressException;
 import com.bill.exception.EditProductException;
 import com.bill.exception.ExcelGeneratorException;
@@ -114,7 +115,7 @@ public class ValidateUserInputs {
 				throw new InvoiceException("Please Select 'Bill To' Address.");
 			if(!Regex.regexInvoiceNumber.matcher(invoiceNumber).matches())
 				throw new InvoiceException("Please provide valid invoice number, starting with 'INV-' followed by valid four"
-						+ " digit number above 6000. Eg. INV-6000");
+						+ " digit number above. Eg. INV-0001, INV-0245");
 			
 			return true;
 			
@@ -162,6 +163,17 @@ public class ValidateUserInputs {
 		
 	}
 
-
+	public static boolean validateInvoiceNumber(String invoice) {
+		try {
+			if(invoice == null)
+				throw new DeleteInvoiceException("Please Select the Invoice.");
+			
+			return true;
+		}catch (DeleteInvoiceException e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.getMessage(), "");
+		}
+		
+		return false;
+	}
 
 }

@@ -8,9 +8,21 @@ import javafx.collections.ObservableList;
 
 public class Utility {
 	
+	/*
+	 * When working in eclipse
+	 */
 	public static String excelSheetPath = "../Excel/";
 	public static String invoicePath = "../Invoice/";
+	public static String databaseConnectionString = "jdbc:sqlite:../Invoice.db";
 	
+	/*
+	 * When converted to jar
+	 */
+//	public static String excelSheetPath = "Excel/";
+//	public static String invoicePath = "Invoice/";
+//	public static String databaseConnectionString = "jdbc:sqlite:Invoice.db";
+	
+	public static String password = "1967";
 	public static ObservableList<String> fromAddressShopNames;
 	public static ObservableList<String> toAddressShopNames;
 	public static Map<String, Float[]> productInfo;

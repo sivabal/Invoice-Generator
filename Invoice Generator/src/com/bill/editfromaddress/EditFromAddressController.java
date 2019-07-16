@@ -1,6 +1,7 @@
 package com.bill.editfromaddress;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import com.bill.beans.Address;
@@ -107,7 +108,8 @@ public class EditFromAddressController implements Initializable {
 		try {
 			if(ValidateUserInputs.validateAddressDetails(updateOldShopName.getValue(),updateNewShopName.getText(), updateAddressLine1.getText(),
 					updateAddressLine2.getText(), updateCity.getText(), updateDistrict.getText(), updateState.getText(), 
-					updatePincode.getText(), updateTelephone.getText(), updateMobile.getText(), updateGstNo.getText())) {
+					updatePincode.getText(), updateTelephone.getText(), updateMobile.getText(), updateGstNo.getText())
+					&& ShowPopups.showPopups(AlertType.CONFIRMATION, "Are you sure want to update this 'Bill From' address..", "")) {
 				
 				ToDatabaseValidator.updateFromAddress(updateOldShopName.getValue(), updateNewShopName.getText(), updateAddressLine1.getText(),
 						updateAddressLine2.getText(), updateCity.getText(), updateDistrict.getText(), updateState.getText(), 
@@ -115,7 +117,12 @@ public class EditFromAddressController implements Initializable {
 				
 				ShowPopups.showPopups(AlertType.INFORMATION, "Success....", "Address Updated Successfully....");
 			}
-		} catch (Exception e) {
+		} catch (SQLException e) {
+			if(e.getMessage().contains("UNIQUE"))
+				ShowPopups.showPopups(AlertType.ERROR, "Shop name is same as the existing one. Please provide different shop name", "");
+			else
+				ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}catch (Exception e) {
 			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 	}
@@ -126,7 +133,8 @@ public class EditFromAddressController implements Initializable {
 		try {
 			if(ValidateUserInputs.validateAddressDetails(insertShopName.getText(), insertShopName.getText(), insertAddressLine1.getText(),
 					insertAddressLine2.getText(), insertCity.getText(), insertDistrict.getText(), insertState.getText(), 
-					insertPincode.getText(), insertTelephone.getText(), insertMobile.getText(), insertGstNo.getText())) {
+					insertPincode.getText(), insertTelephone.getText(), insertMobile.getText(), insertGstNo.getText())
+					&& ShowPopups.showPopups(AlertType.CONFIRMATION, "Are you sure want to insert this 'Bill From' address..", "")) {
 			
 				ToDatabaseValidator.insertFromAddress(insertShopName.getText(), insertAddressLine1.getText(),
 						insertAddressLine2.getText(), insertCity.getText(), insertDistrict.getText(), insertState.getText(), 
@@ -134,7 +142,12 @@ public class EditFromAddressController implements Initializable {
 				
 				ShowPopups.showPopups(AlertType.INFORMATION, "Success....", "Address Inserted to Database Successfully....");
 			}
-		} catch (Exception e) {
+		} catch (SQLException e) {
+			if(e.getMessage().contains("UNIQUE"))
+				ShowPopups.showPopups(AlertType.ERROR, "Shop name is same as the existing one. Please provide different shop name", "");
+			else
+				ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}catch (Exception e) {
 			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 	}
@@ -142,7 +155,8 @@ public class EditFromAddressController implements Initializable {
 	@FXML
 	public void deleteAddress() {
 		try {
-			if(ValidateUserInputs.validateShopName(deleteShopName.getValue())) {
+			if(ValidateUserInputs.validateShopName(deleteShopName.getValue())
+					&& ShowPopups.showPopups(AlertType.CONFIRMATION, "Are you sure want to delete this 'Bill From' address..", "")) {
 				
 				ToDatabaseValidator.deleteFromAddress(deleteShopName.getValue());
 				ShowPopups.showPopups(AlertType.INFORMATION, "Success....", "Address Deleted from the Database Successfully....");
@@ -151,6 +165,21 @@ public class EditFromAddressController implements Initializable {
 			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 		
+	}
+	
+	@FXML
+	public void disableFields() {
+		updateNewShopName.setDisable(true);
+		updateAddressLine1.setDisable(true);
+		updateAddressLine2.setDisable(true);
+		updateCity.setDisable(true);
+		updateDistrict.setDisable(true);
+		updateState.setDisable(true);
+		updatePincode.setDisable(true);
+		updateTelephone.setDisable(true);
+		updateMobile.setDisable(true);
+		updateGstNo.setDisable(true);
+		updateAddressBtn.setDisable(true);
 	}
 	
 

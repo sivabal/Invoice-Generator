@@ -86,7 +86,7 @@
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="557.0" prefWidth="630.0">
                <children>
                   <Label layoutX="123.0" layoutY="51.0" text="Select Any shop :" />
-                  <ComboBox fx:id="updateOldShopName" layoutX="227.0" layoutY="47.0" prefHeight="25.0" prefWidth="214.0" promptText="--SELECT--" />
+                  <ComboBox fx:id="updateOldShopName" layoutX="227.0" layoutY="47.0" onAction="#disableFields" prefHeight="25.0" prefWidth="214.0" promptText="--SELECT--" />
                   <Button layoutX="459.0" layoutY="47.0" mnemonicParsing="false" onAction="#getAddress" text="Get Address " />
                   <Label layoutX="146.0" layoutY="100.0" text="Shop Name :" />
                   <TextField fx:id="updateNewShopName" layoutX="227.0" layoutY="96.0" prefHeight="25.0" prefWidth="214.0" />

@@ -1,6 +1,7 @@
 package com.bill.editproductdetails;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import com.bill.popus.ShowPopups;
@@ -54,14 +55,26 @@ public class EditProductDetailsController implements Initializable{
 		
 		try {
 			if(ValidateUserInputs.validateProductDetails(insertProdName.getText(),
-					insertUnitRate.getText(), insertSgst.getText(), insertCgst.getText())) {
+					insertUnitRate.getText(), insertSgst.getText(), insertCgst.getText())
+					&& ShowPopups.showPopups(AlertType.CONFIRMATION, "Are you sure want to insert this Product..", "")) {
 				
 				ToDatabaseValidator.insertProduct(Integer.parseInt(insertProdId.getText()), insertProdName.getText(),
 						insertUnitRate.getText(), insertSgst.getText(), insertCgst.getText());
 					
 				ShowPopups.showPopups(AlertType.INFORMATION,"Product Inserted to Database Successfully....", "");
 			}
+		} catch (SQLException e) {
+			if(e.getMessage().contains("UNIQUE")) {
+				if(e.getMessage().contains("prodId"))
+					ShowPopups.showPopups(AlertType.ERROR, "Product id is same as the existing one. Please close the window and try again.", "");
+				if(e.getMessage().contains("prodName"))
+					ShowPopups.showPopups(AlertType.ERROR, "Product Name is same as the existing one. Please provide a new product name.", "");
+			}
+			else
+				ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		} catch (NumberFormatException e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}catch (Exception e) {
 			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 			
@@ -92,14 +105,22 @@ public class EditProductDetailsController implements Initializable{
 	
 		try {
 			if(ValidateUserInputs.validateProductDetails(updateNewProdName.getText(),
-					updateUnitRate.getText(), updateSgst.getText(), updateCgst.getText())) {
+					updateUnitRate.getText(), updateSgst.getText(), updateCgst.getText())
+					&& ShowPopups.showPopups(AlertType.CONFIRMATION, "Are you sure want to update this Product..", "")) {
 				
 				ToDatabaseValidator.updateProduct(updateOldProdName.getValue(), updateNewProdName.getText(),
 						updateUnitRate.getText(), updateSgst.getText(), updateCgst.getText());
 				
 				ShowPopups.showPopups(AlertType.INFORMATION, "Product Details Updated Successfully....", "");
 			}
-		} catch (Exception e) {
+		} catch (SQLException e) {
+			if(e.getMessage().contains("UNIQUE")) {
+				if(e.getMessage().contains("prodName"))
+					ShowPopups.showPopups(AlertType.ERROR, "Product Name is same as the existing one. Please provide a new product name.", "");
+				}
+				else
+					ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}catch (Exception e) {
 			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 	}
@@ -107,7 +128,8 @@ public class EditProductDetailsController implements Initializable{
 	@FXML
 	public void deleteProduct() {
 		try {
-			if(ValidateUserInputs.validateProuctName(deleteProductName.getValue())) {
+			if(ValidateUserInputs.validateProuctName(deleteProductName.getValue())
+					&& ShowPopups.showPopups(AlertType.CONFIRMATION, "Are you sure want to delete this Product..", "")) {
 				
 				ToDatabaseValidator.deleteProduct(deleteProductName.getValue());
 				ShowPopups.showPopups(AlertType.INFORMATION, "Product details Successfully deleted from the database....", "");
@@ -116,6 +138,15 @@ public class EditProductDetailsController implements Initializable{
 			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 		
+	}
+	
+	@FXML
+	public void disableFields() {
+		updateProductBtn.setDisable(true);
+		updateNewProdName.setDisable(true);
+		updateUnitRate.setDisable(true);
+		updateSgst.setDisable(true);
+		updateCgst.setDisable(true);
 	}
 	
 

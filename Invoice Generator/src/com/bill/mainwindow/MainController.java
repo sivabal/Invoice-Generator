@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import com.bill.dao.GetConnection;
+import com.bill.exception.DeleteInvoiceException;
+import com.bill.exception.EditProductException;
 import com.bill.popus.ShowPopups;
 import com.bill.utility.Utility;
 
@@ -49,7 +51,7 @@ public class MainController implements Initializable {
 		try {
 			
 			Stage stage = new Stage();
-			Parent parent = FXMLLoader.load(getClass().getResource("../invoicewindow/invoice.fxml"));
+			Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/invoicewindow/invoice.fxml"));
 			Scene scene = new Scene(parent);
 			stage.setTitle("Invoice Window");
 			stage.setScene(scene);
@@ -66,7 +68,7 @@ public class MainController implements Initializable {
 		try {
 			
 			Stage stage = new Stage();
-			Parent parent = FXMLLoader.load(getClass().getResource("../excelwindow/excel.fxml"));
+			Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/excelwindow/excel.fxml"));
 			Scene scene = new Scene(parent);
 			stage.setTitle("Excel Generator Window");
 			stage.setScene(scene);
@@ -81,13 +83,20 @@ public class MainController implements Initializable {
 	public void editProductDetails() {
 		
 		try {
-			Stage stage = new Stage();
-			Parent parent = FXMLLoader.load(getClass().getResource("../editproductdetails/editproductdetails.fxml"));
-			Scene scene = new Scene(parent);
-			stage.setTitle("Edit Product Details");
-			stage.setScene(scene);
-			stage.show();
+			
+			if(ShowPopups.passwordPopUp()) {
+				Stage stage = new Stage();
+				Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/editproductdetails/editproductdetails.fxml"));
+				Scene scene = new Scene(parent);
+				stage.setTitle("Edit Product Details");
+				stage.setScene(scene);
+				stage.show();
+			}
 		} catch (IOException e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}catch (EditProductException e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.getMessage(), "");
+		}catch (Exception e) {
 			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 	}
@@ -95,13 +104,19 @@ public class MainController implements Initializable {
 	@FXML
 	public void editfromaddress() {
 		try {
-			Stage stage = new Stage();
-			Parent parent = FXMLLoader.load(getClass().getResource("../editfromaddress/editfromaddress.fxml"));
-			Scene scene = new Scene(parent);
-			stage.setTitle("Edit 'Bill From' Address");
-			stage.setScene(scene);
-			stage.show();
+			if(ShowPopups.passwordPopUp()) {
+				Stage stage = new Stage();
+				Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/editfromaddress/editfromaddress.fxml"));
+				Scene scene = new Scene(parent);
+				stage.setTitle("Edit 'Bill From' Address");
+				stage.setScene(scene);
+				stage.show();
+			}
 		} catch (IOException e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}catch (EditProductException e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.getMessage(), "");
+		}catch (Exception e) {
 			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 	}
@@ -109,13 +124,39 @@ public class MainController implements Initializable {
 	@FXML
 	public void edittoaddress() {
 		try {
-			Stage stage = new Stage();
-			Parent parent = FXMLLoader.load(getClass().getResource("../edittoaddress/edittoaddress.fxml"));
-			Scene scene = new Scene(parent);
-			stage.setTitle("Edit 'Bill To' Address");
-			stage.setScene(scene);
-			stage.show();
+			if(ShowPopups.passwordPopUp()) {
+				Stage stage = new Stage();
+				Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/edittoaddress/edittoaddress.fxml"));
+				Scene scene = new Scene(parent);
+				stage.setTitle("Edit 'Bill To' Address");
+				stage.setScene(scene);
+				stage.show();
+			}
 		} catch (IOException e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}catch (EditProductException e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.getMessage(), "");
+		}catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}
+	}
+	
+	@FXML
+	public void deleteInvoice() {
+		try {
+			if(ShowPopups.passwordPopUp()) {
+				Stage stage = new Stage();
+				Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/deleteinvoice/deleteinvoice.fxml"));
+				Scene scene = new Scene(parent);
+				stage.setTitle("Delete Invoice");
+				stage.setScene(scene);
+				stage.show();
+			}
+		} catch (IOException e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}catch (DeleteInvoiceException e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.getMessage(), "");
+		}catch (Exception e) {
 			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 	}

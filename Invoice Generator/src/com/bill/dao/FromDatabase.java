@@ -208,4 +208,22 @@ public class FromDatabase {
 		} 
 		return address;
 	}
+	
+	/*
+	 * 
+	 */
+	public static ObservableList<String> getInvoiceNumbers()throws Exception{
+		
+		ObservableList<String> invoice = FXCollections.observableArrayList();
+		String query = "select invoiceNumber from invoiceData";
+		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query);
+				ResultSet resultSet = preparedStmt.executeQuery();){
+			
+			while(resultSet.next()){
+				invoice.add(resultSet.getString("invoiceNumber"));
+			}
+			
+		}
+		return invoice;
+	}
 }

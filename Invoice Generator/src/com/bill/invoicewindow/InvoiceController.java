@@ -2,6 +2,7 @@ package com.bill.invoicewindow;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -28,6 +29,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -61,6 +63,8 @@ public class InvoiceController implements Initializable{
 	@FXML private ComboBox<String> toComboBox;
 	@FXML private TextArea toTextArea;
 	@FXML private ComboBox<String> placeComboBox;
+	@FXML private Button print;
+	@FXML private Button printAndSave;
 	
 	@FXML private TableView<BilledProducts> tableView;
 	@FXML private TableColumn<BilledProducts, Integer> sno;
@@ -70,7 +74,7 @@ public class InvoiceController implements Initializable{
 	@FXML private TableColumn<BilledProducts, TextField> sgst;
 	@FXML private TableColumn<BilledProducts, TextField> cgst;
 	@FXML private TableColumn<BilledProducts, TextField> amount;
-
+	
 
 
 	/**
@@ -88,6 +92,7 @@ public class InvoiceController implements Initializable{
 			invoiceNumber.setText(FromDatabasevalidator.getLastInvoiceNumber());
 			total.setText("0.0");
 			tableView.selectionModelProperty().getValue().selectFirst();
+
 		} catch (Exception e) {
 			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
@@ -131,6 +136,23 @@ public class InvoiceController implements Initializable{
 		}
 	}
 	
+	/*
+	 * 
+	 */
+	@FXML
+	public void newBill() {
+		try {
+			if(ShowPopups.showPopups(AlertType.CONFIRMATION, "This action will overwrite the old bill. Want to Continue?", "")) {
+				billRow.clear();
+				total.setText("0.0");
+				invoiceDate.setValue(LocalDate.now());
+				invoiceNumber.setText(FromDatabasevalidator.getLastInvoiceNumber());
+				createNewRow();
+			}
+		} catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}
+	}
 	
 	/**
 	 * 
@@ -157,6 +179,7 @@ public class InvoiceController implements Initializable{
 	public void onClickToComboBox(ActionEvent event){
 		try {
 			if(toComboBox.getValue().equals("Counter Sales")) {
+				toAddress = null;
 				toTextArea.setText("");
 			}
 			else {
@@ -361,19 +384,27 @@ public class InvoiceController implements Initializable{
 				document.save(Utility.invoicePath + invoiceNumber.getText() +".pdf");
 				document.close();
 				
-				
 				if(save) {
-					ToDatabaseValidator.insertInvoiceDataAndBilledProducts(billRow, invoiceNumber.getText(), invoiceDate.getValue().format(DateTimeFormatter.ofPattern("dd/MM/uuuu")), fromComboBox.getValue(), 
-							toComboBox.getValue(), orderAmount, sgstTotal, cgstTotal, roundTotal);
+					ToDatabaseValidator.insertInvoiceDataAndBilledProducts(billRow, invoiceNumber.getText(), invoiceDate.getValue().format(DateTimeFormatter.ofPattern("dd/MM/uuuu")), fromAddress, 
+							toAddress,fromComboBox.getValue(), toComboBox.getValue(), orderAmount, sgstTotal, cgstTotal, roundTotal);
 				}
+				
 				
 				ShowPopups.showPopups(AlertType.INFORMATION, "Success....", (save)?"Invoice is Generated and Saved Successfully....":"Invoice is Generated Successfully....");
 				
-			} catch (IOException e) {
+			} catch (SQLException e) {
+				if(e.getMessage().contains("UNIQUE"))
+					ShowPopups.showPopups(AlertType.ERROR, "This invoice number '"+invoiceNumber.getText()+"' is already"
+							+ " present in the database. Please provide the next number and try again..", "");
+				else
+					ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+			}catch (IOException e) {
 				ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 			}catch (Exception e) {
 				ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 			}
+
 		}
 	}
+	
 }
