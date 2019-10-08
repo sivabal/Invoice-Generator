@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import com.bill.dao.GetConnection;
-import com.bill.exception.DeleteInvoiceException;
 import com.bill.exception.EditProductException;
 import com.bill.popus.ShowPopups;
 import com.bill.utility.Utility;
@@ -154,7 +153,7 @@ public class MainController implements Initializable {
 			}
 		} catch (IOException e) {
 			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
-		}catch (DeleteInvoiceException e) {
+		}catch (EditProductException e) {
 			ShowPopups.showPopups(AlertType.ERROR, e.getMessage(), "");
 		}catch (Exception e) {
 			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");

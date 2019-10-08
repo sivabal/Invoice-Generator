@@ -21,6 +21,7 @@ public class BillGenerator extends Application {
 		Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/mainwindow/application.fxml"));		
 		Scene scene = new Scene(parent);
 		stage.setTitle("Invoice Application");
+
 		stage.setScene(scene);
 		stage.show();
 
