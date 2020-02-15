@@ -1,4 +1,4 @@
-package com.bill.editproductdetails;
+package com.bill.controller;
 
 import java.net.URL;
 import java.sql.SQLException;

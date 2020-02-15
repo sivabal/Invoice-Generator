@@ -1,4 +1,4 @@
-package com.bill.invoicewindow;
+package com.bill.controller;
 
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -6,7 +6,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -15,7 +16,7 @@ import org.controlsfx.control.textfield.TextFields;
 
 import com.bill.beans.Address;
 import com.bill.beans.BilledProducts;
-import com.bill.pdfgenerator.PDFGenerator;
+import com.bill.generator.PDFGenerator;
 import com.bill.popus.ShowPopups;
 import com.bill.utility.Utility;
 import com.bill.validator.FromDatabasevalidator;
@@ -25,7 +26,9 @@ import com.bill.validator.ValidateUserInputs;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
@@ -279,6 +282,9 @@ public class InvoiceController implements Initializable{
 					tempQty = Float.parseFloat(currentlySelected.getQuantity().getText());
 					tempPrdDetail = Utility.productInfo.get(currentlySelected.getItemName().getText());
 					
+					if(tempQty < 0)
+						throw new NumberFormatException();
+					
 					currentlySelected.setOrderAmount(tempPrdDetail[0] * tempQty);
 					currentlySelected.setSgstTotal((tempPrdDetail[1]*(tempPrdDetail[0] * tempQty))/100);
 					currentlySelected.setCgstTotal((tempPrdDetail[2]*(tempPrdDetail[0] * tempQty))/100);
@@ -367,80 +373,111 @@ public class InvoiceController implements Initializable{
 	 */
 	public void generatePdf(boolean save) {
 
-		Task<Void> task = new Task<Void>() {
-
-			@Override
-			protected Void call() throws Exception {
-
-				print.setDisable(true);
-				printAndSave.setDisable(true);
-				progressBar.setOpacity(1);
-				progressLabel.setOpacity(1);
-
-				
-				updateMessage("Please Wait..");
-				updateProgress(20, 100);
-
-				Float sgstTotal = (float)billRow.stream().mapToDouble(x -> x.getSgstTotal()).reduce(0, (a, b) -> a+b);
-				Float cgstTotal = (float)billRow.stream().mapToDouble(x -> x.getCgstTotal()).reduce(0, (a, b) -> a+b);
-				Float orderAmount = (float)billRow.stream().mapToDouble(x -> x.getOrderAmount()).reduce(0, (a,b) -> a+b);
-				Integer roundTotal = Math.round(Float.parseFloat(total.getText()));
-
-				PDDocument document = new PDDocument();
-				PDPage page = new PDPage();
-
-				updateProgress(40, 100);
-
-				float yPosition = PDFGenerator.drawTitleTable(fromComboBox.getValue(), fromAddress, document, page);
-				yPosition = PDFGenerator.drawInvoiceTable(toComboBox.getValue(), toAddress, invoiceNumber.getText(), invoiceDate.getValue().format(DateTimeFormatter.ofPattern("dd/MM/uuuu"))
-						, placeComboBox.getValue(), document, page, yPosition);
-
-				updateProgress(60, 100);
-
-				yPosition = PDFGenerator.drawProductsTable(billRow, document, page, yPosition);
-				PDFGenerator.drawTotalTable(orderAmount, sgstTotal, cgstTotal, roundTotal, document, page,yPosition);
-
-				document.addPage(page);
-				document.save(Utility.invoicePath + invoiceNumber.getText() +".pdf");
-				document.close();
-
-				updateProgress(80, 100);
-				if(save) {
-					ToDatabaseValidator.insertInvoiceDataAndBilledProducts(billRow, invoiceNumber.getText(), invoiceDate.getValue().format(DateTimeFormatter.ofPattern("dd/MM/uuuu")), fromAddress, 
-							toAddress,fromComboBox.getValue(), toComboBox.getValue(), orderAmount, sgstTotal, cgstTotal, roundTotal);
-				}
-
-				updateProgress(100, 100);
-				ShowPopups.showPopups(AlertType.INFORMATION, "Success....", (save)?"Invoice is Generated and Saved Successfully....":"Invoice is Generated Successfully....");
-				
-				System.out.println("before");
-
-				progressBar.setOpacity(0);
-				progressLabel.setOpacity(0);
-				print.setDisable(false);
-				printAndSave.setDisable(false);
-
-				System.out.println("after");
-
-				return null;
-			}};
-
 			if(ValidateUserInputs.validateInvoiceDetails(fromComboBox.getValue(),toComboBox.getValue(),invoiceNumber.getText())
 					&& ValidateUserInputs.validateBilledRow(billRow)) {
 				try {
-					Thread thread = new Thread(task);
-					thread.start();
-				} catch (Exception e) {
-					if(e.getMessage().contains("UNIQUE"))
-						ShowPopups.showPopups(AlertType.ERROR, "This invoice number '"+invoiceNumber.getText()+"' is already"
-								+ " present in the database. Please provide the next number and try again..", "");
-					else
-						ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
-				}
-			}
+					
+					print.setDisable(true);
+					printAndSave.setDisable(true);
+					progressBar.setOpacity(1);
+					progressLabel.setOpacity(1);
 
-			progressBar.progressProperty().bind(task.progressProperty());
-			progressLabel.textProperty().bind(task.messageProperty());
+					
+					Task<String> task = new Task<String>() {
+
+						@Override
+						protected String call() throws Exception {
+
+							try {
+								
+								updateMessage("Please Wait..");
+								updateProgress(20, 100);
+
+								Float sgstTotal = (float)billRow.stream().mapToDouble(x -> x.getSgstTotal()).reduce(0, (a, b) -> a+b);
+								Float cgstTotal = (float)billRow.stream().mapToDouble(x -> x.getCgstTotal()).reduce(0, (a, b) -> a+b);
+								Float orderAmount = (float)billRow.stream().mapToDouble(x -> x.getOrderAmount()).reduce(0, (a,b) -> a+b);
+								Integer roundTotal = Math.round(Float.parseFloat(total.getText()));
+
+								PDDocument document = new PDDocument();
+								PDPage page = new PDPage();
+
+								updateProgress(40, 100);
+
+								float yPosition = PDFGenerator.drawTitleTable(fromComboBox.getValue(), fromAddress, document, page);
+								yPosition = PDFGenerator.drawInvoiceTable(toComboBox.getValue(), toAddress, invoiceNumber.getText(), invoiceDate.getValue().format(DateTimeFormatter.ofPattern("dd/MM/uuuu"))
+										, placeComboBox.getValue(), document, page, yPosition);
+
+								updateProgress(60, 100);
+
+								yPosition = PDFGenerator.drawProductsTable(billRow, document, page, yPosition);
+								PDFGenerator.drawTotalTable(orderAmount, sgstTotal, cgstTotal, roundTotal, document, page,yPosition);
+
+								document.addPage(page);
+								document.save(Utility.invoicePath + invoiceNumber.getText() +".pdf");
+								document.close();
+
+								updateProgress(80, 100);
+								if(save) {
+									ToDatabaseValidator.insertInvoiceDataAndBilledProducts(billRow, invoiceNumber.getText(), invoiceDate.getValue().format(DateTimeFormatter.ofPattern("dd/MM/uuuu")), fromAddress, 
+											toAddress,fromComboBox.getValue(), toComboBox.getValue(), orderAmount, sgstTotal, cgstTotal, roundTotal);
+								}
+
+								updateProgress(100, 100);
+								
+								return "SUCCESS";
+							} catch (Exception e) {
+								throw e;
+							}
+						}
+					};
+					
+					task.setOnFailed(new EventHandler<WorkerStateEvent>() {
+
+						@Override
+						public void handle(WorkerStateEvent event) {
+							
+							progressBar.setOpacity(0);
+							progressLabel.setOpacity(0);
+							print.setDisable(false);
+							printAndSave.setDisable(false);
+							
+							Throwable e = task.getException();
+							
+							if(e.getMessage().contains("UNIQUE"))
+								ShowPopups.showPopups(AlertType.ERROR, "This invoice number '"+invoiceNumber.getText()+"' is already"
+										+ " present in the database. Please provide the next number and try again..", "");
+							else
+								ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+							
+						}
+						
+					});
+					task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+						
+						@Override
+						public void handle(WorkerStateEvent event) {
+							
+							progressBar.setOpacity(0);
+							progressLabel.setOpacity(0);
+							print.setDisable(false);
+							printAndSave.setDisable(false);
+							
+							ShowPopups.showPopups(AlertType.INFORMATION, "Success....", (save)?"Invoice is Generated and Saved Successfully....":"Invoice is Generated Successfully....");
+							
+						}
+					});
+					
+					progressBar.progressProperty().bind(task.progressProperty());
+					progressLabel.textProperty().bind(task.messageProperty());
+					
+					ExecutorService executorService = Executors.newSingleThreadExecutor();
+					executorService.execute(task);
+					
+					
+				} catch (Exception e) {
+					ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+				} 
+			}
 
 	}
 

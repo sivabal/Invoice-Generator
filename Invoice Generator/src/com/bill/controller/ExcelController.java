@@ -1,6 +1,6 @@
-package com.bill.excelwindow;
+package com.bill.controller;
 
-import com.bill.excelgenerator.ExcelGenerator;
+import com.bill.generator.ExcelGenerator;
 import com.bill.validator.ValidateUserInputs;
 
 import javafx.fxml.FXML;

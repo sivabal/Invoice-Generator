@@ -134,6 +134,8 @@ public class ValidateUserInputs {
 			for(BilledProducts b: billRow) {
 				if(b.getItemName().getText().equals("") || b.getQuantity().getText().equals("")) 
 					throw new InvoiceException("Blank entries are not Allowed...");
+				if(!Regex.regexQantity.matcher(b.getQuantity().getText()).matches()) 
+					throw new InvoiceException("Incorrect Quantity for the product '" + b.getItemName().getText() + "'");
 			
 			}
 			

@@ -10,4 +10,5 @@ public class Regex {
 	public static Pattern regexProdSgst = Pattern.compile("^[0-9]+([.]?[0-9]+)?$");
 	public static Pattern regexProdCgst = Pattern.compile("^[0-9]+([.]?[0-9]+)?$");
 	public static Pattern regexInvoiceNumber = Pattern.compile("^INV-[0-9]{4,}$");
+	public static Pattern regexQantity = Pattern.compile("^[0-9]+([.]?[0-9]+)?$");
 }

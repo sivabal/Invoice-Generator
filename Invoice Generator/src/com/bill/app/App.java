@@ -1,4 +1,4 @@
-package com.bill.mainwindow;
+package com.bill.app;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 
 
 
-public class BillGenerator extends Application {
+public class App extends Application {
 
 	    
 	public static void main(String[] args) {
@@ -18,8 +18,10 @@ public class BillGenerator extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		
-		Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/mainwindow/application.fxml"));		
+		Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/ui/app.fxml"));		
 		Scene scene = new Scene(parent);
+		stage.setMaximized(false);
+		stage.setResizable(false);
 		stage.setTitle("Invoice Application");
 
 		stage.setScene(scene);

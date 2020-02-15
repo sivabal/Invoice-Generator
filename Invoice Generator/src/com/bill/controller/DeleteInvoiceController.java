@@ -1,4 +1,4 @@
-package com.bill.deleteinvoice;
+package com.bill.controller;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -14,7 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Alert.AlertType;
 
-public class DeleteInvoice implements Initializable{
+public class DeleteInvoiceController implements Initializable{
 
 	@FXML private ComboBox<String> deleteInvoice;
 	

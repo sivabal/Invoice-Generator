@@ -1,4 +1,4 @@
-package com.bill.mainwindow;
+package com.bill.controller;
 
 
 import java.io.IOException;
@@ -22,7 +22,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
 
-public class MainController implements Initializable {
+public class AppController implements Initializable {
 	
 	@FXML private Label dbStatus;
 	
@@ -50,7 +50,7 @@ public class MainController implements Initializable {
 		try {
 			
 			Stage stage = new Stage();
-			Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/invoicewindow/invoice.fxml"));
+			Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/ui/invoice.fxml"));
 			Scene scene = new Scene(parent);
 			stage.setTitle("Invoice Window");
 			stage.setScene(scene);
@@ -67,7 +67,7 @@ public class MainController implements Initializable {
 		try {
 			
 			Stage stage = new Stage();
-			Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/excelwindow/excel.fxml"));
+			Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/ui/excel.fxml"));
 			Scene scene = new Scene(parent);
 			stage.setTitle("Excel Generator Window");
 			stage.setScene(scene);
@@ -85,7 +85,7 @@ public class MainController implements Initializable {
 			
 			if(ShowPopups.passwordPopUp()) {
 				Stage stage = new Stage();
-				Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/editproductdetails/editproductdetails.fxml"));
+				Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/ui/editproductdetails.fxml"));
 				Scene scene = new Scene(parent);
 				stage.setTitle("Edit Product Details");
 				stage.setScene(scene);
@@ -105,7 +105,7 @@ public class MainController implements Initializable {
 		try {
 			if(ShowPopups.passwordPopUp()) {
 				Stage stage = new Stage();
-				Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/editfromaddress/editfromaddress.fxml"));
+				Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/ui/editfromaddress.fxml"));
 				Scene scene = new Scene(parent);
 				stage.setTitle("Edit 'Bill From' Address");
 				stage.setScene(scene);
@@ -125,7 +125,7 @@ public class MainController implements Initializable {
 		try {
 			if(ShowPopups.passwordPopUp()) {
 				Stage stage = new Stage();
-				Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/edittoaddress/edittoaddress.fxml"));
+				Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/ui/edittoaddress.fxml"));
 				Scene scene = new Scene(parent);
 				stage.setTitle("Edit 'Bill To' Address");
 				stage.setScene(scene);
@@ -145,7 +145,7 @@ public class MainController implements Initializable {
 		try {
 			if(ShowPopups.passwordPopUp()) {
 				Stage stage = new Stage();
-				Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/deleteinvoice/deleteinvoice.fxml"));
+				Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/ui/deleteinvoice.fxml"));
 				Scene scene = new Scene(parent);
 				stage.setTitle("Delete Invoice");
 				stage.setScene(scene);

@@ -6,9 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.bill.beans.Address;
-import com.bill.excelgenerator.ExcelGenerator;
 import com.bill.exception.DatabaseException;
 import com.bill.exception.ExcelGeneratorException;
+import com.bill.generator.ExcelGenerator;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TextField;

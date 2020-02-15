@@ -26,10 +26,12 @@ public class ToDatabaseValidator {
 					billTo+ ((toAddress != null && toAddress.getGstNo() != "")?"  GST No: " +toAddress.getGstNo():""), 
 					orderAmount, sgst, cgst, total);
 			ToDatabase.insertBilledProducts(billrow, invoiceNumber);
+			
+			
 		}catch (SQLException e) {
 			throw e;
 		}catch (Exception e) {
-			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+			throw e;
 		}
 		
 	}

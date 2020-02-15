@@ -1,6 +1,5 @@
-package com.bill.pdfgenerator;
+package com.bill.generator;
 
-import java.io.IOException;
 import java.text.DecimalFormat;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -22,7 +21,7 @@ import javafx.collections.ObservableList;
 public class PDFGenerator {
 	
 	
-	public static float drawTitleTable(String name, Address fromAddress, PDDocument document, PDPage page) {
+	public static float drawTitleTable(String name, Address fromAddress, PDDocument document, PDPage page) throws Exception {
 		
 		Row<PDPage> row = null;
 		Cell<PDPage> cell = null;
@@ -118,8 +117,8 @@ public class PDFGenerator {
 			    yPosition = table.draw();
 			    
 			    
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			throw e;
 		}
 		
 		return yPosition;
@@ -127,7 +126,7 @@ public class PDFGenerator {
 	}
 	
 	
-	public static float drawInvoiceTable(String ShopName, Address toAddress, String invoiceNumber, String date, String placeOfSupply, PDDocument document, PDPage page, float yPosition) {
+	public static float drawInvoiceTable(String ShopName, Address toAddress, String invoiceNumber, String date, String placeOfSupply, PDDocument document, PDPage page, float yPosition) throws Exception {
 		//yPosition -= 5;
 		float YPositionLeft = yPosition, YPositionRight = yPosition-20;
 		
@@ -212,13 +211,13 @@ public class PDFGenerator {
 			
 			contentStream.close();
 			
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			throw e;
 		}
 		
 		return (YPositionLeft < YPositionRight)?YPositionLeft:YPositionRight;
 	}
-	public static float drawProductsTable(ObservableList<BilledProducts> billRow, PDDocument document, PDPage page, float yPosition) {
+	public static float drawProductsTable(ObservableList<BilledProducts> billRow, PDDocument document, PDPage page, float yPosition) throws Exception {
 		
 		/*
 		 * Content Area in pdf --> Left to Right : 70-500	, Top to Bottom : 730-70 	
@@ -281,15 +280,15 @@ public class PDFGenerator {
 	
 			   table.draw();
 			    
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			throw e;
 		}
 		
 		 return yPosition;
 	}
 	
 	public static void drawTotalTable(Float orderAmount, Float sgstTotal, Float cgstTotal, Integer total,
-			PDDocument document, PDPage page, float yPosition) {
+			PDDocument document, PDPage page, float yPosition) throws Exception {
 		
 		Row<PDPage> row = null;
 		Cell<PDPage> cell = null;
@@ -363,8 +362,8 @@ public class PDFGenerator {
 			
 			contentStream.close();
 			
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			throw e;
 		}
 	}
 
