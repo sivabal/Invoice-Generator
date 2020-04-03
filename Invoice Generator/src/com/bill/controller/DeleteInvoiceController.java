@@ -20,7 +20,11 @@ public class DeleteInvoiceController implements Initializable{
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		deleteInvoice.getItems().addAll(FromDatabasevalidator.getInvoiceNumbers());
+		try {
+			deleteInvoice.getItems().addAll(FromDatabasevalidator.getInvoiceNumbers());
+		} catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}
 	}
 
 	@FXML
@@ -30,6 +34,10 @@ public class DeleteInvoiceController implements Initializable{
 					&& ShowPopups.showPopups(AlertType.CONFIRMATION, "Are you sure want to delete this Invoice..", "")) {
 				
 				ToDatabaseValidator.deleteInvoice(deleteInvoice.getValue());
+				
+				deleteInvoice.getItems().clear();
+				deleteInvoice.getItems().addAll(FromDatabasevalidator.getInvoiceNumbers());
+				
 				ShowPopups.showPopups(AlertType.INFORMATION, "Invoice Successfully deleted from the database....", "");
 			}
 		} catch (SQLException e) {

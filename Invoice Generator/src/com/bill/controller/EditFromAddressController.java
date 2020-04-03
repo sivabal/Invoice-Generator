@@ -115,6 +115,12 @@ public class EditFromAddressController implements Initializable {
 						updateAddressLine2.getText(), updateCity.getText(), updateDistrict.getText(), updateState.getText(), 
 						updatePincode.getText(), updateTelephone.getText(), updateMobile.getText(), updateGstNo.getText());
 				
+				Utility.fromAddressShopNames = FromDatabasevalidator.getFromAddressShopNames();
+				updateOldShopName.getItems().clear();
+				updateOldShopName.getItems().addAll(Utility.fromAddressShopNames);	
+				deleteShopName.getItems().clear();
+				deleteShopName.getItems().addAll(Utility.fromAddressShopNames);
+				
 				ShowPopups.showPopups(AlertType.INFORMATION, "Success....", "Address Updated Successfully....");
 			}
 		} catch (SQLException e) {
@@ -140,6 +146,12 @@ public class EditFromAddressController implements Initializable {
 						insertAddressLine2.getText(), insertCity.getText(), insertDistrict.getText(), insertState.getText(), 
 						insertPincode.getText(), insertTelephone.getText(), insertMobile.getText(), insertGstNo.getText());
 				
+				Utility.fromAddressShopNames = FromDatabasevalidator.getFromAddressShopNames();
+				updateOldShopName.getItems().clear();
+				updateOldShopName.getItems().addAll(Utility.fromAddressShopNames);	
+				deleteShopName.getItems().clear();
+				deleteShopName.getItems().addAll(Utility.fromAddressShopNames);
+				
 				ShowPopups.showPopups(AlertType.INFORMATION, "Success....", "Address Inserted to Database Successfully....");
 			}
 		} catch (SQLException e) {
@@ -159,6 +171,13 @@ public class EditFromAddressController implements Initializable {
 					&& ShowPopups.showPopups(AlertType.CONFIRMATION, "Are you sure want to delete this 'Bill From' address..", "")) {
 				
 				ToDatabaseValidator.deleteFromAddress(deleteShopName.getValue());
+				
+				Utility.fromAddressShopNames = FromDatabasevalidator.getFromAddressShopNames();
+				updateOldShopName.getItems().clear();
+				updateOldShopName.getItems().addAll(Utility.fromAddressShopNames);	
+				deleteShopName.getItems().clear();
+				deleteShopName.getItems().addAll(Utility.fromAddressShopNames);
+				
 				ShowPopups.showPopups(AlertType.INFORMATION, "Success....", "Address Deleted from the Database Successfully....");
 			}
 		} catch (Exception e) {

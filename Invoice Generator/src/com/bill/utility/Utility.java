@@ -13,7 +13,7 @@ public class Utility {
 	 */
 	public static String excelSheetPath = "../Excel/";
 	public static String invoicePath = "../Invoice/";
-	public static String databaseConnectionString = "jdbc:sqlite:../Invoice.db";
+	public static String databaseConnectionString = "jdbc:sqlite:../Database.sqlite";
 	
 	/*
 	 * When converted to jar

@@ -7,7 +7,10 @@ import com.bill.exception.DeleteInvoiceException;
 import com.bill.exception.EditAddressException;
 import com.bill.exception.EditProductException;
 import com.bill.exception.ExcelGeneratorException;
+import com.bill.exception.GoodsProducedException;
+import com.bill.exception.InventoryException;
 import com.bill.exception.InvoiceException;
+import com.bill.exception.SalesMadeException;
 import com.bill.popus.ShowPopups;
 import com.bill.utility.Regex;
 
@@ -178,4 +181,70 @@ public class ValidateUserInputs {
 		return false;
 	}
 
+	public static boolean validateInventoryInfo(String itemName, String quantity, String price, String cgst, String sgst,
+			String igst, String transportCharge, String totalAmount, LocalDate date) {
+		try {
+			
+			if(itemName.equals("") || quantity.equals("") || price.equals("") || totalAmount.equals("") || date == null)
+				throw new InventoryException("Please provide all the required fields.");
+			if(!Regex.regexProdName.matcher(itemName).matches()) 
+				throw new InventoryException("Please Provide Valid Product Name.");
+			if(!Regex.regexQantity.matcher(quantity).matches())
+				throw new InventoryException("Please Provide Valid Quantity.");
+			if(!Regex.regexProdRate.matcher(price).matches())
+				throw new InventoryException("Please Provide Valid Price.");
+			if(!sgst.equals("") && !Regex.regexProdSgst.matcher(sgst).matches())
+				throw new InventoryException("Please Provide Valid Sgst Percentage. Eg. 0.53, 500, 3.7");
+			if(!cgst.equals("") && !Regex.regexProdCgst.matcher(cgst).matches())
+				throw new InventoryException("Please Provide Valid Cgst Percentage. Eg. 0.53, 500, 3.7");
+			if(!igst.equals("") && !Regex.regexProdCgst.matcher(igst).matches())
+				throw new InventoryException("Please Provide Valid Igst Percentage. Eg. 0.53, 500, 3.7");
+			if(!transportCharge.equals("") && !Regex.regexProdRate.matcher(transportCharge).matches())
+				throw new InventoryException("Please Provide Valid Transport Charge.");
+			if(!Regex.regexProdRate.matcher(totalAmount).matches())
+				throw new InventoryException("Please Provide Valid Total Amount.");
+			
+			return true;
+		}catch (InventoryException e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.getMessage(), "");
+		}
+		
+		return false; 
+	}
+	
+	public static boolean validateGoodsProducedInfo(String itemName, LocalDate date, String lotNo, String goodsProduced) throws Exception{
+		try {
+			
+			if(itemName == null || goodsProduced.equals("") || date == null)
+				throw new GoodsProducedException("Please provide all the required fields.");
+			
+			if(!Regex.regexQantity.matcher(goodsProduced).matches())
+				throw new GoodsProducedException("Please Provide Valid Goods Produced.");
+			
+			return true;
+		}catch (GoodsProducedException e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.getMessage(), "");
+		}
+		
+		return false; 
+	}
+	
+	public static boolean validateSalesMadeInfo(String itemName, LocalDate date, String lotNo, String goodsTaken, String salesManName) throws Exception{
+		try {
+			
+			if(itemName == null || goodsTaken.equals("") || salesManName.equals("") || date == null)
+				throw new SalesMadeException("Please provide all the required fields.");
+			
+			if(!Regex.regexQantity.matcher(goodsTaken).matches())
+				throw new SalesMadeException("Please Provide Valid Goods Taken for Sale.");
+			
+			return true;
+		}catch (SalesMadeException e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.getMessage(), "");
+		}
+		
+		return false; 
+	}
+	
+	
 }

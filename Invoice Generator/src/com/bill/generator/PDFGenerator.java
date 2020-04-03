@@ -65,8 +65,7 @@ public class PDFGenerator {
 				cell.setBottomPadding(0);
 				cell.setTopPadding(0);
 			    
-			    
-			    if(fromAddress.getAddressLine2() != "") {
+			    if(!fromAddress.getAddressLine2().equals("")) {
 				    row = table.createRow(5f);  
 				    cell = row.createCell(50, fromAddress.getAddressLine2());
 				    cell.setFont(PDType1Font.COURIER);
@@ -99,13 +98,13 @@ public class PDFGenerator {
 			    
 
 				row = table.createRow(5f);  
-				cell = row.createCell(50, (fromAddress.getTelephone() != "")?fromAddress.getTelephone()+" / "+fromAddress.getMobile():fromAddress.getMobile());
+				cell = row.createCell(50, (!fromAddress.getTelephone().equals(""))?fromAddress.getTelephone()+" / "+fromAddress.getMobile():fromAddress.getMobile());
 				cell.setFont(PDType1Font.COURIER);
 				cell.setFontSize(9);
 				cell.setBottomPadding(0);
 				cell.setTopPadding(0);
 			   
-				if(fromAddress.getGstNo() != "") {
+				if(!fromAddress.getGstNo().equals("")) {
 				    row = table.createRow(5f);  
 				    cell = row.createCell(50, fromAddress.getGstNo());
 				    cell.setFont(PDType1Font.COURIER);
@@ -178,7 +177,7 @@ public class PDFGenerator {
 				contentStream.showText(toAddress.getAddressLine1());
 				contentStream.endText();YPositionRight -= 10;
 				
-				if(toAddress.getAddressLine2() != "") {
+				if(!toAddress.getAddressLine2().equals("")) {
 					contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, YPositionRight);
 					contentStream.showText(toAddress.getAddressLine2());
 					contentStream.endText();YPositionRight -= 10;
@@ -189,7 +188,7 @@ public class PDFGenerator {
 				contentStream.endText();YPositionRight -= 10;
 				
 				contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, YPositionRight);
-				contentStream.showText(toAddress.getDistrict() + " - " + toAddress.getPincode());
+				contentStream.showText(toAddress.getDistrict() + "-" + toAddress.getPincode());
 				contentStream.endText();YPositionRight -= 10;
 				
 				contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, YPositionRight);
@@ -197,10 +196,10 @@ public class PDFGenerator {
 				contentStream.endText();YPositionRight -= 10;
 				
 				contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, YPositionRight);
-				contentStream.showText((toAddress.getTelephone() != "")?toAddress.getTelephone()+" / "+toAddress.getMobile():toAddress.getMobile());
+				contentStream.showText((!toAddress.getTelephone().equals("")?(toAddress.getTelephone()+" / "+toAddress.getMobile()):toAddress.getMobile()));
 				contentStream.endText();
 				
-				if(toAddress.getGstNo() != "") {
+				if(!toAddress.getGstNo().equals("")) {
 					YPositionRight -= 10;
 					contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 9);contentStream.newLineAtOffset(400, YPositionRight);
 					contentStream.showText(toAddress.getGstNo());

@@ -114,8 +114,8 @@ public class Address {
 	}
 	
 	public String toString() {
-		return addressLine1 + ", " + addressLine2 +", " + city +", "+ district+"-" + pincode+ ", "
-	+ state + ", "+ telephone +"/"+ mobile + ", " + gstNo;
+		return addressLine1 + ", " + (addressLine2.equals("")?"":addressLine2 +", ") + city +", "+ district+"-" + pincode+ ", "
+	+ state + ", "+ (telephone.equals("")?"":telephone+"/" )+ mobile +  (gstNo.equals("")?"":", "+gstNo);
 	}
 	
 }

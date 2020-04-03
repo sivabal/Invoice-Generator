@@ -12,7 +12,9 @@ import java.util.stream.Collectors;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
+import org.controlsfx.control.textfield.AutoCompletionBinding.AutoCompletionEvent;
 
 import com.bill.beans.Address;
 import com.bill.beans.BilledProducts;
@@ -49,7 +51,7 @@ public class InvoiceController implements Initializable{
 	
 	public ObservableList<String> placeItems = FXCollections.observableArrayList();
 	public ObservableList<BilledProducts> billRow = FXCollections.observableArrayList();
-	
+	static AutoCompletionBinding<String> autoCompletion;
 	public Float tempQty;
 	public Float[] tempPrdDetail;
 	Float tempSum;
@@ -262,10 +264,36 @@ public class InvoiceController implements Initializable{
 				}
 				
 		});
-	
+		
+		
 		itemNameField.textProperty().addListener((observableValue,oldValue,newValue) -> {
-				TextFields.bindAutoCompletion(itemNameField, suggestions);	
+			
+			if(!newValue.equals("") && newValue != null) {
+			
+				AutoCompletionBinding<String> autoCompletion = TextFields.bindAutoCompletion(itemNameField, suggestions);
+				
+				autoCompletion.setOnAutoCompleted((AutoCompletionEvent<String> e) -> {
+	
+						itemNameField.fireEvent(new ActionEvent());	
+						autoCompletion.dispose();
+						List<BilledProducts> currentlyFocused = billRow.stream().filter(x -> x.getItemName().equals(itemNameField)).collect(Collectors.toList());
+						currentlyFocused.get(0).getQuantity().requestFocus();
+						
+						
+					});
+			}
 		});
+		
+//		itemNameField.setOnKeyPressed((KeyEvent e) -> {
+//			
+//			 switch(e.getCode()) {
+//				 case ENTER:
+//					 itemNameField.fireEvent(new ActionEvent());
+//					 break;
+//				 default:
+//					break;
+//			 }
+//		});
 		
 		itemNameField.focusedProperty().addListener((observableValue,oldValue,newValue) -> {
 			if(newValue) {
@@ -292,6 +320,7 @@ public class InvoiceController implements Initializable{
 						(tempPrdDetail[0] * tempQty) + currentlySelected.getSgstTotal() + currentlySelected.getCgstTotal()));
 					tempSum = billRow.stream().map(x -> Float.parseFloat(x.getAmount().getText())).reduce(0.0f, (a,b) -> a+b);
 					total.setText(decimalFormat.format(tempSum));
+					
 					
 				} catch (NumberFormatException e) {
 					ShowPopups.showPopups(AlertType.ERROR, "Please Provide Valid Quantity..", "");
@@ -418,7 +447,7 @@ public class InvoiceController implements Initializable{
 
 								updateProgress(80, 100);
 								if(save) {
-									ToDatabaseValidator.insertInvoiceDataAndBilledProducts(billRow, invoiceNumber.getText(), invoiceDate.getValue().format(DateTimeFormatter.ofPattern("dd/MM/uuuu")), fromAddress, 
+									ToDatabaseValidator.insertInvoiceDataAndBilledProducts(billRow, invoiceNumber.getText(), invoiceDate.getValue(), fromAddress, 
 											toAddress,fromComboBox.getValue(), toComboBox.getValue(), orderAmount, sgstTotal, cgstTotal, roundTotal);
 								}
 
@@ -440,14 +469,19 @@ public class InvoiceController implements Initializable{
 							progressLabel.setOpacity(0);
 							print.setDisable(false);
 							printAndSave.setDisable(false);
-							
-							Throwable e = task.getException();
-							
-							if(e.getMessage().contains("UNIQUE"))
-								ShowPopups.showPopups(AlertType.ERROR, "This invoice number '"+invoiceNumber.getText()+"' is already"
-										+ " present in the database. Please provide the next number and try again..", "");
-							else
-								ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+
+
+							try {
+								Throwable e = task.getException();
+
+								if(e.getMessage().contains("UNIQUE"))
+									ShowPopups.showPopups(AlertType.ERROR, "This invoice number '"+invoiceNumber.getText()+"' is already"
+											+ " present in the database. Please provide the next number and try again..", "");
+								else
+									ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+							} catch (NullPointerException e) {
+								ShowPopups.showPopups(AlertType.ERROR,"Please Provide Valid Product Name.", "");
+							}
 							
 						}
 						

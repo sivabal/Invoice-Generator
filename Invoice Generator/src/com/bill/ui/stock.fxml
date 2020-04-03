@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="459.0" prefWidth="670.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bill.controller.StockController">
+   <children>
+      <TableView fx:id="tableView" layoutX="21.0" layoutY="106.0" prefHeight="325.0" prefWidth="622.0" style="-fx-font-weight: 800;">
+        <columns>
+          <TableColumn fx:id="itemName" prefWidth="310.0" text="Item Name" />
+            <TableColumn fx:id="lotNo" prefWidth="129.0" text="Lot NO" />
+            <TableColumn fx:id="goodsInStock" prefWidth="167.0" text="Good In Stock" />
+        </columns>
+      </TableView>
+      <Label layoutX="295.0" layoutY="54.0" text="Goods In Stock">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

@@ -10,8 +10,9 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="695.0" prefWidth="1355.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bill.controller.InvoiceController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="1350.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bill.controller.InvoiceController">
    <children>
       <ComboBox fx:id="fromComboBox" cache="true" cacheHint="SPEED" layoutX="76.0" layoutY="49.0" onAction="#onClickFromComboBox" prefHeight="29.0" prefWidth="224.0" promptText="--SELECT--" />
       <Label layoutX="33.0" layoutY="49.0" prefHeight="22.0" prefWidth="42.0" text="From : " />
@@ -25,7 +26,7 @@
       <Button fx:id="printAndSave" layoutX="701.0" layoutY="563.0" mnemonicParsing="false" onAction="#printAndSave" text="Print &amp; Save" />
       <Label layoutX="348.0" layoutY="53.0" prefHeight="22.0" prefWidth="102.0" text="Invoice Number :" />
       <Label layoutX="596.0" layoutY="52.0" prefHeight="22.0" prefWidth="88.0" text="Invoice Date :" />
-      <TableView fx:id="tableView" editable="true" layoutX="348.0" layoutY="110.0" prefHeight="417.0" prefWidth="793.0">
+      <TableView fx:id="tableView" editable="true" layoutX="348.0" layoutY="110.0" prefHeight="417.0" prefWidth="793.0" style="-fx-font-weight: 800;">
         <columns>
           <TableColumn fx:id="sno" prefWidth="48.0" text="S.No" />
           <TableColumn fx:id="itemName" prefWidth="366.0" text="Item Name" />
@@ -36,8 +37,14 @@
             <TableColumn fx:id="amount" prefWidth="89.0" text="Amount (Rs)" />
         </columns>
       </TableView>
-      <Label layoutX="1015.0" layoutY="558.0" text="Total : Rs. " />
-      <Label fx:id="total" layoutX="1077.0" layoutY="558.0" text="0.0" />
+      <Label layoutX="1001.0" layoutY="558.0" text="Total : Rs. ">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font></Label>
+      <Label fx:id="total" layoutX="1077.0" layoutY="558.0" text="0.0">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font></Label>
       <Button layoutX="1175.0" layoutY="157.0" mnemonicParsing="false" onAction="#createNewRow" text="Add row" />
       <Button layoutX="1175.0" layoutY="212.0" mnemonicParsing="false" onAction="#deleteRow" prefHeight="29.0" prefWidth="82.0" text="Delete row" />
       <TextField fx:id="invoiceNumber" layoutX="444.0" layoutY="52.0" prefHeight="25.0" prefWidth="126.0" />

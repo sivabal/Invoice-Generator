@@ -73,15 +73,14 @@ public class ToDatabase {
 	/*
 	 * 
 	 */
-	public static void insertProduct(int prodId, String prodName, String unitRate, String sgst, String cgst)throws Exception {
+	public static void insertProduct(String prodName, String unitRate, String sgst, String cgst)throws Exception {
 		
-		String query = "insert into productDetails values(?,?,?,?,?)";
+		String query = "INSERT INTO productDetails (prodName, rate, sgst, cgst) VALUES(?,?,?,?)";
 		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query)) {
-			preparedStmt.setInt(1, prodId);
-			preparedStmt.setString(2, prodName);
-			preparedStmt.setString(3, unitRate);
-			preparedStmt.setString(4, sgst);
-			preparedStmt.setString(5, cgst);
+			preparedStmt.setString(1, prodName);
+			preparedStmt.setString(2, unitRate);
+			preparedStmt.setString(3, sgst);
+			preparedStmt.setString(4, cgst);
 			
 			preparedStmt.executeUpdate();
 			
@@ -256,4 +255,100 @@ public class ToDatabase {
 			
 		}
 	}
+	
+	public static void addInventory(String itemName, String quantity, String price, String cgst, String sgst,
+		String igst, String transportCharge, String totalAmount, String date)throws Exception  {
+		
+		String query = "INSERT INTO inventory (itemName, qty, price, cgst, sgst, igst, transportCharge, totalAmount, date) VALUES(?,?,?,?,?,?,?,?,?)";
+		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query)) {
+			preparedStmt.setString(1, itemName);
+			preparedStmt.setString(2, quantity);
+			preparedStmt.setString(3, price);
+			preparedStmt.setString(4, cgst);
+			preparedStmt.setString(5, sgst);
+			preparedStmt.setString(6, igst);
+			preparedStmt.setString(7, transportCharge);
+			preparedStmt.setString(8, totalAmount);
+			preparedStmt.setString(9, date);
+			
+			preparedStmt.executeUpdate();
+			
+		} 
+	}
+	
+	public static void addGoodsProduced(String itemName, String date, String lotNo, Float goodsProduced) throws Exception  {
+			
+			String insertQuery = "INSERT INTO goodsProduced (itemName, date, lotNo, goodsProduced) VALUES(?,?,?,?)";
+			String updateQuery = "UPDATE goodsProduced SET goodsProduced = ? WHERE itemName = ?";
+			
+			PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(updateQuery);
+			
+			try {
+				preparedStmt.setFloat(1, goodsProduced);
+				preparedStmt.setString(2, itemName);
+				
+				int rowCount = preparedStmt.executeUpdate();
+				
+				if(rowCount == 0) {
+					
+					preparedStmt = GetConnection.connection.prepareStatement(insertQuery);
+					
+					preparedStmt.setString(1, itemName);
+					preparedStmt.setString(2, date);
+					preparedStmt.setString(3, lotNo);
+					preparedStmt.setFloat(4, goodsProduced);
+					
+					preparedStmt.executeUpdate();
+				}
+				
+		}finally {
+			preparedStmt.close();
+		}
+	}
+	
+	public static void updateGoodsProducedForItem(Float goodsProduced, String itemName) throws Exception  {
+		
+		String query = "update goodsProduced set goodsProduced = ? where itemName = ?";
+		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query)) {
+
+			preparedStmt.setFloat(1, goodsProduced);
+			preparedStmt.setString(2, itemName);
+			preparedStmt.executeUpdate();
+			
+		} 
+	}
+
+	public static void addSalesMade(String itemName, String date, String lotNo, String goodsTaken, String salesManName) throws Exception  {
+		
+		String query = "INSERT INTO salesMade (itemName, date, lotNo, salesManName, goodsTakenForSale, goodsSold) VALUES(?,?,?,?,?,?)";
+		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query)) {
+			preparedStmt.setString(1, itemName);
+			preparedStmt.setString(2, date);
+			preparedStmt.setString(3, lotNo);
+			preparedStmt.setString(4, salesManName);
+			preparedStmt.setString(5, goodsTaken);
+			preparedStmt.setString(6, goodsTaken);
+
+			
+			preparedStmt.executeUpdate();
+			
+		} 
+	}
+	
+	public static void updateSalesMade(String itemName, String date, String salesManName, Float goodsSold, Float goodsReturn) throws Exception  {
+		
+		String query = "UPDATE salesMade SET goodsReturned = ?, goodsSold = ? WHERE itemName = ? AND date = ? AND salesManName = ?";
+		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query)) {
+			preparedStmt.setFloat(1, goodsReturn);
+			preparedStmt.setFloat(2, goodsSold);
+			preparedStmt.setString(3, itemName);
+			preparedStmt.setString(4, date);
+			preparedStmt.setString(5, salesManName);
+			
+			preparedStmt.executeUpdate();
+			
+		} 
+	}
+	
+	
 }

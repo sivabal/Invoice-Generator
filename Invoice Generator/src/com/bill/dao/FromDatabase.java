@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.bill.beans.Address;
+import com.bill.beans.GoodsInStock;
+import com.bill.beans.Inventory;
+import com.bill.beans.SalesMade;
 import com.bill.exception.DatabaseException;
 import com.bill.exception.ExcelGeneratorException;
 import com.bill.generator.ExcelGenerator;
@@ -226,5 +229,106 @@ public class FromDatabase {
 			
 		}
 		return invoice;
+	}
+	
+	public static ObservableList<GoodsInStock> getGoodsInStock()throws Exception{
+		
+		ObservableList<GoodsInStock> goodsInStock = FXCollections.observableArrayList();
+		
+		String query = "select * from goodsProduced";
+		
+		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query);
+				ResultSet resultSet = preparedStmt.executeQuery();){
+			
+			while(resultSet.next()){
+				GoodsInStock goods = new GoodsInStock();
+				goods.setItemName(resultSet.getString("itemName"));
+				goods.setDate(resultSet.getString("date"));
+				goods.setLotNo(resultSet.getString("lotNo"));
+				goods.setGoodsInStock(resultSet.getString("goodsProduced"));
+				
+				goodsInStock.add(goods);
+			}
+			
+		}
+		return goodsInStock;
+	}
+	
+	public static ObservableList<Inventory> getInventory()throws Exception{
+		
+		ObservableList<Inventory> inventory = FXCollections.observableArrayList();
+		
+		String query = "select * from inventory";
+		
+		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query);
+				ResultSet resultSet = preparedStmt.executeQuery();){
+			
+			while(resultSet.next()){
+				Inventory goods = new Inventory();
+				goods.setItemName(resultSet.getString("itemName"));
+				goods.setQuantity(resultSet.getString("qty"));
+				goods.setPrice(resultSet.getString("price"));
+				goods.setDate(resultSet.getString("date"));
+				goods.setCgst(resultSet.getString("cgst"));
+				goods.setSgst(resultSet.getString("sgst"));
+				goods.setIgst(resultSet.getString("igst"));
+				goods.setTpCharge(resultSet.getString("transportCharge"));
+				goods.setTotalAmount(resultSet.getString("totalAmount"));
+				
+				inventory.add(goods);
+			}
+			
+		}
+		return inventory;
+	}
+	
+	public static Float getGoodsProducedForItem(String itemName)throws Exception{
+		
+		
+		String query = "select goodsProduced from goodsProduced where itemName = ?";
+		Float goodsProduced = 0f;
+		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query);){
+			
+			preparedStmt.setString(1, itemName);
+			ResultSet resultSet = preparedStmt.executeQuery();
+			
+			while(resultSet.next()){
+				goodsProduced = resultSet.getFloat("goodsProduced");
+			}
+			
+			resultSet.close();
+		}
+		
+		return goodsProduced;
+	}
+	
+	public static ObservableList<SalesMade> getSalesMade(String date)throws Exception{
+		
+		ObservableList<SalesMade> salesMade = FXCollections.observableArrayList();
+		
+		String query = "select * from salesMade where date = ?";
+		
+		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query);){
+			
+			preparedStmt.setString(1, date);
+			
+			ResultSet resultSet = preparedStmt.executeQuery();
+			
+			while(resultSet.next()){
+				SalesMade sales = new SalesMade();
+				sales.setItemName(resultSet.getString("itemName"));
+				sales.setDate(resultSet.getString("date"));
+				sales.setLotNo(resultSet.getString("lotNo"));
+				sales.setGoodsTaken(resultSet.getString("goodsTakenForSale"));
+				sales.setSalesmanName(resultSet.getString("salesManName"));
+				sales.setGoodsReturned(resultSet.getString("goodsReturned"));
+				sales.setGoodsSold(resultSet.getString("goodsSold"));
+				
+				
+				salesMade.add(sales);
+			}
+			resultSet.close();
+		}
+		return salesMade;
 	}
 }

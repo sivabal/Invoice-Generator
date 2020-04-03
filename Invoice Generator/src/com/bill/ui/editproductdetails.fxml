@@ -15,17 +15,15 @@
          <content>
             <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="379.0" prefWidth="603.0">
                <children>
-                  <Label layoutX="178.0" layoutY="51.0" text="Product Id :" />
-                  <Label layoutX="160.0" layoutY="90.0" text="Product Name :" />
-                  <Label layoutX="164.0" layoutY="134.0" text="Unit Rate(Rs) :" />
-                  <Label layoutX="188.0" layoutY="171.0" text="SGST(%) :" />
-                  <Label layoutX="186.0" layoutY="214.0" text="CGST(%) :" />
-                  <Button layoutX="275.0" layoutY="281.0" mnemonicParsing="false" onAction="#insertProduct" text="Insert Product" />
-                  <TextField fx:id="insertProdId" editable="false" layoutX="247.0" layoutY="47.0" />
-                  <TextField fx:id="insertProdName" layoutX="247.0" layoutY="86.0" />
-                  <TextField fx:id="insertUnitRate" layoutX="247.0" layoutY="130.0" />
-                  <TextField fx:id="insertSgst" layoutX="247.0" layoutY="167.0" />
-                  <TextField fx:id="insertCgst" layoutX="247.0" layoutY="210.0" />
+                  <Label layoutX="160.0" layoutY="50.0" text="Product Name :" />
+                  <Label layoutX="164.0" layoutY="94.0" text="Unit Rate(Rs) :" />
+                  <Label layoutX="188.0" layoutY="131.0" text="SGST(%) :" />
+                  <Label layoutX="186.0" layoutY="174.0" text="CGST(%) :" />
+                  <Button layoutX="275.0" layoutY="241.0" mnemonicParsing="false" onAction="#insertProduct" text="Insert Product" />
+                  <TextField fx:id="insertProdName" layoutX="247.0" layoutY="46.0" />
+                  <TextField fx:id="insertUnitRate" layoutX="247.0" layoutY="90.0" />
+                  <TextField fx:id="insertSgst" layoutX="247.0" layoutY="127.0" />
+                  <TextField fx:id="insertCgst" layoutX="247.0" layoutY="170.0" />
                   <Label layoutX="451.0" layoutY="12.0" prefHeight="10.0" prefWidth="10.0" text="*" textFill="#e41010">
                      <font>
                         <Font size="23.0" />
