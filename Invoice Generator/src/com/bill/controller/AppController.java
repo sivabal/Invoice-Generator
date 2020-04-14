@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import com.bill.dao.GetConnection;
+import com.bill.dao.ToDatabase;
 import com.bill.exception.InvalidPasswordException;
 import com.bill.popus.ShowPopups;
 import com.bill.utility.Utility;
@@ -34,7 +35,7 @@ public class AppController implements Initializable {
 			GetConnection getConnection = new GetConnection();
 			getConnection.getConnection();
 			dbStatus.setText(((GetConnection.connection.isClosed())?"Disconnected":"Connected"));
-			Utility.getDetailsReady();
+			new Utility().getDetailsReady();
 		} catch (SQLException e) {
 			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}catch (Exception e) {
@@ -53,7 +54,7 @@ public class AppController implements Initializable {
 			stage.getIcons().add(new Image("/icon.png"));
 			stage.setTitle("Invoice");
 			
-			Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/ui/invoice.fxml"));
+			Parent parent = FXMLLoader.load(getClass().getResource("/invoice.fxml"));
 			Scene scene = new Scene(parent);
 			
 			stage.setScene(scene);
@@ -77,7 +78,7 @@ public class AppController implements Initializable {
 			stage.getIcons().add(new Image("/icon.png"));
 			stage.setTitle("Generate Excel");
 			
-			Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/ui/excel.fxml"));
+			Parent parent = FXMLLoader.load(getClass().getResource("/excel.fxml"));
 			Scene scene = new Scene(parent);
 			
 			
@@ -103,7 +104,7 @@ public class AppController implements Initializable {
 				stage.getIcons().add(new Image("/icon.png"));
 				stage.setTitle("Edit Product Details");
 				
-				Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/ui/editproductdetails.fxml"));
+				Parent parent = FXMLLoader.load(getClass().getResource("/editproductdetails.fxml"));
 				Scene scene = new Scene(parent);
 				
 				stage.setScene(scene);
@@ -128,7 +129,7 @@ public class AppController implements Initializable {
 				stage.getIcons().add(new Image("/icon.png"));
 				stage.setTitle("Edit 'Bill From' Address");
 				
-				Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/ui/editfromaddress.fxml"));
+				Parent parent = FXMLLoader.load(getClass().getResource("/editfromaddress.fxml"));
 				Scene scene = new Scene(parent);
 				
 				stage.setScene(scene);
@@ -154,7 +155,7 @@ public class AppController implements Initializable {
 				stage.getIcons().add(new Image("/icon.png"));
 				stage.setTitle("Edit 'Bill To' Address");
 				
-				Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/ui/edittoaddress.fxml"));
+				Parent parent = FXMLLoader.load(getClass().getResource("/edittoaddress.fxml"));
 				
 				Scene scene = new Scene(parent);
 				
@@ -180,7 +181,7 @@ public class AppController implements Initializable {
 				stage.getIcons().add(new Image("/icon.png"));
 				stage.setTitle("Delete Invoice");
 				
-				Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/ui/deleteinvoice.fxml"));
+				Parent parent = FXMLLoader.load(getClass().getResource("/deleteinvoice.fxml"));
 				
 				Scene scene = new Scene(parent);
 				
@@ -206,7 +207,7 @@ public class AppController implements Initializable {
 				stage.getIcons().add(new Image("/icon.png"));
 				stage.setTitle("Inventory");
 				
-				Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/ui/inventory.fxml"));
+				Parent parent = FXMLLoader.load(getClass().getResource("/inventory.fxml"));
 				
 				Scene scene = new Scene(parent);
 				
@@ -232,7 +233,7 @@ public class AppController implements Initializable {
 				stage.getIcons().add(new Image("/icon.png"));
 				stage.setTitle("Goods Produced");
 				
-				Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/ui/goodsproduced.fxml"));
+				Parent parent = FXMLLoader.load(getClass().getResource("/goodsproduced.fxml"));
 				
 				Scene scene = new Scene(parent);
 				
@@ -258,7 +259,7 @@ public class AppController implements Initializable {
 				stage.getIcons().add(new Image("/icon.png"));
 				stage.setTitle("Sales Made");
 				
-				Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/ui/salesmade.fxml"));
+				Parent parent = FXMLLoader.load(getClass().getResource("/salesmade.fxml"));
 				
 				Scene scene = new Scene(parent);
 				
@@ -284,7 +285,7 @@ public class AppController implements Initializable {
 				stage.getIcons().add(new Image("/icon.png"));
 				stage.setTitle("Sales Return");
 				
-				Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/ui/salesreturn.fxml"));
+				Parent parent = FXMLLoader.load(getClass().getResource("/salesreturn.fxml"));
 				
 				Scene scene = new Scene(parent);
 				
@@ -310,12 +311,35 @@ public class AppController implements Initializable {
 				stage.getIcons().add(new Image("/icon.png"));
 				stage.setTitle("Stock Info");
 				
-				Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/ui/stock.fxml"));
+				Parent parent = FXMLLoader.load(getClass().getResource("/stock.fxml"));
 				
 				Scene scene = new Scene(parent);
 				
 				stage.setScene(scene);
 				stage.show();
+			}
+		} catch (IOException e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}catch (InvalidPasswordException e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.getMessage(), "");
+		}catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}
+	}
+	
+	@FXML
+	public void changePassword() {
+		try {
+			if(ShowPopups.passwordPopUp()) {
+				
+				String newPassword = ShowPopups.getValue("New Password", "Please Enter New Password");
+				
+				if(newPassword != null) {
+					ToDatabase.updatePassword(newPassword);
+					Utility.password = newPassword;
+					ShowPopups.showPopups(AlertType.INFORMATION, "Password Updated Successfully.", "");
+				}
+			
 			}
 		} catch (IOException e) {
 			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");

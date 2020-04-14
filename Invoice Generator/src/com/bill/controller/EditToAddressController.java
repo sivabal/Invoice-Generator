@@ -50,20 +50,24 @@ public class EditToAddressController implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		
-		updateOldShopName.getItems().addAll(Utility.toAddressShopNames);
-		deleteShopName.getItems().addAll(Utility.toAddressShopNames);
-		
-		updateNewShopName.setDisable(true);
-		updateAddressLine1.setDisable(true);
-		updateAddressLine2.setDisable(true);
-		updateCity.setDisable(true);
-		updateDistrict.setDisable(true);
-		updateState.setDisable(true);
-		updatePincode.setDisable(true);
-		updateTelephone.setDisable(true);
-		updateMobile.setDisable(true);
-		updateGstNo.setDisable(true);
-		updateAddressBtn.setDisable(true);
+		try {
+			updateOldShopName.getItems().addAll(Utility.toAddressShopNames);
+			deleteShopName.getItems().addAll(Utility.toAddressShopNames);
+			
+			updateNewShopName.setDisable(true);
+			updateAddressLine1.setDisable(true);
+			updateAddressLine2.setDisable(true);
+			updateCity.setDisable(true);
+			updateDistrict.setDisable(true);
+			updateState.setDisable(true);
+			updatePincode.setDisable(true);
+			updateTelephone.setDisable(true);
+			updateMobile.setDisable(true);
+			updateGstNo.setDisable(true);
+			updateAddressBtn.setDisable(true);
+		} catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}
 	}
 	
 	@FXML

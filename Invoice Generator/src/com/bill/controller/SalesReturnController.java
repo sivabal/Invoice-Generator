@@ -38,15 +38,19 @@ public class SalesReturnController implements Initializable{
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		
-		date.setValue(LocalDate.now());
-		
-		itemName.setCellValueFactory(new PropertyValueFactory<SalesMade, String>("itemName"));
-		lotNo.setCellValueFactory(new PropertyValueFactory<SalesMade, String>("lotNo"));
-		dateCol.setCellValueFactory(new PropertyValueFactory<SalesMade, String>("date"));
-		salesmanName.setCellValueFactory(new PropertyValueFactory<SalesMade, String>("salesmanName"));
-		goodsTaken.setCellValueFactory(new PropertyValueFactory<SalesMade, String>("goodsTaken"));
-		goodsReturned.setCellValueFactory(new PropertyValueFactory<SalesMade, String>("goodsReturned"));
-		goodsSold.setCellValueFactory(new PropertyValueFactory<SalesMade, String>("goodsSold"));
+		try {
+			date.setValue(LocalDate.now());
+			
+			itemName.setCellValueFactory(new PropertyValueFactory<SalesMade, String>("itemName"));
+			lotNo.setCellValueFactory(new PropertyValueFactory<SalesMade, String>("lotNo"));
+			dateCol.setCellValueFactory(new PropertyValueFactory<SalesMade, String>("date"));
+			salesmanName.setCellValueFactory(new PropertyValueFactory<SalesMade, String>("salesmanName"));
+			goodsTaken.setCellValueFactory(new PropertyValueFactory<SalesMade, String>("goodsTaken"));
+			goodsReturned.setCellValueFactory(new PropertyValueFactory<SalesMade, String>("goodsReturned"));
+			goodsSold.setCellValueFactory(new PropertyValueFactory<SalesMade, String>("goodsSold"));
+		} catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}
 		
 	}
 
@@ -71,7 +75,7 @@ public class SalesReturnController implements Initializable{
 			
 			if(selectedRow == null) throw new SalesReturnException("Please Select any Item.");
 			
-			String salesReturn = ShowPopups.askSalesReturn();
+			String salesReturn = ShowPopups.getValue("Sales Return", "Please Enter Sales Return");
 			
 			if(salesReturn != null) {
 				

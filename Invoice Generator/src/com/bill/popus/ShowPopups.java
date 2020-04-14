@@ -33,7 +33,7 @@ public class ShowPopups {
 
 		Dialog<String> passwordDialog = new Dialog<>();
 		passwordDialog.setTitle("Authentication");
-		passwordDialog.setHeaderText("Please enter your Password");
+		passwordDialog.setHeaderText("Please Enter Your Password");
 
 		passwordDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
@@ -60,11 +60,11 @@ public class ShowPopups {
 			throw new InvalidPasswordException("Invalid Password..");
 	}
 	
-	public static String askSalesReturn() throws Exception {
+	public static String getValue(String title, String header) throws Exception {
 
 		Dialog<String> textDialog = new Dialog<>();
-		textDialog.setTitle("Sales Return");
-		textDialog.setHeaderText("Please enter Sales Return");
+		textDialog.setTitle(title);
+		textDialog.setHeaderText(header);
 
 		textDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 

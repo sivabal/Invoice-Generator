@@ -37,7 +37,7 @@
             <Font name="System Bold Italic" size="12.0" />
          </font>
       </Button>
-      <Button layoutX="205.0" layoutY="188.0" mnemonicParsing="false" onAction="#goodsProduced" prefHeight="87.0" prefWidth="133.0" text="Goods Produced">
+      <Button layoutX="202.0" layoutY="188.0" mnemonicParsing="false" onAction="#goodsProduced" prefHeight="87.0" prefWidth="138.0" text="Goods Produced">
          <font>
             <Font name="System Bold Italic" size="12.0" />
          </font>
@@ -58,6 +58,11 @@
          </font>
       </Button>
       <Button layoutX="355.0" layoutY="235.0" mnemonicParsing="false" onAction="#salesReturn" prefHeight="40.0" prefWidth="158.0" text="Sales Return">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font>
+      </Button>
+      <Button layoutX="61.0" layoutY="401.0" mnemonicParsing="false" onAction="#changePassword" prefHeight="29.0" prefWidth="127.0" text="Change Password">
          <font>
             <Font name="System Bold Italic" size="12.0" />
          </font>

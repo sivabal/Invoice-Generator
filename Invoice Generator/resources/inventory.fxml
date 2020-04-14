@@ -75,7 +75,7 @@
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <TableView fx:id="tableView" layoutX="7.0" layoutY="27.0" prefHeight="489.0" prefWidth="770.0" style="-fx-font-weight: 800;">
+                  <TableView fx:id="tableView" layoutX="7.0" layoutY="27.0" prefHeight="430.0" prefWidth="770.0" style="-fx-font-weight: 800;">
                     <columns>
                       <TableColumn fx:id="itemNameCol" prefWidth="231.0" text="Item Name" />
                       <TableColumn fx:id="quantityCol" prefWidth="53.0" text="Qty" />
@@ -88,6 +88,7 @@
                         <TableColumn fx:id="dateCol" prefWidth="102.0" text="Date" />
                     </columns>
                   </TableView>
+                  <Button layoutX="367.0" layoutY="477.0" mnemonicParsing="false" onAction="#deleteInventory" text="Delete" />
                </children></AnchorPane>
       </content>
     </Tab>

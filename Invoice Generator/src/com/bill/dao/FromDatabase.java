@@ -331,4 +331,72 @@ public class FromDatabase {
 		}
 		return salesMade;
 	}
+	
+	public static ObservableList<SalesMade> getSalesMade()throws Exception{
+		
+		ObservableList<SalesMade> salesMade = FXCollections.observableArrayList();
+		
+		String query = "select * from salesMade";
+		
+		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query);){
+			
+			ResultSet resultSet = preparedStmt.executeQuery();
+			
+			while(resultSet.next()){
+				SalesMade sales = new SalesMade();
+				sales.setItemName(resultSet.getString("itemName"));
+				sales.setDate(resultSet.getString("date"));
+				sales.setLotNo(resultSet.getString("lotNo"));
+				sales.setGoodsTaken(resultSet.getString("goodsTakenForSale"));
+				sales.setSalesmanName(resultSet.getString("salesManName"));
+				sales.setGoodsReturned(resultSet.getString("goodsReturned"));
+				sales.setGoodsSold(resultSet.getString("goodsSold"));
+				
+				
+				salesMade.add(sales);
+			}
+			resultSet.close();
+		}
+		return salesMade;
+	}
+	
+	public static String getPassword()throws Exception{
+		
+		String password = "0000";
+		
+		String query = "select value from credentials where key = 'password'";
+		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query);
+				ResultSet resultSet = preparedStmt.executeQuery();){
+			
+			while(resultSet.next()){
+				password = resultSet.getString("value");
+			}
+			
+		}
+		return password;
+	}
+	
+	public static ObservableList<SalesMade> getBilledProducts(String invoiceNo)throws Exception{
+		
+		ObservableList<SalesMade> billedProducts = FXCollections.observableArrayList();
+		
+		String query = "select * from billedProducts where invoiceNumber = ?";
+		
+		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query);){
+			
+			preparedStmt.setString(1, invoiceNo);
+			
+			ResultSet resultSet = preparedStmt.executeQuery();
+			
+			while(resultSet.next()){
+				SalesMade sales = new SalesMade();
+				sales.setItemName(resultSet.getString("productName"));
+				sales.setGoodsTaken(resultSet.getString("qty"));
+				
+				billedProducts.add(sales);
+			}
+			resultSet.close();
+		}
+		return billedProducts;
+	}
 }

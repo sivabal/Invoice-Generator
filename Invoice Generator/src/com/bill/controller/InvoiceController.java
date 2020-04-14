@@ -403,7 +403,7 @@ public class InvoiceController implements Initializable{
 	public void generatePdf(boolean save) {
 
 			if(ValidateUserInputs.validateInvoiceDetails(fromComboBox.getValue(),toComboBox.getValue(),invoiceNumber.getText())
-					&& ValidateUserInputs.validateBilledRow(billRow)) {
+					&& ValidateUserInputs.validateBilledRow(billRow) && (save?ValidateUserInputs.validateOutOfStock(billRow):true)) {
 				try {
 					
 					print.setDisable(true);

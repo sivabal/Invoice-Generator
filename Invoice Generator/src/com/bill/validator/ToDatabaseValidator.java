@@ -7,6 +7,7 @@ import java.time.temporal.ChronoUnit;
 
 import com.bill.beans.Address;
 import com.bill.beans.BilledProducts;
+import com.bill.beans.SalesMade;
 import com.bill.dao.FromDatabase;
 import com.bill.dao.ToDatabase;
 import com.bill.exception.OutOfStockException;
@@ -29,6 +30,9 @@ public class ToDatabaseValidator {
 					orderAmount, sgst, cgst, total);
 			ToDatabase.insertBilledProducts(billrow, invoiceNumber);
 			
+			for(BilledProducts b: billrow) {
+				ToDatabase.updateGoodsProducedForItem(b.getGoodsRemains(), b.getItemName().getText());
+			}
 			
 		}catch (SQLException e) {
 			throw e;
@@ -154,6 +158,13 @@ public class ToDatabaseValidator {
 		
 		try {
 			
+			ObservableList<SalesMade> billedProducts = FromDatabase.getBilledProducts(invoice);
+			
+			for(SalesMade s: billedProducts) {
+				Float totalGoodsProduced = FromDatabase.getGoodsProducedForItem(s.getItemName());
+				ToDatabase.updateGoodsProducedForItem(totalGoodsProduced + Float.parseFloat(s.getGoodsTaken()) , s.getItemName());
+			}
+			
 			ToDatabase.deleteBilledProducts(invoice);
 			ToDatabase.deleteInvoice(invoice);
 			
@@ -175,11 +186,11 @@ public class ToDatabaseValidator {
 		}
 	}
 	
-	public static void addGoodsProduced(String itemName, LocalDate date, String lotNo, String goodsProduced) throws Exception{
+	public static void addGoodsProduced(String itemName, String date, String lotNo, String goodsProduced) throws Exception{
 		
 		try {
 			
-			ToDatabase.addGoodsProduced(itemName, date.format(DateTimeFormatter.ofPattern("dd/MM/uuuu")), lotNo, Float.parseFloat(goodsProduced) + FromDatabase.getGoodsProducedForItem(itemName));
+			ToDatabase.addGoodsProduced(itemName, date, lotNo, Float.parseFloat(goodsProduced) + FromDatabase.getGoodsProducedForItem(itemName));
 			
 		} catch (SQLException e) {
 			throw e;
@@ -233,4 +244,6 @@ public class ToDatabaseValidator {
 			throw e;
 		}
 	}
+	
+	
 }

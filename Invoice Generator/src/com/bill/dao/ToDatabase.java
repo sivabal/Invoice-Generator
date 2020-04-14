@@ -4,6 +4,8 @@ import java.sql.PreparedStatement;
 import java.text.DecimalFormat;
 
 import com.bill.beans.BilledProducts;
+import com.bill.beans.Inventory;
+import com.bill.beans.SalesMade;
 
 import javafx.collections.ObservableList;
 
@@ -276,6 +278,18 @@ public class ToDatabase {
 		} 
 	}
 	
+	public static void deleteInventory(Inventory inventory)throws Exception  {
+			
+			String query = "DELETE FROM inventory WHERE itemName = ? AND date = ?";
+			try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query)) {
+				preparedStmt.setString(1, inventory.getItemName());
+				preparedStmt.setString(2, inventory.getDate());
+				
+				preparedStmt.executeUpdate();
+				
+			} 
+		}
+	
 	public static void addGoodsProduced(String itemName, String date, String lotNo, Float goodsProduced) throws Exception  {
 			
 			String insertQuery = "INSERT INTO goodsProduced (itemName, date, lotNo, goodsProduced) VALUES(?,?,?,?)";
@@ -349,6 +363,47 @@ public class ToDatabase {
 			
 		} 
 	}
+	
+	public static void deleteSalesMade(SalesMade salesMade) throws Exception  {
+		
+		String query = "DELETE FROM salesMade WHERE itemName = ? AND date = ? AND salesManName = ?";
+		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query)) {
+			preparedStmt.setString(1, salesMade.getItemName());
+			preparedStmt.setString(2, salesMade.getDate());
+			preparedStmt.setString(3, salesMade.getSalesmanName());
+			
+			preparedStmt.executeUpdate();
+			
+		} 
+	}
+	
+	public static void updatePassword(String password) throws Exception  {
+		
+		String insertQuery = "INSERT INTO credentials (key, value) VALUES(?,?)";
+		String updateQuery = "UPDATE credentials SET value = ? WHERE key = ?";
+		
+		PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(updateQuery);
+		
+		try {
+			preparedStmt.setString(1, password);
+			preparedStmt.setString(2, "password");
+			
+			int rowCount = preparedStmt.executeUpdate();
+			
+			if(rowCount == 0) {
+				
+				preparedStmt = GetConnection.connection.prepareStatement(insertQuery);
+				
+				preparedStmt.setString(1, "password");
+				preparedStmt.setString(2, password);
+				
+				preparedStmt.executeUpdate();
+			}
+			
+	}finally {
+		preparedStmt.close();
+	}
+}
 	
 	
 }

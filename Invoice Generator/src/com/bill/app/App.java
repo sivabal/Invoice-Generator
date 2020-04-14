@@ -20,7 +20,7 @@ public class App extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		
-		Parent parent = FXMLLoader.load(getClass().getResource("/com/bill/ui/app.fxml"));		
+		Parent parent = FXMLLoader.load(getClass().getResource("/app.fxml"));		
 		Scene scene = new Scene(parent);
 		stage.getIcons().add(new Image("/icon.png"));
 		stage.setMaximized(false);

@@ -39,14 +39,18 @@ public class EditProductDetailsController implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
-		updateProductBtn.setDisable(true);
-		updateNewProdName.setDisable(true);
-		updateUnitRate.setDisable(true);
-		updateSgst.setDisable(true);
-		updateCgst.setDisable(true);
-		
-		updateOldProdName.getItems().addAll(Utility.productInfo.keySet().toArray(new String[Utility.productInfo.size()]));
-		deleteProductName.getItems().addAll(updateOldProdName.getItems());
+		try {
+			updateProductBtn.setDisable(true);
+			updateNewProdName.setDisable(true);
+			updateUnitRate.setDisable(true);
+			updateSgst.setDisable(true);
+			updateCgst.setDisable(true);
+			
+			updateOldProdName.getItems().addAll(Utility.productInfo.keySet().toArray(new String[Utility.productInfo.size()]));
+			deleteProductName.getItems().addAll(updateOldProdName.getItems());
+		} catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}
 		
 	}
 	

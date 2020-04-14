@@ -3,6 +3,7 @@ package com.bill.validator;
 import java.time.LocalDate;
 
 import com.bill.beans.BilledProducts;
+import com.bill.dao.FromDatabase;
 import com.bill.exception.DeleteInvoiceException;
 import com.bill.exception.EditAddressException;
 import com.bill.exception.EditProductException;
@@ -10,6 +11,7 @@ import com.bill.exception.ExcelGeneratorException;
 import com.bill.exception.GoodsProducedException;
 import com.bill.exception.InventoryException;
 import com.bill.exception.InvoiceException;
+import com.bill.exception.OutOfStockException;
 import com.bill.exception.SalesMadeException;
 import com.bill.popus.ShowPopups;
 import com.bill.utility.Regex;
@@ -139,16 +141,43 @@ public class ValidateUserInputs {
 					throw new InvoiceException("Blank entries are not Allowed...");
 				if(!Regex.regexQantity.matcher(b.getQuantity().getText()).matches()) 
 					throw new InvoiceException("Incorrect Quantity for the product '" + b.getItemName().getText() + "'");
-			
+		
 			}
 			
 			return true;
 			
 		}catch (InvoiceException e) {
 			ShowPopups.showPopups(AlertType.ERROR, e.getMessage(), "");
+		} catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 		return false;
 	}
+	
+	public static boolean validateOutOfStock(ObservableList<BilledProducts> billRow) {
+		
+		try {
+			
+			for(BilledProducts b: billRow) {
+				
+				Float goodsProduced = FromDatabase.getGoodsProducedForItem(b.getItemName().getText());
+				Float takenForSale = Float.parseFloat(b.getQuantity().getText());
+				
+				if(takenForSale > goodsProduced) throw new OutOfStockException(b.getItemName().getText() + " - Out of Stock! Available stock is " + goodsProduced + " Kg");
+				
+				b.setGoodsRemains(goodsProduced - takenForSale);
+			}
+			
+			return true;
+			
+		}catch (OutOfStockException e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.getMessage(), "");
+		} catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}
+		return false;
+	}
+	
 
 	public static boolean validateDates(LocalDate fromDate, LocalDate toDate) {
 		
