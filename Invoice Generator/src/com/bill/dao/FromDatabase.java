@@ -254,6 +254,29 @@ public class FromDatabase {
 		return goodsInStock;
 	}
 	
+	public static ObservableList<GoodsInStock> getGoodsTracker()throws Exception{
+		
+		ObservableList<GoodsInStock> goodsInStock = FXCollections.observableArrayList();
+		
+		String query = "select * from goodsProducedTracker";
+		
+		try(PreparedStatement preparedStmt = GetConnection.connection.prepareStatement(query);
+				ResultSet resultSet = preparedStmt.executeQuery();){
+			
+			while(resultSet.next()){
+				GoodsInStock goods = new GoodsInStock();
+				goods.setItemName(resultSet.getString("itemName"));
+				goods.setDate(resultSet.getString("date"));
+				goods.setLotNo(resultSet.getString("lotNo"));
+				goods.setGoodsInStock(resultSet.getString("goodsProduced"));
+				
+				goodsInStock.add(goods);
+			}
+			
+		}
+		return goodsInStock;
+	}
+	
 	public static ObservableList<Inventory> getInventory()throws Exception{
 		
 		ObservableList<Inventory> inventory = FXCollections.observableArrayList();

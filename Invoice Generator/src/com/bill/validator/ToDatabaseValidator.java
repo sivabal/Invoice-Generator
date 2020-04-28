@@ -7,9 +7,11 @@ import java.time.temporal.ChronoUnit;
 
 import com.bill.beans.Address;
 import com.bill.beans.BilledProducts;
+import com.bill.beans.GoodsInStock;
 import com.bill.beans.SalesMade;
 import com.bill.dao.FromDatabase;
 import com.bill.dao.ToDatabase;
+import com.bill.exception.GoodsProducedException;
 import com.bill.exception.OutOfStockException;
 import com.bill.exception.SalesReturnException;
 import com.bill.utility.Regex;
@@ -189,8 +191,27 @@ public class ToDatabaseValidator {
 	public static void addGoodsProduced(String itemName, String date, String lotNo, String goodsProduced) throws Exception{
 		
 		try {
-			
+			ToDatabase.insertGoodsProducedTracker(itemName, date, lotNo, Float.parseFloat(goodsProduced));
 			ToDatabase.addGoodsProduced(itemName, date, lotNo, Float.parseFloat(goodsProduced) + FromDatabase.getGoodsProducedForItem(itemName));
+			
+		} catch (SQLException e) {
+			throw e;
+		}
+	}
+	
+	public static void updateGoodsProduced(String currentValueStr, GoodsInStock selectedRow) throws Exception{
+		
+		try {
+			
+			Float currentValue = Float.parseFloat(currentValueStr);
+			Float previousValue = Float.parseFloat(selectedRow.getGoodsInStock());
+			Float newValue = (currentValue - previousValue) + FromDatabase.getGoodsProducedForItem(selectedRow.getItemName());
+			if(newValue < 0)
+				throw new GoodsProducedException("Can't update Goods Produced, as some amount of goods already been sold.");
+			
+			ToDatabase.updateGoodsProducedForItem( newValue, selectedRow.getItemName());
+			
+			ToDatabase.updateGoodsProducedTracker(currentValue, selectedRow.getItemName(), selectedRow.getDate());
 			
 		} catch (SQLException e) {
 			throw e;

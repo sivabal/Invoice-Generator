@@ -6,7 +6,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 import com.bill.beans.GoodsInStock;
-import com.bill.dao.ToDatabase;
 import com.bill.exception.GoodsProducedException;
 import com.bill.popus.ShowPopups;
 import com.bill.utility.Regex;
@@ -27,79 +26,97 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 public class GoodsProducedController implements Initializable {
 
-	@FXML private ComboBox<String> itemName;
-	@FXML private DatePicker date;
-	@FXML private TextField lotNo;
-	@FXML private TextField goodsProduced;
-	
-	@FXML private TableView<GoodsInStock> tableView;
-	
-	@FXML private TableColumn<GoodsInStock, String> itemNameCol;
-	@FXML private TableColumn<GoodsInStock, String> lotNoCol;
-	@FXML private TableColumn<GoodsInStock, String> goodsInStock;
-	
+	@FXML
+	private ComboBox<String> itemName;
+	@FXML
+	private DatePicker date;
+	@FXML
+	private TextField lotNo;
+	@FXML
+	private TextField goodsProduced;
+
+	@FXML
+	private TableView<GoodsInStock> tableView;
+
+	@FXML
+	private TableColumn<GoodsInStock, String> itemNameCol;
+	@FXML
+	private TableColumn<GoodsInStock, String> dateCol;
+	@FXML
+	private TableColumn<GoodsInStock, String> lotNoCol;
+	@FXML
+	private TableColumn<GoodsInStock, String> goodsInStock;
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		try {
 			itemName.getItems().addAll(Utility.productInfo.keySet().toArray(new String[Utility.productInfo.size()]));
 			date.setValue(LocalDate.now());
-			
+
 			itemNameCol.setCellValueFactory(new PropertyValueFactory<GoodsInStock, String>("itemName"));
+			dateCol.setCellValueFactory(new PropertyValueFactory<GoodsInStock, String>("date"));
 			lotNoCol.setCellValueFactory(new PropertyValueFactory<GoodsInStock, String>("lotNo"));
 			goodsInStock.setCellValueFactory(new PropertyValueFactory<GoodsInStock, String>("goodsInStock"));
-			
+
 		} catch (Exception e) {
 			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 	}
-	
+
 	@FXML
 	public void getGoodsProduced() {
 		try {
-			
-			tableView.setItems(FromDatabasevalidator.getGoodsInStock());
-			
-		}catch (Exception e) {
-			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
-		}
-	}
-	
-	@FXML
-	public void addGoodsProduced() {
-		try {
-			if(ValidateUserInputs.validateGoodsProducedInfo(itemName.getValue(), date.getValue(), lotNo.getText().trim(), goodsProduced.getText().trim())) {
-				
-				ToDatabaseValidator.addGoodsProduced(itemName.getValue(), date.getValue().format(DateTimeFormatter.ofPattern("dd/MM/uuuu")), lotNo.getText(), goodsProduced.getText());
-				
-				ShowPopups.showPopups(AlertType.INFORMATION, "Data added Successfully.", "");
-			}
-			
+
+			tableView.setItems(FromDatabasevalidator.getGoodsTracker());
+
 		} catch (Exception e) {
 			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 	}
-	
+
+	@FXML
+	public void addGoodsProduced() {
+		try {
+			if (ValidateUserInputs.validateGoodsProducedInfo(itemName.getValue(), date.getValue(),
+					lotNo.getText().trim(), goodsProduced.getText().trim())) {
+
+				ToDatabaseValidator.addGoodsProduced(itemName.getValue(),
+						date.getValue().format(DateTimeFormatter.ofPattern("dd/MM/uuuu")), lotNo.getText(),
+						goodsProduced.getText());
+
+				ShowPopups.showPopups(AlertType.INFORMATION, "Data added Successfully.", "");
+			}
+
+		} catch (Exception e) {
+			if (e.getMessage().contains("UNIQUE"))
+				ShowPopups.showPopups(AlertType.ERROR, "Already Item [" + itemName.getValue() + "] has entry on "
+						+ date.getValue().format(DateTimeFormatter.ofPattern("dd/MM/uuuu")), "");
+			else
+				ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}
+	}
+
 	@FXML
 	public void updateGoodsProduced() {
-		
+
 		try {
 			GoodsInStock selectedRow = tableView.getSelectionModel().getSelectedItem();
-			if(selectedRow == null) throw new GoodsProducedException("Please Select any Item.");
+			if (selectedRow == null)
+				throw new GoodsProducedException("Please Select any Item.");
 			String goodsProduced = ShowPopups.getValue("Update Goods Produced", "Please Enter Goods Produced");
-			
-			if(goodsProduced != null) {
-				if(!Regex.regexQantity.matcher(goodsProduced).matches())
+
+			if (goodsProduced != null) {
+				if (!Regex.regexQantity.matcher(goodsProduced).matches())
 					throw new GoodsProducedException("Please Provide Valid Goods Produced.");
-				
-				ToDatabase.updateGoodsProducedForItem(Float.parseFloat(goodsProduced), selectedRow.getItemName());
+				ToDatabaseValidator.updateGoodsProduced(goodsProduced, selectedRow);
 				getGoodsProduced();
 				ShowPopups.showPopups(AlertType.INFORMATION, "Data Updated Successfully.", "");
-				
+
 			}
-			
+
 		} catch (GoodsProducedException e) {
 			ShowPopups.showPopups(AlertType.ERROR, e.getMessage(), "");
-		}catch (Exception e) {
+		} catch (Exception e) {
 			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
 		}
 	}

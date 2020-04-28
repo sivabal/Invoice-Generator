@@ -176,6 +176,18 @@ public class FromDatabasevalidator {
 		return goodsInStock;
 	}
 	
+	public static ObservableList<GoodsInStock> getGoodsTracker() {
+
+		ObservableList<GoodsInStock> goodsInStock = null;
+		try {
+			goodsInStock = FromDatabase.getGoodsTracker();
+
+		} catch (Exception e) {
+			ShowPopups.showPopups(AlertType.ERROR, e.toString(), "");
+		}
+		return goodsInStock;
+	}
+	
 	public static ObservableList<Inventory> getInventory() {
 
 		ObservableList<Inventory> inventory = null;

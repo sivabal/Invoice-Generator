@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="459.0" prefWidth="670.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bill.controller.GoodsProducedController">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="459.0" prefWidth="669.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bill.controller.GoodsProducedController">
   <tabs>
     <Tab text="Add Goods Produced">
          <content>
@@ -54,13 +54,14 @@
     </Tab>
     <Tab onSelectionChanged="#getGoodsProduced" text="Update Goods Produced">
       <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="430.0" prefWidth="658.0">
                <children>
                   <TableView fx:id="tableView" layoutX="24.0" layoutY="32.0" prefHeight="325.0" prefWidth="622.0" style="-fx-font-weight: 800;">
                     <columns>
-                       <TableColumn fx:id="itemNameCol" prefWidth="310.0" text="Item Name" />
-            		   <TableColumn fx:id="lotNoCol" prefWidth="129.0" text="Lot NO" />
-            		   <TableColumn fx:id="goodsInStock" prefWidth="167.0" text="Good In Stock" />
+                       <TableColumn fx:id="itemNameCol" prefWidth="283.0" text="Item Name" />
+            		   <TableColumn fx:id="dateCol" minWidth="0.0" prefWidth="102.0" text="Date" />
+                        <TableColumn fx:id="lotNoCol" minWidth="0.0" prefWidth="113.0" text="Lot NO" />
+            		   <TableColumn fx:id="goodsInStock" prefWidth="111.0" text="Stock Produced" />
                     </columns>
                   </TableView>
                   <Button layoutX="309.0" layoutY="371.0" mnemonicParsing="false" onAction="#updateGoodsProduced" text="Update" />
