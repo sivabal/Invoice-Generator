@@ -1,12 +1,12 @@
 # Sales Management Software
 
-#JavaFX application.
+# Description
+A Desktop application developed using JAVAFX library. It uses SQLite (a Client side Database) for data storage.
 
-Features:
-
-# Bill generation (PDF)
-# Sales Report generation (Excel)
-# Sales & Stock Tracking
+# Features:
+1. Bill generation (PDF)
+2. Sales Report generation (Excel)
+3. Sales & Stock Tracking
 
 
 
