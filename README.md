@@ -1,4 +1,4 @@
-# Sales Management Software
+# Sales Management Software v1.0
 
 # Description
 A Desktop application developed using JAVAFX library. It uses SQLite (a Client side Database) for data storage.
