@@ -195,7 +195,7 @@ public class ExcelGenerator {
 					invoiceNumber = resultSet.getString("invoiceNumber");
 					
 					cell = row.createCell(0);
-					cell.setCellValue(invoiceNumber);
+					cell.setCellValue(invoiceNumber.replace("INV-", Utility.invoiceFormat));
 					cellStyle = workbook.createCellStyle();
 					cellStyle.setAlignment(HorizontalAlignment.CENTER);
 					cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);

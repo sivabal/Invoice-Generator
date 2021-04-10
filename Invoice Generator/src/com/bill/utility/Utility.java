@@ -1,7 +1,10 @@
 package com.bill.utility;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Properties;
 
 import com.bill.dao.FromDatabase;
 import com.bill.validator.FromDatabasevalidator;
@@ -10,24 +13,16 @@ import javafx.collections.ObservableList;
 
 public class Utility {
 	
-	/*
-	 * When working in eclipse
-	 */
-//	public static String excelSheetPath = "../Excel/";
-//	public static String invoicePath = "../Invoice/";
-//	public static String databaseConnectionString = "jdbc:sqlite:../Database.db";
-	
-	/*
-	 * When converted to jar
-	 */
 	public static String excelSheetPath = "Excel/";
 	public static String invoicePath = "Invoice/";
 	public static String databaseConnectionString = "jdbc:sqlite:Database.db";
+	public static String propertiesPath = "properties.properties";
 	
 	public static String password;
 	public static ObservableList<String> fromAddressShopNames;
 	public static ObservableList<String> toAddressShopNames;
 	public static Map<String, Float[]> productInfo;
+	public static String invoiceFormat;
 	public static LocalDate startDate = LocalDate.of(2018,01,01);
 	
 	public static String rupeeInWords(int rupee) {
@@ -80,6 +75,14 @@ public class Utility {
 			toAddressShopNames = FromDatabasevalidator.getToAddressShopNames();
 			password = FromDatabase.getPassword();
 			
+			Properties properties = new Properties();
+			FileInputStream fileInputStream = new FileInputStream(new File(propertiesPath));
+			properties.load(fileInputStream);
+			fileInputStream.close();
+			invoiceFormat = (String) properties.get("InvoiceFormat");
+			
+			if(invoiceFormat == null) invoiceFormat = "INV-";
+			else invoiceFormat = invoiceFormat.trim();
 	}
 	
 

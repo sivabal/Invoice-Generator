@@ -38,15 +38,18 @@ public class FromDatabasevalidator {
 	 */
 	public static String getLastInvoiceNumber() {
 
-		String invoiceNumber = "";
+		String invoiceNumber = "", newNumber;
 		try {
 
 			String[] invoiceNumberArray = FromDatabase.getLastInvoiceNumber().split("-");
-			invoiceNumber = invoiceNumberArray[0] + (invoiceNumberArray[1].startsWith("0")?"-0":"-") 
-					+ (Integer.parseInt(invoiceNumberArray[1]) + 1);
+			
+			newNumber = (Integer.parseInt(invoiceNumberArray[1]) + 1) + "";
+			while(newNumber.length() < 4) newNumber = "0" + newNumber;
+
+			invoiceNumber = invoiceNumberArray[0] + "-" + newNumber;
 
 		} catch (DatabaseException e) {
-			invoiceNumber = "INV-6000";
+			invoiceNumber = "INV-0001";
 		} catch (NullPointerException e) {
 			ShowPopups.showPopups(AlertType.ERROR, "Null Pointer Exception Occured..", e.toString());
 		} catch (Exception e) {

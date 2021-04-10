@@ -141,7 +141,7 @@ public class PDFGenerator {
 			contentStream.endText();
 			
 			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER_BOLD, 10);contentStream.newLineAtOffset(170, YPositionLeft);
-			contentStream.showText(invoiceNumber);
+			contentStream.showText(invoiceNumber.replace("INV-", Utility.invoiceFormat));
 			contentStream.endText();YPositionLeft-=20;
 			
 			contentStream.beginText();contentStream.setFont(PDType1Font.COURIER, 10);contentStream.newLineAtOffset(55, YPositionLeft);
